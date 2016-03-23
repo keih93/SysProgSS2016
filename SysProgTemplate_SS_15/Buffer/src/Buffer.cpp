@@ -21,7 +21,8 @@ Buffer::Buffer(const char *pathname) {
 }
 
 Buffer::~Buffer() {
-	delete[] buffer;
+	delete[] buffer1;
+	delete[] buffer2;
 }
 
 char* Buffer::getchar() {
@@ -31,16 +32,20 @@ char* Buffer::getchar() {
 	return buffer1[i];
 	i++;
 	}
+	while(stand>512){
 	i = 0;
-	if (stand > 512) {
 	stand = read(fd,buffer2, 512);
-	}
-	
 	while(i<stand){
 		return buffer2[i];
 		i++;
 	}
-	
-	
+	i=0;
+	stand = read(fd,buffer1, 512);
+	while(i<stand){
+	return buffer1[i];
+	i++;
+	}
+	}
+		
 }
 
