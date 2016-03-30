@@ -12,11 +12,14 @@ class Buffer {
 	char* buffer2;
 	char* buffer1;
 	int fd;
+	int pointer;
+	int stand;
+
 
 public:
 	Buffer(const char *pathname);
 	virtual ~Buffer();
-	char* getchar();
+	char getchar();
 	char* ungetchar();
 };
 
