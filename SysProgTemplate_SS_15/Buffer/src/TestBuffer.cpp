@@ -10,17 +10,19 @@
 
 int main(int argc, char **argv) {
 
-	Buffer*  buffer;
+	Buffer* buffer;
 
 	buffer = new Buffer("test.txt");
-	std::cout<<buffer->getchar();
-	std::cout<<buffer->getchar();
-	std::cout<<buffer->getchar();
-	std::cout<<buffer->getchar();
-	std::cout<<buffer->getchar();
-	std::cout<<buffer->getchar();
+	char a;
+	int i;
+	while (i < 1536) {
+		a = buffer->getchar();
+		std::cout << a;
+		i++;
+	}
 
-
+	//buffer->getchar();
+	//buffer->getchar();
 
 	//char* testbuffer = new char[512];
 	//posix_memalign((void**)&testbuffer,512,1024);

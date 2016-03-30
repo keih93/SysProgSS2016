@@ -15,7 +15,8 @@ class Buffer {
 	int fd;
 	int pointer;
 	char token;
-	int stand;
+	int stand1;
+	int stand2;
 
 
 public:
