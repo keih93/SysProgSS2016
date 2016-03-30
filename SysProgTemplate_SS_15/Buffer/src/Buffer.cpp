@@ -15,6 +15,7 @@
 
 Buffer::Buffer(const char *pathname) {
 
+	file = pathname;
 	buffer1 = new char[512];
 	buffer2 = new char[512];
 	posix_memalign((void**) &buffer1, 512, 1024);
@@ -33,34 +34,14 @@ Buffer::~Buffer() {
 char Buffer::getchar() {
 
 	if (pointer < stand) {
-		return buffer1[pointer];
+		token = buffer1[pointer];
 		pointer++;
+		return token;
 	}
 
-	else if (stand > 512) {
-		stand = read(fd, buffer2, 512);
+	else if (pointer > 512) {
+		stand = read(fd,buffer1,3);
 	}
-
-	else if (stand)
-
-		while (stand > 512) {
-			pointer = 0;
-			stand = read(fd, buffer2, 512);
-
-			//danach ein Zeichen von zweitem Buffer ausgeben
-			while (pointer < stand) {
-				return buffer2[pointer];
-				pointer++;
-			}
-			pointer = 0;
-			//nachdem zweiter Buffer voll ist
-			//gehen wir zurück zu dem ersten Buffer und überschreiben den
-			stand = read(fd, buffer1, 512);
-			while (pointer < stand) {
-				return buffer1[pointer];
-				pointer++;
-			}
-		}		//while-loop beendet, wenn der File bis zum Ende gelesen wird
 	return 0;
 }
 

@@ -13,11 +13,12 @@ int main(int argc, char **argv) {
 	Buffer*  buffer;
 
 	buffer = new Buffer("test.txt");
-	//buffer->getchar();
-	char testchar = buffer->getchar();
-	char testchar2 = buffer->getchar();
-	std::cout<<testchar;
-	std::cout<<testchar2;
+	std::cout<<buffer->getchar();
+	std::cout<<buffer->getchar();
+	std::cout<<buffer->getchar();
+	std::cout<<buffer->getchar();
+	std::cout<<buffer->getchar();
+	std::cout<<buffer->getchar();
 
 
 

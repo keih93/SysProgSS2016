@@ -11,8 +11,10 @@
 class Buffer {
 	char* buffer2;
 	char* buffer1;
+	const char* file;
 	int fd;
 	int pointer;
+	char token;
 	int stand;
 
 
