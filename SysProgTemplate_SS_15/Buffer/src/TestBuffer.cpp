@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
 	buffer = new Buffer("test.txt");
 	char a;
 	int i;
-	while (i < 1536) {
+	while (i < 2710) {
 		a = buffer->getchar();
 		std::cout << a;
 		i++;

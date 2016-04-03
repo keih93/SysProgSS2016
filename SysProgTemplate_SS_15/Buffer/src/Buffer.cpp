@@ -56,7 +56,9 @@ char Buffer::getchar() {
 		pointer = 0;
 		stand1 = read(fd, buffer1, 512);
 		stand2 = read(fd, buffer2, 512);
-		return this->getchar();
+		token = buffer1[pointer];
+		pointer++;
+		return token;
 	}
 
 	return 0;
