@@ -23,7 +23,7 @@ public:
 	Buffer(const char *pathname);
 	virtual ~Buffer();
 	char getchar();
-	//void ungetchar();
+	void ungetchar();
 
 private:
 	void fill(int buffer);

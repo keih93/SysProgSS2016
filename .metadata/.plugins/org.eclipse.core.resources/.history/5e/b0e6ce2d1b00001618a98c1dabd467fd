@@ -16,10 +16,9 @@ public:
 	virtual ~Automat();
 	void handleChar(char c);
 	void setState(State* s);
-	void error();
-	void stop();
 private:
 	State* currentState;
+	void error();
 };
 
 class State {
@@ -65,7 +64,6 @@ public:
 	static State* makeState();
 	virtual ~State2();
 };
-
 class State3: public State {
 
 private:
@@ -74,7 +72,7 @@ private:
 
 public:
 	void read(char c, Automat* a);
-	static State* makeState();
+	State* makeState();
 	virtual ~State3();
 };
 
@@ -86,7 +84,7 @@ private:
 
 public:
 	void read(char c, Automat* a);
-	static State* makeState();
+	State* makeState();
 	virtual ~State4();
 };
 
@@ -98,7 +96,7 @@ private:
 
 public:
 	void read(char c, Automat* a);
-	static State* makeState();
+	State* makeState();
 	virtual ~State5();
 };
 
@@ -110,9 +108,10 @@ private:
 
 public:
 	void read(char c, Automat* a);
-	static State* makeState();
+	State* makeState();
 	virtual ~State6();
 };
+
 
 class State7: public State {
 
@@ -122,9 +121,10 @@ private:
 
 public:
 	void read(char c, Automat* a);
-	static State* makeState();
+	State* makeState();
 	virtual ~State7();
 };
+
 
 class State8: public State {
 
@@ -134,7 +134,7 @@ private:
 
 public:
 	void read(char c, Automat* a);
-	static State* makeState();
+	State* makeState();
 	virtual ~State8();
 };
 
@@ -146,7 +146,7 @@ private:
 
 public:
 	void read(char c, Automat* a);
-	static State* makeState();
+	State* makeState();
 	virtual ~State9();
 };
 
@@ -159,7 +159,7 @@ private:
 
 public:
 	void read(char c, Automat* a);
-	static State* makeState();
+	State* makeState();
 	virtual ~State10();
 };
 

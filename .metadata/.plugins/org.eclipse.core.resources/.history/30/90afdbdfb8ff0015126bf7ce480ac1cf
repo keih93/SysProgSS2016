@@ -72,5 +72,5 @@ char Buffer::getchar() {
 	return '\0';
 }
 
-//*void Buffer::ungetchar() {}
-
+void Buffer::ungetchar() {
+}

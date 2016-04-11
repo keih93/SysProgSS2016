@@ -243,14 +243,14 @@ void State1::read(char c, Automat* automat) {
 		case '\0':
 			//todo
 			//ungetChar(1)
-			//makeToken(CharArrayInScanner) --> integer
+			//makeToken(CharArrayInScanner)
 			automat->setState(State0::makeState());
 			break;
 		default:			//fehlerhaftes Zeichen
 			automat->setState(State0::makeState());
 			//todo
 			//ungetChar(1)
-			//makeToken(CharArrayInScanner) --> integer
+			//makeToken(CharArrayInScanner)
 			break;
 	}
 }
@@ -327,14 +327,14 @@ void State2::read(char c, Automat* automat) {
 		case '\0':
 			//todo
 			//ungetChar(1)
-			//makeToken(CharArrayInScanner) -->identifier
+			//makeToken(CharArrayInScanner)
 			automat->setState(State0::makeState());
 			break;
 		default:				//fehlerhaftes Zeichen
 			automat->setState(State0::makeState());
 			//todo
 			//ungetChar(1)
-			//makeToken(CharArrayInScanner) -->identifier
+			//makeToken(CharArrayInScanner)
 			break;
 	}
 }
@@ -342,7 +342,7 @@ void State2::read(char c, Automat* automat) {
 void State3::read(char c, Automat* automat) {
 	//todo
 	//ungetChar(1)
-	//makeToken(CharArrayInScanner) -->sign
+	//makeToken(CharArrayInScanner)
 	automat->setState(State0::makeState());
 }
 
@@ -357,14 +357,14 @@ void State4::read(char c, Automat* automat) {
 		case '\0':
 			//todo
 			//ungetChar(1)
-			//makeToken(CharArrayInScanner) --> :
+			//makeToken(CharArrayInScanner)
 			automat->setState(State0::makeState());
 			break;
 		default:				//fehlerhaftes Zeichen
 			automat->setState(State0::makeState());
 			//todo
 			//ungetChar(1)
-			//makeToken(CharArrayInScanner) --> :
+			//makeToken(CharArrayInScanner)
 			break;
 	}
 }
@@ -372,7 +372,7 @@ void State4::read(char c, Automat* automat) {
 void State5::read(char c, Automat* automat) {
 	//todo
 	//ungetChar(1)
-	//makeToken(CharArrayInScanner) --> :=
+	//makeToken(CharArrayInScanner)
 	automat->setState(State0::makeState());
 }
 
@@ -387,14 +387,14 @@ void State6::read(char c, Automat* automat) {
 		case '\0':
 			//todo
 			//ungetChar(1)
-			//makeToken(CharArrayInScanner) --> =
+			//makeToken(CharArrayInScanner)
 			automat->setState(State0::makeState());
 			break;
 		default:				//fehlerhaftes Zeichen
 			automat->setState(State0::makeState());
 			//todo
 			//ungetChar(1)
-			//makeToken(CharArrayInScanner) --> =
+			//makeToken(CharArrayInScanner)
 			break;
 	}
 }
@@ -410,14 +410,14 @@ void State7::read(char c, Automat* automat) {
 		case '\0':
 			//todo
 			//ungetChar(2)
-			//makeToken(CharArrayInScanner) --> =
+			//makeToken(CharArrayInScanner)
 			automat->setState(State0::makeState());
 			break;
 		default:				//fehlerhaftes Zeichen
 			automat->setState(State0::makeState());
 			//todo
 			//ungetChar(2)!
-			//makeToken(CharArrayInScanner) --> =
+			//makeToken(CharArrayInScanner)
 			break;
 	}
 }
@@ -425,7 +425,7 @@ void State7::read(char c, Automat* automat) {
 void State8::read(char c, Automat* automat) {
 	//todo
 	//ungetChar(1)
-	//makeToken(CharArrayInScanner) --> =:=
+	//makeToken(CharArrayInScanner)
 	automat->setState(State0::makeState());
 }
 
@@ -457,7 +457,7 @@ void State9::read(char c, Automat* automat) {
 void State10::read(char c, Automat* automat) {
 	//todo
 	//ungetChar(1)
-	//makeToken(CharArrayInScanner) --> &&
+	//makeToken(CharArrayInScanner)
 	automat->setState(State0::makeState());
 }
 

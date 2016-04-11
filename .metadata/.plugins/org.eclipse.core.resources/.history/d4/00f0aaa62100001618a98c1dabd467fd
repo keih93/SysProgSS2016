@@ -17,7 +17,6 @@ public:
 	void handleChar(char c);
 	void setState(State* s);
 	void error();
-	void stop();
 private:
 	State* currentState;
 };
@@ -162,6 +161,19 @@ public:
 	static State* makeState();
 	virtual ~State10();
 };
+
+class State11: public State {
+
+private:
+	static State11* theState;
+	State11();
+
+public:
+	void read(char c, Automat* a);
+	static State* makeState();
+	virtual ~State11();
+};
+
 
 
 #endif /* Automat_H_ */

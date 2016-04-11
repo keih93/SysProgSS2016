@@ -17,7 +17,6 @@ public:
 	void handleChar(char c);
 	void setState(State* s);
 	void error();
-	void stop();
 private:
 	State* currentState;
 };

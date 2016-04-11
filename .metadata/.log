@@ -1,0 +1,9 @@
+!SESSION 2016-04-10 21:28:09.489 -----------------------------------------------
+eclipse.buildId=debbuild
+java.version=1.7.0_95
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86, WS=gtk, NL=de_DE
+Command-line arguments:  -os linux -ws gtk -arch x86
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-04-10 21:30:11.631
+!MESSAGE Indexed 'SysProgTemplate_SS_15' (8 sources, 151 headers) in 13,3 sec: 11.428 declarations; 18.850 references; 0 unresolved inclusions; 8 syntax errors; 3 unresolved names (0,0099 %)
