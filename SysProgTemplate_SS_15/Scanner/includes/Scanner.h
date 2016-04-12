@@ -12,6 +12,17 @@ class Scanner {
 public:
 	Scanner();
 	virtual ~Scanner();
+	Token nextToken();
+	void freeToken(Token token);
+};
+
+class ISScanner {
+public:
+	ISScanner();
+	virtual ~ISScanner();
+	mkToken(Tokentype tktype);
+	ungetChar(int index);
+	stop();
 };
 
 #endif /* SCANNER_H_ */
