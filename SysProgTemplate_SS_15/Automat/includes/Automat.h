@@ -8,9 +8,10 @@
 #ifndef Automat_H_
 #define Automat_H_
 
+
 class State;
 
-class Automat {
+class Automat{
 public:
 	Automat();
 	virtual ~Automat();
@@ -19,11 +20,15 @@ public:
 	void error();
 	void stop();
 private:
+	int eof;
 	State* currentState;
 };
 
 class State {
+private:
+	//State();
 public:
+	State();
 	virtual void read(char c, Automat* a) = 0;
 	virtual ~State();
 };
@@ -163,5 +168,24 @@ public:
 	virtual ~State10();
 };
 
+class State11: public State{
+private:
+	static State11* theState;
+	State11();
+public:
+	void read(char c, Automat* a);
+	static State* makeState();
+	virtual ~State11();
+};
+
+class State12: public State{
+private:
+	static State12* theState;
+	State12();
+public:
+	void read(char c, Automat* a);
+	static State* makeState();
+	virtual ~State12();
+};
 
 #endif /* Automat_H_ */

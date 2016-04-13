@@ -7,8 +7,12 @@
 
 #ifndef SCANNER_H_
 #define SCANNER_H_
+#include "IScanner.h"
+#include "Token.h"
 
 class Scanner {
+private:
+
 public:
 	Scanner();
 	virtual ~Scanner();
@@ -16,13 +20,16 @@ public:
 	void freeToken(Token token);
 };
 
-class ISScanner {
+class Scannerimpl: public Scanner, IScanner {
+private:
+	Automat* automat;
 public:
-	ISScanner();
-	virtual ~ISScanner();
-	mkToken(Tokentype tktype);
-	ungetChar(int index);
-	stop();
+	Scannerimpl();
+	virtual ~Scannerimpl();
+	Token nextToken();
+	void freeToken(Token token);
+	Token mkToken(TokenType token,int l, int c);
+	void ungetChar(int index);
+	void stop();
 };
-
 #endif /* SCANNER_H_ */
