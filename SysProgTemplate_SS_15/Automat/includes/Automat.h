@@ -7,21 +7,30 @@
 
 #ifndef Automat_H_
 #define Automat_H_
-
+#include "../../Scanner/includes/Scanner.h"
 
 class State;
 
-class Automat{
+class Automat {
 public:
 	Automat();
 	virtual ~Automat();
-	void handleChar(char c);
+	Token* handleChar(char c);
 	void setState(State* s);
+	Token* mkToken(TokenType token, int l, int c);
+	void setToken(Token* t);
 	void error();
 	void stop();
+	void countline(int c);
+	void countcolumn(int c);
+	void resetcolumn();
+	int getLine();
+	int getColumn();
 private:
-	int eof;
+	int line;
+	int column;
 	State* currentState;
+	Token* currentToken;
 };
 
 class State {
@@ -155,7 +164,6 @@ public:
 	virtual ~State9();
 };
 
-
 class State10: public State {
 
 private:
@@ -168,7 +176,7 @@ public:
 	virtual ~State10();
 };
 
-class State11: public State{
+class State11: public State {
 private:
 	static State11* theState;
 	State11();
@@ -178,7 +186,7 @@ public:
 	virtual ~State11();
 };
 
-class State12: public State{
+class State12: public State {
 private:
 	static State12* theState;
 	State12();

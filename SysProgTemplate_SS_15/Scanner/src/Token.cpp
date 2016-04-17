@@ -6,10 +6,12 @@
  */
 #include "../includes/Token.h"
 
-Token::Token(int l, int c, TokenType type){
+
+
+Token::Token(TokenType tokent, int l, int c){
 	this->column = c;
 	this->line = l;
-	this->type = type;
+	this->type = tokent;
 }
 
 Token::~Token(){

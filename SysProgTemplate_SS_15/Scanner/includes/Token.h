@@ -12,6 +12,8 @@ enum TokenType {
 	Identifier,
 	Integer,
 	Assign,
+	EqualSemicolonEqual,
+	Equal,
 	Plus,
 	SquareBracket,
 	Parentheses,
@@ -23,6 +25,7 @@ enum TokenType {
 	ExclamationMark,
 	Semicolon,
 	And,
+	Error
 };
 
 class Token {
@@ -30,7 +33,9 @@ private:
 	TokenType type;
 	int line;
 	int column;
-	Token(int line, int column, TokenType type);
+public:
+	Token();
+	Token(TokenType tokent, int l, int c);
 	virtual ~Token();
 };
 

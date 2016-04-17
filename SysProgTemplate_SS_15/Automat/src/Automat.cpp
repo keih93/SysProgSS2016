@@ -4,7 +4,7 @@
  */
 
 #include "../includes/Automat.h"
-#include "../../Scanner/includes/IScanner.h"
+#include "../../Scanner/includes/Scanner.h"
 #include "../../Scanner/includes/Token.h"
 
 #include <stdlib.h>
@@ -24,8 +24,8 @@ State11* State11::theState = NULL;
 State12* State12::theState = NULL;
 
 State::State() {
-
 }
+
 State0::State0() {
 }
 
@@ -158,6 +158,7 @@ void State0::read(char c, Automat* automat) {
 	case '7':
 	case '8':
 	case '9':
+		automat->countcolumn(1);
 		automat->setState(State1::makeState()); //integer
 		break;
 	case 'a':
@@ -212,6 +213,7 @@ void State0::read(char c, Automat* automat) {
 	case 'X':
 	case 'Y':
 	case 'Z':
+		automat->countcolumn(1);
 		automat->setState(State2::makeState()); //identifier
 		break;
 	case '+':
@@ -227,25 +229,37 @@ void State0::read(char c, Automat* automat) {
 	case '}':
 	case '[':
 	case ']':
+		automat->countcolumn(1);
 		automat->setState(State3::makeState()); //einzelnes sign ohne : und =
 		break;
 	case ':':
-		automat->setState(State4::makeState()); //einzelnes sign ohne : und =
+		automat->countcolumn(1);
+		automat->setState(State4::makeState()); //:=
 		break;
 	case '=':
-		automat->setState(State6::makeState()); //einzelnes sign ohne : und =
+		automat->countcolumn(1);
+		automat->setState(State6::makeState()); //=,=:=
 		break;
 	case '&':
-		automat->setState(State9::makeState()); //einzelnes sign ohne : und =
+		automat->countcolumn(1);
+		automat->setState(State9::makeState()); //&&
 		break;
 	case ' ':
+		automat->countcolumn(1);
 		automat->setState(State0::makeState()); //Leerzeichen hat keine Auswirkungen
 		break;
 	case '\0':
 		automat->stop(); //Ende des Dokuments erreicht
 		break;
 	case '\n':
-
+		automat->countline(1);
+		automat->resetcolumn();
+		automat->setState(State0::makeState());
+		break;
+	case '\t':
+		automat->countcolumn(8);
+		automat->setState(State0::makeState());
+		break;
 	default:			//fehlerhaftes Zeichen
 		automat->error();
 		automat->setState(State0::makeState());
@@ -265,21 +279,50 @@ void State1::read(char c, Automat* automat) {
 	case '7':
 	case '8':
 	case '9':
+		automat->countcolumn(1);
 		automat->setState(State1::makeState()); //integer
 		break;
-
 	case ' ':
+		//Token machen und zum Zustand 0 gehen
+		automat->setToken(
+				automat->mkToken(Integer, automat->getLine(),
+						automat->getColumn())); //make token
+		automat->countcolumn(1);
 		automat->setState(State0::makeState()); //Leerzeichen hat keine Auswirkungen
 		break;
 	case '\0':
 		//TODO
 		//ungetChar(1)
-		//makeToken(CharArrayInScanner) --> integer
+		//Token machen und zum Zustand 0 gehen --> integer
+		automat->setToken(
+				automat->mkToken(Integer, automat->getLine(),
+						automat->getColumn()));
+		automat->setState(State0::makeState());
+		break;
+	case '\n':
+		//Token machen und zum Zustand 0 gehen --> integer
+		automat->setToken(
+				automat->mkToken(Integer, automat->getLine(),
+						automat->getColumn()));
+		automat->countline(1);
+		automat->resetcolumn();
+		automat->setState(State0::makeState());
+
+		break;
+	case '\t':
+		//Token machen und zum Zustand 0 gehen --> integer
+		automat->setToken(
+				automat->mkToken(Integer, automat->getLine(),
+						automat->getColumn()));
+		automat->countcolumn(8);
 		automat->setState(State0::makeState());
 		break;
 	default: //fehlerhaftes Zeichen wird an Status 0 weitergeleitet
 		//ungetChar(1)
 		//makeToken(Integer) --> integer
+		automat->setToken(
+				automat->mkToken(Integer, automat->getLine(),
+						automat->getColumn()));
 		automat->setState(State0::makeState()); //Statuswechsel erst nach makeToken damit man durch currentState weiß welcher Tokentyp erzeugt werden muss
 		break;
 	}
@@ -349,26 +392,56 @@ void State2::read(char c, Automat* automat) {
 	case 'X':
 	case 'Y':
 	case 'Z':
+		automat->countcolumn(1);
 		automat->setState(State2::makeState()); //identifier
 		break;
 	case ' ':
+		//makeToken(Identifier) --> identifier
+		automat->setToken(
+				automat->mkToken(Identifier, automat->getLine(),
+						automat->getColumn()));
+		automat->countcolumn(1);
 		automat->setState(State0::makeState()); //Leerzeichen hat keine Auswirkungen
+		break;
+	case '\n':
+		//makeToken(Identifier) --> identifier
+		automat->setToken(
+				automat->mkToken(Identifier, automat->getLine(),
+						automat->getColumn()));
+		automat->countline(1);
+		automat->resetcolumn();
+		automat->setState(State0::makeState());
+		break;
+	case '\t':
+		//makeToken(Identifier) --> identifier
+		automat->setToken(
+				automat->mkToken(Identifier, automat->getLine(),
+						automat->getColumn()));
+		automat->countcolumn(8);
+		automat->setState(State0::makeState());
 		break;
 	case '\0':
 		//TODO
 		//ungetChar(1)
-		//makeToken(CharArrayInScanner) -->identifier
+		///makeToken(Identifier) --> identifier
+		automat->setToken(
+				automat->mkToken(Identifier, automat->getLine(),
+						automat->getColumn()));
 		automat->setState(State0::makeState());
 		break;
 	default: //fehlerhaftes Zeichen wird an Status 0 weitergeleitet
 			 //ungetChar(1)
-			 //makeToken(CharArrayInScanner) --> identifier
+		///makeToken(Identifier) --> identifier
+		automat->setToken(
+				automat->mkToken(Identifier, automat->getLine(),
+						automat->getColumn()));
 		automat->setState(State0::makeState()); //Statuswechsel erst nach makeToken damit man durch currentState weiß welcher Tokentyp erzeugt werden muss
 		break;
 	}
 }
 
 void State3::read(char c, Automat* automat) {
+	//todo
 	//fehlerhaftes Zeichen wird an Status 0 weitergeleitet
 	//ungetChar(1)
 	//makeToken(CharArrayInScanner) --> sign
@@ -378,23 +451,52 @@ void State3::read(char c, Automat* automat) {
 void State4::read(char c, Automat* automat) {
 	switch (c) {
 	case '*':
+		automat->countcolumn(1);
 		automat->setState(State11::makeState());
 		break;
 	case '=':
+		automat->countcolumn(1);
 		automat->setState(State5::makeState());
 		break;
 	case ' ':
+		automat->setToken(
+				automat->mkToken(Semicolon, automat->getLine(),
+						automat->getColumn()));
+		automat->countcolumn(1);
 		automat->setState(State0::makeState());
 		break;
 	case '\0':
 		//TODO
 		//ungetChar(1)
 		//makeToken(CharArrayInScanner) --> :
+		automat->setToken(
+				automat->mkToken(Semicolon, automat->getLine(),
+						automat->getColumn()));
+		automat->setState(State0::makeState());
+		break;
+	case '\n':
+		//makeToken(CharArrayInScanner) --> :
+		automat->setToken(
+				automat->mkToken(Semicolon, automat->getLine(),
+						automat->getColumn()));
+		automat->countline(1);
+		automat->resetcolumn();
+		automat->setState(State0::makeState());
+		break;
+	case '\t':
+		//makeToken(CharArrayInScanner) --> :
+		automat->setToken(
+				automat->mkToken(Semicolon, automat->getLine(),
+						automat->getColumn()));
+		automat->countcolumn(8);
 		automat->setState(State0::makeState());
 		break;
 	default: //fehlerhaftes Zeichen wird an Status 0 weitergeleitet
 			 //ungetChar(1)
 			 //makeToken(CharArrayInScanner) --> :
+		automat->setToken(
+				automat->mkToken(Semicolon, automat->getLine(),
+						automat->getColumn()));
 		automat->setState(State0::makeState()); //Statuswechsel erst nach makeToken damit man durch currentState weiß welcher Tokentyp erzeugt werden muss
 		break;
 	}
@@ -404,27 +506,55 @@ void State5::read(char c, Automat* automat) {
 	//fehlerhaftes Zeichen wird an Status 0 weitergeleitet
 	//ungetChar(1)
 	//makeToken(CharArrayInScanner) --> :=
+	automat->setToken(
+			automat->mkToken(Assign, automat->getLine(), automat->getColumn()));
 	automat->setState(State0::makeState()); //Statuswechsel erst nach makeToken damit man durch currentState weiß welcher Tokentyp erzeugt werden muss
 }
 
 void State6::read(char c, Automat* automat) {
 	switch (c) {
 	case ':':
+		automat->countcolumn(1);
 		automat->setState(State7::makeState());
 		break;
 	case ' ':
-		automat->setState(State0::makeState()); //bleibt in State6
+		//makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine(),
+						automat->getColumn()));
+		automat->countcolumn(1);
+		automat->setState(State0::makeState());
 		break;
 	case '\0':
 		//TODO
 		//ungetChar(1)
 		//makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine(),
+						automat->getColumn()));
 		automat->setState(State0::makeState());
 		break;
-
+	case '\n':
+		//makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine(),
+						automat->getColumn()));
+		automat->countline(1);
+		automat->resetcolumn();
+		break;
+	case '\t':
+		//makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine(),
+						automat->getColumn()));
+		automat->countcolumn(8);
+		break;
 	default: //fehlerhaftes Zeichen wird an Status 0 weitergeleitet
 			 //ungetChar(1)
 			 //makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine(),
+						automat->getColumn()));
 		automat->setState(State0::makeState()); //Statuswechsel erst nach makeToken damit man durch currentState weiß welcher Tokentyp erzeugt werden muss
 		break;
 	}
@@ -433,15 +563,25 @@ void State6::read(char c, Automat* automat) {
 void State7::read(char c, Automat* automat) {
 	switch (c) {
 	case '=':
+		automat->countcolumn(1);
 		automat->setState(State8::makeState());
 		break;
 	case ' ':
+		//ungetchar(2)
+		//makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine() - 1,
+						automat->getColumn() - 1));
+		automat->countcolumn(1);
 		automat->setState(State0::makeState()); //bleibt in State7
 		break;
 	case '\0':
 		//todo
 		//ungetChar(2)
 		//makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine() - 1,
+						automat->getColumn() - 1));
 		automat->setState(State0::makeState());
 		break;
 	case '0':
@@ -521,14 +661,44 @@ void State7::read(char c, Automat* automat) {
 	case ']':
 	case ':':
 	case '&':
-		automat->setState(State0::makeState());
 		//todo
 		//ungetChar(2)!
 		//makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine() - 1,
+						automat->getColumn() - 1));
+		automat->setState(State0::makeState());
 		break;
-	default: //fehlerhaftes Zeichen wird an Status 0 weitergeleitet
-			 //ungetChar(2)
-			 //makeToken(CharArrayInScanner) --> =
+	case '\n':
+		//todo
+		//ungetchar(2)
+		//makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine() - 1,
+						automat->getColumn() - 1));
+		automat->countline(1);
+		automat->resetcolumn();
+		automat->setState(State0::makeState());
+		break;
+	case '\t':
+		//todo
+		//ungetchar(2)
+		//makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine() - 1,
+						automat->getColumn() - 1));
+		automat->countcolumn(8);
+		automat->setState(State0::makeState());
+		break;
+	default:
+		//todo
+		//fehlerhaftes Zeichen wird an Status 0 weitergeleitet
+		//error();
+		//ungetChar(2)
+		//makeToken(CharArrayInScanner) --> =
+		automat->setToken(
+				automat->mkToken(Equal, automat->getLine() - 1,
+						automat->getColumn() - 1));
 		automat->setState(State0::makeState()); //Statuswechsel erst nach makeToken damit man durch currentState weiß welcher Tokentyp erzeugt werden muss
 		break;
 	}
@@ -538,6 +708,9 @@ void State8::read(char c, Automat* automat) {
 	//fehlerhaftes Zeichen wird an Status 0 weitergeleitet
 	//ungetChar(1)
 	//makeToken(CharArrayInScanner) --> =:=
+	automat->setToken(
+			automat->mkToken(EqualSemicolonEqual, automat->getLine() - 1,
+					automat->getColumn() - 1));
 	automat->setState(State0::makeState()); //Statuswechsel erst nach makeToken damit man durch currentState weiß welcher Tokentyp erzeugt werden muss
 
 }
@@ -545,45 +718,75 @@ void State8::read(char c, Automat* automat) {
 void State9::read(char c, Automat* automat) {
 	switch (c) {
 	case '&':
+		automat->countcolumn(1);
 		automat->setState(State10::makeState());
 		break;
 	case ' ':
-		automat->setState(State0::makeState()); //bleibt in State9
+		//Vorherige & als Fehler bearbeiten
+		automat->error();
+		automat->countcolumn(1);
+		automat->setState(State0::makeState());
+		break;
+	case '\n':
+		//Vorherige & als Fehler bearbeiten
+		automat->error();
+		automat->countline(1);
+		automat->resetcolumn();
+		automat->setState(State0::makeState());
+		break;
+	case '\t':
+		//Vorherige & als Fehler bearbeiten
+		automat->error();
+		automat->countcolumn(8);
+		automat->setState(State0::makeState());
 		break;
 	case '\0':
-		//todo
-		//ungetChar(1)
-		//makeToken(CharArrayInScanner) --> FehlerToken
+		//Vorherige & als Fehler bearbeiten
 		automat->error();
 		automat->setState(State0::makeState());
 		break;
-	default:				//fehlerhaftes Zeichen
-		//todo
-		//ungetChar(1)
-		//makeToken(CharArrayInScanner) --> FehlerToken
+	default:
+		//Vorherige & als Fehler bearbeiten
+		automat->error();
 		automat->setState(State0::makeState());
-		automat->error(); //& ist fehlerhaftes Zeichen
+		//& ist fehlerhaftes Zeichen
 		break;
 	}
 }
 
 void State10::read(char c, Automat* automat) {
 	//fehlerhaftes Zeichen wird an Status 0 weitergeleitet
-//ungetChar(1)
-//makeToken(CharArrayInScanner) --> &&
-	automat->setState(State0::makeState()); //Statuswechsel erst nach makeToken damit man durch currentState weiß welcher Tokentyp erzeugt werden muss
+	//ungetChar(1)
+	//makeToken(CharArrayInScanner) --> &&
+	automat->setToken(
+			automat->mkToken(And, automat->getLine(), automat->getColumn()));
+	//Statuswechsel erst nach makeToken damit man
+	//durch currentState weiß welcher Tokentyp erzeugt werden muss
+	automat->setState(State0::makeState());
 }
 
 void State11::read(char c, Automat* automat) {
 	switch (c) {
 	case '*':
+		automat->countcolumn(1);
 		automat->setState(State12::makeState());
 		break;
+	case '\n':
+		automat->countline(1);
+		automat->resetcolumn();
+		automat->setState(State0::makeState());
+		break;
+	case '\t':
+		automat->countcolumn(8);
+		automat->setState(State0::makeState());
+		break;
 	case '\0':
+		//todo
 		automat->setState(State0::makeState());
 		automat->stop();
 		break;
 	default: //alle ASCII Zeichen im Kommentar erlaubt
+		automat->countcolumn(1);
 		automat->setState(State11::makeState());
 		break;
 	}
@@ -592,13 +795,25 @@ void State11::read(char c, Automat* automat) {
 void State12::read(char c, Automat* automat) {
 	switch (c) {
 	case ':':
+		automat->countcolumn(1);
+		automat->setState(State0::makeState());
+		break;
+	case '\n':
+		automat->countline(1);
+		automat->resetcolumn();
+		automat->setState(State0::makeState());
+		break;
+	case '\t':
+		automat->countcolumn(8);
 		automat->setState(State0::makeState());
 		break;
 	case '\0':
+		//todo
 		automat->setState(State0::makeState());
 		automat->stop();
 		break;
 	default: //alle ASCII Zeichen im Kommentar erlaubt
+		automat->countcolumn(1);
 		automat->setState(State11::makeState());
 		break;
 	}
@@ -606,25 +821,59 @@ void State12::read(char c, Automat* automat) {
 
 Automat::Automat() {
 	this->currentState = State0::makeState();
-	//IScanner* isc = new IScanner();
+	this->line = 1;
+	this->column = 0;
+	this->currentToken = NULL;
 }
 
 Automat::~Automat() {
 
 }
 
-void Automat::handleChar(char c) {
+void Automat::resetcolumn() {
+	this->column = 0;
+}
+
+void Automat::countline(int c) {
+	this->line += c;
+}
+
+void Automat::countcolumn(int c) {
+	this->column += c;
+}
+
+int Automat::getLine() {
+	return this->line;
+}
+
+int Automat::getColumn() {
+	return this->column;
+}
+
+Token* Automat::handleChar(char c) {
 	this->currentState->read(c, this);
+	return this->currentToken;
 }
 
 void Automat::setState(State* s) {
 	this->currentState = s;
 }
 
+Token* Automat::mkToken(TokenType tokent, int l, int c) {
+	Token* token = new Token(tokent, l, c);
+	return token;
+}
+
+void Automat::setToken(Token* t) {
+	this->currentToken = t;
+}
+
 void Automat::error() { //muss Fehlertoken erzeugen aus CharArrayInScanner
-//todo
+	Token* t = this->mkToken(Error, this->line, this->column);
+	this->setToken(t);
 }
 
 void Automat::stop() {
+
 }
 
