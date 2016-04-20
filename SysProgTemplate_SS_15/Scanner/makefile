@@ -24,7 +24,7 @@ SYMBOLTABLEDIR = ../Symboltable
 ## darauf achten, dass letzte Zeile ohne "\" eingetragen wird
 
 OBJS = $(OBJDIR)/Scanner.o \
-OBJS = $(OBJDIR)/Token.o \
+	$(OBJDIR)/Token.o \
 	#$(OBJDIR)/xx1.o \
 	#$(OBJDIR)/xxn.o
 

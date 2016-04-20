@@ -7,15 +7,17 @@
 
 #ifndef Automat_H_
 #define Automat_H_
-#include "../../Scanner/includes/Scanner.h"
+#include "../../Scanner/includes/IScanner.h"
 
 class State;
 
+
+
 class Automat {
 public:
-	Automat();
+	Automat(IScanner* scanner);
 	virtual ~Automat();
-	Token* handleChar(char c);
+	int handleChar(char c);
 	void setState(State* s);
 	void setToken(Token* t);
 	void error();
@@ -27,16 +29,18 @@ public:
 	void setTokenType(char c, int i);
 	void setLexem(char c);
 	void setValue(char c);
-	void tokenFound();
-	String getLexem();
+	void tokenfound(int i);
 	int getValue();
 	int getLine();
 	int getColumn();
+	TokenType getTokenType();
+	void ungetChar(int i);
 private:
-	String lexem;
+
+	IScanner* scanner;
 	int value;
 	TokenType type;
-	int tokenfound;
+	int tokenFound;
 	int tokenline;
 	int tokencolumn;
 	int currentline;
@@ -62,7 +66,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State0();
+	//virtual ~State0();
 
 };
 
@@ -75,7 +79,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State1();
+	//virtual ~State1();
 };
 
 class State2: public State {
@@ -88,7 +92,7 @@ public:
 
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State2();
+	//virtual ~State2();
 };
 
 class State3: public State {
@@ -100,7 +104,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State3();
+	//virtual ~State3();
 };
 
 class State4: public State {
@@ -112,7 +116,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State4();
+	//virtual ~State4();
 };
 
 class State5: public State {
@@ -124,7 +128,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State5();
+	//virtual ~State5();
 };
 
 class State6: public State {
@@ -136,7 +140,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State6();
+	//virtual ~State6();
 };
 
 class State7: public State {
@@ -148,7 +152,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State7();
+	//virtual ~State7();
 };
 
 class State8: public State {
@@ -160,7 +164,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State8();
+	//virtual ~State8();
 };
 
 class State9: public State {
@@ -172,7 +176,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State9();
+	//virtual ~State9();
 };
 
 class State10: public State {
@@ -184,7 +188,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State10();
+	//virtual ~State10();
 };
 
 class State11: public State {
@@ -194,7 +198,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State11();
+	//virtual ~State11();
 };
 
 class State12: public State {
@@ -204,7 +208,7 @@ private:
 public:
 	void read(char c, Automat* a);
 	static State* makeState();
-	virtual ~State12();
+	//virtual ~State12();
 };
 
 #endif /* Automat_H_ */

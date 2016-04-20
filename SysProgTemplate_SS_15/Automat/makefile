@@ -18,7 +18,7 @@ makeTestAutomat: AutomatTarget TestAutomatTarget
 # -g --> debug Informationen erzeugen
 # -Wall --> alle meldungen erzeugen (Warning all)
 
-AutomatTarget :  src/Automat.cpp includes/Automat.h 
+AutomatTarget :  src/Automat.cpp includes/Automat.h ../Scanner/includes/IScanner.h
 	g++ -g  -c -Wall src/Automat.cpp -o objs/Automat.o  
 
 

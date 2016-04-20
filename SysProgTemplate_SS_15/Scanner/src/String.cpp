@@ -18,6 +18,14 @@ String::String(char c) {
 	str[1] = '\0';
 }
 
+String::String(int i){
+	size = 1;
+	str = new char[2];
+	char c = i;
+	str[0] = c;
+	str[1] = '\0';
+}
+
 String::String(const char *s) {
 	//array zählen
 	while (*s != '\0') {
@@ -52,6 +60,19 @@ char& String::operator[](int index) {
 }
 
 String& String::operator=(String& s) {
+
+	if (this != &s) {
+		delete[] str;
+		size = s.size;
+		str = new char[size];
+		for (int i = 0; i < size; i++) {
+		str[i] = s.str[i];
+	}
+	}
+	return *this;
+}
+
+String& String::operator=(int s) {
 
 	if (this != &s) {
 		delete[] str;

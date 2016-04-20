@@ -7,9 +7,10 @@
 
 #ifndef SCANNER_INCLUDES_TOKEN_H_
 #define SCANNER_INCLUDES_TOKEN_H_
-#include "../includes/String.h"
+
 
 enum TokenType {
+	ze_ro,
 	Identifier,
 	Integer,
 	Assign,
@@ -34,11 +35,13 @@ private:
 	TokenType type;
 	int line;
 	int column;
-	String infokey;
+	char* infokey;
+	int value;
 
 public:
 	Token();
-	Token(TokenType tokent, int l, int c);
+	Token(TokenType tokent, int l, int c, char* info);
+	Token(TokenType tokent, int l, int c, int value);
 	virtual ~Token();
 };
 

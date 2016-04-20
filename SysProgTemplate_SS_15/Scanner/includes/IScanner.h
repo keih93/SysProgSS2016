@@ -11,10 +11,10 @@
 
 class IScanner {
 public:
-	IScanner();
-	virtual ~IScanner();
-	Token mkToken(TokenType tktype);
-	void ungetChar(int index);
-	void stop();
+	//IScanner();
+	//virtual ~IScanner();
+	//Token mkToken(TokenType tktype);
+	virtual void ungetChar(int index) = 0;
+	virtual void stop() = 0;
 };
 #endif /* SCANNER_INCLUDES_ISCANNER_H_ */
