@@ -5,7 +5,7 @@
  *      Author: ngng1012
  */
 #include "../includes/Token.h"
-
+#include "../includes/String.h"
 
 
 Token::Token(TokenType tokent, int l, int c){

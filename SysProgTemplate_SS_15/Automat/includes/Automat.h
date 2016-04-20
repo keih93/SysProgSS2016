@@ -17,20 +17,31 @@ public:
 	virtual ~Automat();
 	Token* handleChar(char c);
 	void setState(State* s);
-	Token* mkToken(TokenType token, int l, int c);
 	void setToken(Token* t);
 	void error();
 	void stop();
 	void countline(int c);
 	void countcolumn(int c);
 	void resetcolumn();
+	void setTokenPosition();
+	void setTokenType(char c, int i);
+	void setLexem(char c);
+	void setValue(char c);
+	void tokenFound();
+	String getLexem();
+	int getValue();
 	int getLine();
 	int getColumn();
 private:
-	int line;
-	int column;
+	String lexem;
+	int value;
+	TokenType type;
+	int tokenfound;
+	int tokenline;
+	int tokencolumn;
+	int currentline;
+	int currentcolumn;
 	State* currentState;
-	Token* currentToken;
 };
 
 class State {

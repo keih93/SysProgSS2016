@@ -7,6 +7,7 @@
 
 #ifndef SCANNER_INCLUDES_TOKEN_H_
 #define SCANNER_INCLUDES_TOKEN_H_
+#include "../includes/String.h"
 
 enum TokenType {
 	Identifier,
@@ -33,13 +34,12 @@ private:
 	TokenType type;
 	int line;
 	int column;
+	String infokey;
+
 public:
 	Token();
 	Token(TokenType tokent, int l, int c);
 	virtual ~Token();
 };
-
-
-
 
 #endif /* SCANNER_INCLUDES_TOKEN_H_ */
