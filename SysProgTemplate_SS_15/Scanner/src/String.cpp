@@ -32,10 +32,10 @@ String::String(const char *s) {
 		s++;
 		size++;
 	}
-	//zeiger züruck auf dem 1.Stelle
+	//zeiger züruck auf die 1.Stelle
 	s = s - size;
 	str = new char[size + 1];
-	//jede Zeichen kopieren
+	//jedes Zeichen kopieren
 	for (int i = 0; i < size; i++) {
 		str[i] = s[i];
 	}
@@ -87,7 +87,7 @@ String& String::operator=(int s) {
 
 
 String& String::operator+=(String& s) {
-	//Zwischen speichern
+	//zwischenspeichern
 	int osize = size;
 	char* temp = new char[osize];
 

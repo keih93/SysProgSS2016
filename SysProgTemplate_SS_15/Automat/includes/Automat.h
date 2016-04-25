@@ -26,7 +26,7 @@ public:
 	void countcolumn(int c);
 	void resetcolumn();
 	void setTokenPosition();
-	void setTokenType(char c, int i);
+	void setTokenType(char c, TokenType t);
 	void setLexem(char c);
 	void setValue(char c);
 	void tokenfound(int i);

@@ -19,6 +19,7 @@ Scanner::Scanner() {
 	automat = new Automat(this);
 	//posix_memalign((void**) &buffer, 512, 512);
 	pointer = 0;
+	char buffer[];
 }
 
 void Scanner::stop(){
@@ -36,11 +37,10 @@ Token* Scanner::mkToken(TokenType t, int l, int c, int value) {
 Token* Scanner::nextToken() {
 	int tokenfound = 0;
 	Token* t;
-	pointer = 0;
 	while (tokenfound == 0) {
 		char c = buf->getchar();
-		buffer[pointer] = c;
-		pointer++;
+		//buffer[pointer] = c;
+		//pointer++;
 		tokenfound = automat->handleChar(c);
 	}
 	TokenType type = automat->getTokenType();

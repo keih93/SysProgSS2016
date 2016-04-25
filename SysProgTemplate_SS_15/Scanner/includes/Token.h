@@ -10,24 +10,25 @@
 
 
 enum TokenType {
-	ze_ro,
+	ze_ro, //default bzw, Kommentar, was kein Token ist
+	Sign, //allgemein
 	Identifier,
 	Integer,
-	Assign,
-	EqualSemicolonEqual,
-	Equal,
-	Plus,
-	SquareBracket,
-	Parentheses,
-	Braces,
-	Chevrons,
-	Colon,
-	Minus,
-	Star,
-	ExclamationMark,
-	Semicolon,
-	And,
-	Error
+	Assign, //:=
+	EqualColonEqual, //=:=
+	Equal, // =
+	Plus, // +
+	SquareBracket, // [ ]
+	Parentheses, // ( )
+	Braces,  //  { }
+	InequalitySign,  // < >
+	Colon,  //:
+	Minus,  //-
+	Star, //*
+	ExclamationMark,  //!
+	Semicolon,  //;
+	And, //&&
+	Error //Fehlertoken
 };
 
 class Token {

@@ -1,0 +1,13 @@
+!SESSION 2016-04-14 00:18:36.551 -----------------------------------------------
+eclipse.buildId=debbuild
+java.version=1.7.0_95
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86, WS=gtk, NL=de_DE
+Command-line arguments:  -os linux -ws gtk -arch x86
+
+!ENTRY org.eclipse.core.resources 4 77 2016-04-14 00:24:11.573
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2016-04-14 00:24:11.573
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2016-04-14 00:24:11.573
+!MESSAGE /home/sonja/Dokumente/SysProg/git1/SysProgSS2016/SysProgTemplate_SS_15 overlaps the workspace location: /home/sonja/Dokumente/SysProg/git1/SysProgSS2016/SysProgTemplate_SS_15

@@ -1,78 +1,47 @@
-23:26:27 **** Incremental Build of configuration Default for project SysProgTemplate_SS_15 ****
+21:55:09 **** Incremental Build of configuration Default for project SysProgTemplate_SS_15 ****
 make all 
 make -C Automat AutomatOBJTarget
-make[1]: Entering directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Automat'
+make[1]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Automat'
 make AutomatTarget
-make[2]: Entering directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Automat'
+make[2]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Automat'
 g++ -g  -c -Wall src/Automat.cpp -o objs/Automat.o  
-src/Automat.cpp: In constructor ‘Automat::Automat()’:
-src/Automat.cpp:467:9: warning: unused variable ‘currentState’ [-Wunused-variable]
-  State* currentState = State0::makeState();
-         ^
-make[2]: Leaving directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Automat'
-make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Automat'
+make[2]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Automat'
+make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Automat'
 make -C Buffer BufferOBJTarget
-make[1]: Entering directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
+make[1]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
 make BufferTarget
-make[2]: Entering directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
+make[2]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
 g++ -g  -c -Wall  src/Buffer.cpp -o objs/Buffer.o
-make[2]: Leaving directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
-make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
+make[2]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
+make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
 make -C Symboltable SymboltableOBJTarget
-make[1]: Entering directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
+make[1]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
 make SymboltableTarget
-make[2]: Entering directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
+make[2]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
 make[2]: Nothing to be done for 'SymboltableTarget'.
-make[2]: Leaving directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
-make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
+make[2]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
+make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
 make -C Scanner makeTestScanner
-make[1]: Entering directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Scanner'
+make[1]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Scanner'
+g++ Scanner.cpp
+g++ -g  -c -Wall  -o objs/Scanner.o  src/Scanner.cpp
+src/Scanner.cpp: In member function ‘char* Scanner::mkLexem()’:
+src/Scanner.cpp:62:8: warning: unused variable ‘tempbuffer’ [-Wunused-variable]
+  char* tempbuffer = new char[4];
+        ^
 g++ -g  -c -Wall src/TestScanner.cpp -o debug/TestScanner.o  
 src/TestScanner.cpp: In function ‘int main(int, char**)’:
 src/TestScanner.cpp:5:11: warning: variable ‘scanner’ set but not used [-Wunused-but-set-variable]
   Scanner* scanner;
            ^
 g++ -g debug/TestScanner.o objs/*.o ../Automat/objs/*.o ../Buffer/objs/*.o ../Symboltable/objs/*.o -o debug/ScannerTest
-/usr/bin/ld: i386:x86-64 architecture of input file `objs/Scanner.o' is incompatible with i386 output
+makefile:66: recipe for target 'ScannerTest' failed
 /usr/bin/ld: i386:x86-64 architecture of input file `../Symboltable/objs/Symboltable.o' is incompatible with i386 output
-objs/Scanner.o: In Funktion `Scanner::Scanner()':
-/home/stud/lkt/fbi/ngng1012/SysProgSS2016/SysProgTemplate_SS_15/Scanner/src/Scanner.cpp:13: Nicht definierter Verweis auf `operator new(unsigned long)'
-makefile:65: recipe for target 'ScannerTest' failed
-make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Scanner'
+make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/5.Labortermin_fortgesetztVon Sonja/SysProgSS2016/SysProgTemplate_SS_15/Scanner'
 makefile:43: recipe for target 'scanner' failed
-../Automat/objs/Automat.o: In Funktion `State::State()':
-/home/sonja/Dokumente/SysProg/bearbeiteteVersionen/3.Labortermin/SysProgSS2016/SysProgTemplate_SS_15/Automat/src/../includes/Automat.h:25: Nicht definierter Verweis auf `vtable for State'
-../Automat/objs/Automat.o:(.rodata._ZTV7State10[_ZTV7State10]+0xc): Nicht definierter Verweis auf `State10::~State10()'
-../Automat/objs/Automat.o:(.rodata._ZTV7State10[_ZTV7State10]+0x10): Nicht definierter Verweis auf `State10::~State10()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State9[_ZTV6State9]+0xc): Nicht definierter Verweis auf `State9::~State9()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State9[_ZTV6State9]+0x10): Nicht definierter Verweis auf `State9::~State9()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State8[_ZTV6State8]+0xc): Nicht definierter Verweis auf `State8::~State8()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State8[_ZTV6State8]+0x10): Nicht definierter Verweis auf `State8::~State8()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State7[_ZTV6State7]+0xc): Nicht definierter Verweis auf `State7::~State7()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State7[_ZTV6State7]+0x10): Nicht definierter Verweis auf `State7::~State7()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State6[_ZTV6State6]+0xc): Nicht definierter Verweis auf `State6::~State6()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State6[_ZTV6State6]+0x10): Nicht definierter Verweis auf `State6::~State6()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State5[_ZTV6State5]+0xc): Nicht definierter Verweis auf `State5::~State5()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State5[_ZTV6State5]+0x10): Nicht definierter Verweis auf `State5::~State5()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State4[_ZTV6State4]+0xc): Nicht definierter Verweis auf `State4::~State4()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State4[_ZTV6State4]+0x10): Nicht definierter Verweis auf `State4::~State4()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State3[_ZTV6State3]+0xc): Nicht definierter Verweis auf `State3::~State3()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State3[_ZTV6State3]+0x10): Nicht definierter Verweis auf `State3::~State3()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State2[_ZTV6State2]+0xc): Nicht definierter Verweis auf `State2::~State2()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State2[_ZTV6State2]+0x10): Nicht definierter Verweis auf `State2::~State2()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State1[_ZTV6State1]+0xc): Nicht definierter Verweis auf `State1::~State1()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State1[_ZTV6State1]+0x10): Nicht definierter Verweis auf `State1::~State1()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State0[_ZTV6State0]+0xc): Nicht definierter Verweis auf `State0::~State0()'
-../Automat/objs/Automat.o:(.rodata._ZTV6State0[_ZTV6State0]+0x10): Nicht definierter Verweis auf `State0::~State0()'
-../Automat/objs/Automat.o:(.rodata._ZTI7State10[_ZTI7State10]+0x8): Nicht definierter Verweis auf `typeinfo for State'
-../Automat/objs/Automat.o:(.rodata._ZTI6State9[_ZTI6State9]+0x8): Nicht definierter Verweis auf `typeinfo for State'
-../Automat/objs/Automat.o:(.rodata._ZTI6State8[_ZTI6State8]+0x8): Nicht definierter Verweis auf `typeinfo for State'
-../Automat/objs/Automat.o:(.rodata._ZTI6State7[_ZTI6State7]+0x8): Nicht definierter Verweis auf `typeinfo for State'
-../Automat/objs/Automat.o:(.rodata._ZTI6State6[_ZTI6State6]+0x8): Nicht definierter Verweis auf `typeinfo for State'
-../Automat/objs/Automat.o:(.rodata._ZTI6State5[_ZTI6State5]+0x8): Weitere nicht definierte Verweise auf `typeinfo for State' folgen
 collect2: error: ld returned 1 exit status
 make[1]: *** [ScannerTest] Error 1
 make: *** [scanner] Error 2
 
-23:26:31 Build Finished (took 4s.525ms)
+21:55:17 Build Finished (took 8s.137ms)
 
