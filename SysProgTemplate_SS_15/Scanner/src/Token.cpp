@@ -27,6 +27,10 @@ Token::~Token(){
 
 }
 
+char Token::getType(){
+	return 'F';
+}
+
 
 
 

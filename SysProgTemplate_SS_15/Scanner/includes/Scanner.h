@@ -18,10 +18,13 @@ private:
 	Buffer* buf;
 	Automat* automat;
 	char* buffer;
+	int hasungetc;
 	int pointer;
+	int temppointer;
 	char* mkLexem();
+	int end;
 public:
-	Scanner();
+	Scanner(Buffer* bufe);
 	 ~Scanner();
 	Token* nextToken();
 	void freeToken(Token token);

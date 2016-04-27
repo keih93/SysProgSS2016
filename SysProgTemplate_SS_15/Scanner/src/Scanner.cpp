@@ -9,20 +9,27 @@
 #include "../includes/Token.h"
 #include "../../Automat/includes/Automat.h"
 #include "../../Buffer/includes/Buffer.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 Scanner::~Scanner() {
-	// TODO Auto-generated destructor stub
 }
 
-Scanner::Scanner() {
-	buf = new Buffer("test.txt");
+Scanner::Scanner(Buffer* bufe) {
+	buf = bufe;
 	automat = new Automat(this);
-	//posix_memalign((void**) &buffer, 512, 512);
+	buffer = new char[10];
+	hasungetc = 0;
 	pointer = 0;
-	char buffer[];
+	temppointer = 0;
+	end = 0;
 }
 
-void Scanner::stop(){
+void Scanner::stop() {
 
 }
 
@@ -37,10 +44,45 @@ Token* Scanner::mkToken(TokenType t, int l, int c, int value) {
 Token* Scanner::nextToken() {
 	int tokenfound = 0;
 	Token* t;
+	char c;
+	int i = 0;
 	while (tokenfound == 0) {
-		char c = buf->getchar();
-		//buffer[pointer] = c;
-		//pointer++;
+		if (temppointer == 0) {
+			if (end != 0) {
+				c = buffer[pointer];
+				pointer++;
+				if (pointer == end) {
+					end = 0;
+					pointer = 0;
+				}
+			} else {
+				buffer[pointer] = buf->getchar();
+				c = buffer[pointer];
+				pointer++;
+
+			}
+
+		} else {
+			if (buffer[pointer] != '\0') {
+				while (pointer < temppointer || end > pointer) {
+					buffer[i] = buffer[pointer];
+					pointer++;
+					i++;
+				}
+				if (pointer == temppointer) {
+					end = i;
+					pointer = 0;
+					temppointer = 0;
+					c = buffer[pointer];
+					pointer++;
+					if (pointer == end) {
+						end = 0;
+					//	pointer = 0;
+					}
+				}
+
+			}
+		}
 		tokenfound = automat->handleChar(c);
 	}
 	TokenType type = automat->getTokenType();
@@ -56,16 +98,15 @@ Token* Scanner::nextToken() {
 }
 
 char* Scanner::mkLexem() {
-	char* lex = new char[pointer + 1];
-	for (int i = 0; i < pointer + 1; i++) {
+	char* lex = new char[pointer];
+	for (int i = 0; i < pointer; i++) {
 		lex[i] = buffer[i];
 	}
-	char* tempbuffer = new char[4];
-		for(int i = pointer; i < pointer; i++ );
 
 	return lex;
 }
 
 void Scanner::ungetChar(int i) {
+	this->temppointer = this->pointer;
 	this->pointer = this->pointer - i;
 }

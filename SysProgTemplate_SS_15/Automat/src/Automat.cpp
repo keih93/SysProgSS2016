@@ -611,7 +611,12 @@ void Automat::stop(){
 
 
 void Automat::setValue(char c) {
-	int i = c;
+	if(this->value == -1){
+		this->value = 0;
+	}
+	char* p = &c;
+	char** pp = &p;
+	int i = strtol(p,pp,10);
 	this->value = (this->value) * 10 + i;
 }
 

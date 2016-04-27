@@ -20,6 +20,7 @@ int main(int argc, char **argv) {
 		std::cout << a;
 		i++;
 	}
+	std::cout<<'a';
 
 	//buffer->getchar();
 	//buffer->getchar();
