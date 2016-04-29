@@ -544,7 +544,7 @@ Automat::~Automat() {
 }
 
 void Automat::resetcolumn() {
-	this->currentcolumn = 0;
+	this->currentcolumn = 1;
 }
 
 void Automat::countline(int c) {
@@ -561,7 +561,7 @@ void Automat::setTokenPosition() {
 }
 
 void Automat::setTokenType(char c, TokenType t) {
-	if (t != Sign) {
+	if (t == Sign) {
 		switch (c) {
 		case '+':
 			this->type = Plus;
@@ -625,7 +625,9 @@ TokenType Automat::getTokenType() {
 }
 
 int Automat::getValue() {
-	return this->value;
+	int tempval = this->value;
+	this->value = -1;
+	return tempval;
 }
 
 int Automat::getLine() {

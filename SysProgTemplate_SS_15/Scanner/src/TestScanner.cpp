@@ -15,9 +15,31 @@ int main(int argc, char **argv) {
 	Scanner* scanner;
 	Buffer* buf = new Buffer("test.txt");
 	scanner = new Scanner(buf);
+	int i = 0;
 	Token* token1 = scanner->nextToken();
-	Token* token2 = scanner->nextToken();
-	Token* token3 = scanner->nextToken();
-	Token* token4 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+	token1 = scanner->nextToken();
+
+
 }
 
