@@ -18,7 +18,9 @@ private:
 	Buffer* buf;
 	Automat* automat;
 	char* buffer;
+	int hasungetc;
 	int pointer;
+	int temppointer;
 	char* mkLexem();
 	int end;
 public:
@@ -29,7 +31,6 @@ public:
 	Token* mkToken(TokenType t, int l, int c, char* info);
 	Token* mkToken(TokenType tokent, int l, int c, int value);
 	void ungetChar(int index);
-	void copyChar();
 	void stop();
 };
 

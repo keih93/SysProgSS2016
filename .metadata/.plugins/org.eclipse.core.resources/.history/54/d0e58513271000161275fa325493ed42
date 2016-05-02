@@ -23,19 +23,20 @@ Scanner::Scanner(Buffer* bufe) {
 	buf = bufe;
 	automat = new Automat(this);
 	//buffer = new char[10];
-	pointer = 0; //steht auf dem nächsten zu verarbeitenden Zeichen
-	end = 0; //rechtes Ende der zu verarbeitenden Zeichen
+	pointer = 0;
+	temppointer = 0;
+	end = 0;
 }
 
 void Scanner::stop() {
 
 }
 
-Token* Scanner::mkToken(TokenType t, int l, int c, char* info) { //Token für einen Identifier oder ein fehlerhaftes Zeichen erzeugen
+Token* Scanner::mkToken(TokenType t, int l, int c, char* info) {
 	return new Token(t, l, c, info);
 }
 
-Token* Scanner::mkToken(TokenType t, int l, int c, int value) { //Token für einen Integer erzeugen
+Token* Scanner::mkToken(TokenType t, int l, int c, int value) {
 	return new Token(t, l, c, value);
 }
 
@@ -43,54 +44,68 @@ Token* Scanner::nextToken() {
 	int tokenfound = 0;
 	Token* t;
 	char c;
+	int i = 0;
 	while (tokenfound == 0) {
-		if (pointer == end) { //neues Zeichen einlesen
-			buffer[end] = buf->getchar();
-			end ++;
+		if (temppointer == 0) {
+			if (end != 0) {
+				c = buffer[pointer];
+				pointer++;
+				if (pointer == end) {
+					end = 0;
+					pointer = 0;
+				}
+			} else {
+				buffer[pointer] = buf->getchar();
+				c = buffer[pointer];
+				pointer++;
+
+			}
+
+		} else {
+			if (buffer[pointer] != '\0') {
+				while (pointer < temppointer || end > pointer) {
+					buffer[i] = buffer[pointer];
+					pointer++;
+					i++;
+				}
+				if (pointer == temppointer) {
+					end = i;
+					pointer = 0;
+					temppointer = 0;
+					c = buffer[pointer];
+					pointer++;
+					if (pointer == end) {
+						end = 0;
+					//	pointer = 0;
+					}
+				}
+
+			}
 		}
-		c = buffer[pointer]; //nächstes Zeichen verarbeiten
-		pointer++;
 		tokenfound = automat->handleChar(c);
 	}
-
 	TokenType type = automat->getTokenType();
 	int line = automat->getLine();
 	int column = automat->getColumn();
 	int val = automat->getValue();
-
-	if (type == Identifier) { //nur im Fall von einem Identifier, Integer oder Fehler wird ein Token erzeugt
-		t = this->mkToken(type, line, column, mkLexem()); //Token für einen Identifier oder Fehlertoken
-	} else if (type == Integer){ //Token für einen Integer
+	if (val == -1) {
+		t = this->mkToken(type, line, column, mkLexem());
+	} else {
 		t = this->mkToken(type, line, column, val);
-	} else{
-      // erkanntes Token überschreiben --> überlesen
-	  this->copyChar();
 	}
 	return t;
 }
 
 char* Scanner::mkLexem() {
-	char* lex;
-	lex = new char[pointer];
+	char* lex = new char[pointer];
 	for (int i = 0; i < pointer; i++) {
 		lex[i] = buffer[i];
 	}
-	this->copyChar();
+
 	return lex;
 }
 
 void Scanner::ungetChar(int i) {
+	this->temppointer = this->pointer;
 	this->pointer = this->pointer - i;
-}
-
-void Scanner::copyChar(){
-	int i = 0;
-	int temp = pointer;
-		while(temp < end){
-			buffer[i] = buffer[temp];
-			temp ++;
-			i++;
-		}
-	end = i;
-	pointer = 0;
 }

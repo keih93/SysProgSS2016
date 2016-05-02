@@ -43,6 +43,7 @@ Token* Scanner::nextToken() {
 	int tokenfound = 0;
 	Token* t;
 	char c;
+	int i = 0;
 	while (tokenfound == 0) {
 		if (pointer == end) { //neues Zeichen einlesen
 			buffer[end] = buf->getchar();
@@ -93,4 +94,5 @@ void Scanner::copyChar(){
 		}
 	end = i;
 	pointer = 0;
+
 }
