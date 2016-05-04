@@ -17,28 +17,10 @@ int main(int argc, char **argv) {
 	scanner = new Scanner(buf);
 	int i = 0;
 	Token* token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
-	token1 = scanner->nextToken();
+	while(i<38){
+		token1=scanner->nextToken();
+		i++;
+	}
 
 
 }

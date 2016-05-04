@@ -16,19 +16,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Scanner::~Scanner() {
-}
+Scanner::~Scanner() {}
 
 Scanner::Scanner(Buffer* bufe) {
 	buf = bufe;
 	automat = new Automat(this);
-	//buffer = new char[10];
+	buffer = new char[100];
 	pointer = 0; //steht auf dem nächsten zu verarbeitenden Zeichen
 	end = 0; //rechtes Ende der zu verarbeitenden Zeichen
 }
 
 void Scanner::stop() {
-
+	//return 1;
 }
 
 Token* Scanner::mkToken(TokenType t, int l, int c, char* info) { //Token für einen Identifier oder ein fehlerhaftes Zeichen erzeugen
@@ -41,32 +40,31 @@ Token* Scanner::mkToken(TokenType t, int l, int c, int value) { //Token für ein
 
 Token* Scanner::nextToken() {
 	int tokenfound = 0;
-	Token* t;
 	char c;
 	while (tokenfound == 0) {
 		if (pointer == end) { //neues Zeichen einlesen
 			buffer[end] = buf->getchar();
-			end ++;
+			end++;
 		}
 		c = buffer[pointer]; //nächstes Zeichen verarbeiten
 		pointer++;
 		tokenfound = automat->handleChar(c);
 	}
-
 	TokenType type = automat->getTokenType();
 	int line = automat->getLine();
 	int column = automat->getColumn();
 	int val = automat->getValue();
-
-	if (type == Identifier) { //nur im Fall von einem Identifier, Integer oder Fehler wird ein Token erzeugt
-		t = this->mkToken(type, line, column, mkLexem()); //Token für einen Identifier oder Fehlertoken
-	} else if (type == Integer){ //Token für einen Integer
-		t = this->mkToken(type, line, column, val);
-	} else{
-      // erkanntes Token überschreiben --> überlesen
-	  this->copyChar();
+	if (type == ze_ro) {
+		// erkanntes Token überschreiben --> überlesen
+		this->copyChar();
+		return this->nextToken();
+	} else if (type == Integer) { //Token für einen Integer
+		this->copyChar();
+		return this->mkToken(type, line, column, val);
+	} else {
+		//nur im Fall von einem Identifier, Integer oder Fehler wird ein Token erzeugt
+		return this->mkToken(type, line, column, mkLexem()); //Token für einen Identifier oder Fehlertoken
 	}
-	return t;
 }
 
 char* Scanner::mkLexem() {
@@ -83,14 +81,14 @@ void Scanner::ungetChar(int i) {
 	this->pointer = this->pointer - i;
 }
 
-void Scanner::copyChar(){
+void Scanner::copyChar() {
 	int i = 0;
 	int temp = pointer;
-		while(temp < end){
-			buffer[i] = buffer[temp];
-			temp ++;
-			i++;
-		}
+	while (temp < end) {
+		buffer[i] = buffer[temp];
+		temp++;
+		i++;
+	}
 	end = i;
 	pointer = 0;
 }

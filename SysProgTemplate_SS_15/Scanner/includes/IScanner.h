@@ -12,7 +12,7 @@
 class IScanner {
 public:
 	//IScanner();
-	//virtual ~IScanner();
+	//~IScanner();
 	//Token mkToken(TokenType tktype);
 	virtual void ungetChar(int index) = 0;
 	virtual void stop() = 0;

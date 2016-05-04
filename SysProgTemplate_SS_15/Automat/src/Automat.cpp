@@ -6,9 +6,11 @@
 #include "../includes/Automat.h"
 #include "../../Scanner/includes/Scanner.h"
 #include "../../Scanner/includes/Token.h"
-#include "../../Scanner/includes/String.h"
-
 #include <stdlib.h>
+       #include <limits.h>
+       #include <stdio.h>
+       #include <errno.h>
+
 
 State0* State0::theState = NULL;
 State1* State1::theState = NULL;
@@ -255,6 +257,8 @@ void State0::read(char c, Automat* automat) {
 		automat->setState(State9::makeState()); //&&
 		break;
 	case ' ':
+		automat->setTokenType(c, ze_ro);
+		automat->tokenfound(1);
 		automat->countcolumn(1);
 		automat->setState(State0::makeState()); //Leerzeichen führt immer in Zustand 0
 		break;
@@ -262,11 +266,15 @@ void State0::read(char c, Automat* automat) {
 		automat->stop(); //Ende des Dokuments erreicht
 		break;
 	case '\n':
+		automat->setTokenType(c, ze_ro);
+		automat->tokenfound(1);
 		automat->countline(1);
 		automat->resetcolumn();
 		automat->setState(State0::makeState());
 		break;
 	case '\t':
+		automat->setTokenType(c, ze_ro);
+		automat->tokenfound(1);
 		automat->countcolumn(8);
 		automat->setState(State0::makeState());
 		break;
@@ -537,7 +545,7 @@ Automat::Automat(IScanner* scanner) {
 	this->currentline = 1;
 	this->currentcolumn = 1;
 	this->value = -1;
-	}
+}
 
 Automat::~Automat() {
 
@@ -600,24 +608,22 @@ void Automat::setTokenType(char c, TokenType t) {
 	}
 }
 
-void Automat::ungetChar(int i){
+void Automat::ungetChar(int i) {
 	scanner->ungetChar(i);
 }
 
-
-void Automat::stop(){
+void Automat::stop() {
 	scanner->stop();
 }
 
-
 void Automat::setValue(char c) {
 	if(this->value == -1){
-		this->value = 0;
-	}
-	char* p = &c;
-	char** pp = &p;
-	int i = strtol(p,pp,10);
-	this->value = (this->value) * 10 + i;
+			this->value = 0;
+		}
+		char* p = &c;
+		char** pp = &p;
+		int i = strtol(p,pp,10);
+		this->value = (this->value) * 10 + i;
 }
 
 TokenType Automat::getTokenType() {
@@ -650,6 +656,4 @@ int Automat::handleChar(char c) {
 void Automat::setState(State* s) {
 	this->currentState = s;
 }
-
-
 

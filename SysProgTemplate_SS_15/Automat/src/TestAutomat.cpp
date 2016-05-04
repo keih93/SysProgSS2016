@@ -3,22 +3,21 @@
 
 #include <stdlib.h>
 
-class TestScanner :public IScanner{
+class TestScanner: public IScanner {
 public:
 	void ungetChar(int i);
-	void stop();
+	int stop();
+	 ~TestScanner();
 };
 
-void TestScanner::ungetChar(int i){
+void TestScanner::ungetChar(int i) {
 
 }
 
-void TestScanner::stop(){
+int TestScanner::stop() {
 }
 
-
-
-int main (int argc, char* argv[]){
+int main(int argc, char* argv[]) {
 
 	Automat* automat;
 	IScanner* scanner = new TestScanner();

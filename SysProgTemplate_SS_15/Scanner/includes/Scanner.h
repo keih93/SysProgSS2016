@@ -23,7 +23,7 @@ private:
 	int end;
 public:
 	Scanner(Buffer* bufe);
-	 ~Scanner();
+	virtual ~Scanner();
 	Token* nextToken();
 	void freeToken(Token token);
 	Token* mkToken(TokenType t, int l, int c, char* info);
