@@ -7,10 +7,9 @@
 #include "../../Scanner/includes/Scanner.h"
 #include "../../Scanner/includes/Token.h"
 #include <stdlib.h>
-       #include <limits.h>
-       #include <stdio.h>
-       #include <errno.h>
-
+#include <limits.h>
+#include <stdio.h>
+#include <errno.h>
 
 State0* State0::theState = NULL;
 State1* State1::theState = NULL;
@@ -617,13 +616,13 @@ void Automat::stop() {
 }
 
 void Automat::setValue(char c) {
-	if(this->value == -1){
-			this->value = 0;
-		}
-		char* p = &c;
-		char** pp = &p;
-		int i = strtol(p,pp,10);
-		this->value = (this->value) * 10 + i;
+	if (this->value == -1) {
+		this->value = 0;
+	}
+	char* p = &c;
+	char** pp = &p;
+	int i = strtol(p, pp, 10);
+	this->value = (this->value) * 10 + i;
 }
 
 TokenType Automat::getTokenType() {

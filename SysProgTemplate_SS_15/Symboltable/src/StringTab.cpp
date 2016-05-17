@@ -7,6 +7,10 @@
 #include "StringTab.h"
 #include "string.h"
 
+StringTab::StringTab(){
+
+}
+
 char* StringTab::insert(char* lexem, int size) {
 	char* tmp = this->freeP;
 	if (size < this->freeSpace) {

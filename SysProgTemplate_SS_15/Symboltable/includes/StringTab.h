@@ -16,7 +16,7 @@ public:
 private:
 	char* freeP;
 	int freeSpace;
-	StringTabNode node;
+	StringTabNode* node;
 };
 
 #endif /* SYMBOLTABLE_INCLUDES_STRINGTAB_H_ */

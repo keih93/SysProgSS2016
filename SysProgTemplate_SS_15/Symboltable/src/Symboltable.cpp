@@ -6,9 +6,21 @@
  */
 
 #include "../includes/Symboltable.h"
+#include "../includes/StringTab.h"
+#include "../includes/SymtabEntry.h"
 
 Symboltable::Symboltable() {
-	// TODO Auto-generated constructor stub
+	this->table = new StringTab();
+	//this->sym = new SymtabEntry[512];
+	 this->sym = new SymtabEntry[512];
+
+}
+
+char* Symboltable::insert(char* lexem){
+
+}
+
+int Symboltable::hashFunc(char* lexem){
 
 }
 

@@ -7,11 +7,16 @@
 
 #ifndef SYMBOLTABLE_INCLUDES_SYMTABENTRY_H_
 #define SYMBOLTABLE_INCLUDES_SYMTABENTRY_H_
+#include "Information.h"
 
 class SymtabEntry{
 public:
+	SymtabEntry();
+	Info getInfo();
+	Info creatInfo(char* name, char* typ);
+	Information intInfo;
 private:
-	Information info;
+	Info info;
 };
 
 

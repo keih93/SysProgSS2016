@@ -9,9 +9,10 @@
 #define SYMBOLTABLE_INCLUDES_STRINGTABNODE_H_
 class StringTabNode {
 public:
+	Information info;
 private:
 	StringTabNode* next;
-	char* vector[];
+	char* vector;
 };
 
 #endif /* SYMBOLTABLE_INCLUDES_STRINGTABNODE_H_ */
