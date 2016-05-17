@@ -7,9 +7,9 @@
 
 #ifndef SYMBOLTABLE_INCLUDES_STRINGTABNODE_H_
 #define SYMBOLTABLE_INCLUDES_STRINGTABNODE_H_
+
 class StringTabNode {
 public:
-	Information info;
 private:
 	StringTabNode* next;
 	char* vector;

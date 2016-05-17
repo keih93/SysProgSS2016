@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
 
 	symboltable = new Symboltable();
 	char a = 'a';
-	int c = a;
-	cout<<c;
+
+	//cout<<c[1];
 
 }

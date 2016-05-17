@@ -11,12 +11,12 @@
 
 class SymtabEntry{
 public:
-	SymtabEntry();
-	Info getInfo();
-	Info creatInfo(char* name, char* typ);
-	Information intInfo;
+	SymtabEntry(char* name, char* typ);
+	Info* getInfo();
+	Info* creatInfo();
+	Information* intInfo;
 private:
-	Info info;
+	Info* info;
 };
 
 

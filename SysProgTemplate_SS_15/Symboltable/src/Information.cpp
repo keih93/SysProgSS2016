@@ -4,7 +4,7 @@
  *  Created on: May 15, 2016
  *      Author: quang
  */
-#include "Information.h"
+#include "../includes/Information.h"
 
 Info::Info(char* name, char* typ){
 	this->name = name;

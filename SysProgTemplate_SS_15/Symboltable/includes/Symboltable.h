@@ -18,7 +18,7 @@ public:
 	char* insert(char* lexem);
 	int hashFunc(char* lexem);
 private:
-	SymtabEntry* sym;
+	SymtabEntry* sym[];
 	StringTab* table;
 	Information* lookup(char* key);
 };

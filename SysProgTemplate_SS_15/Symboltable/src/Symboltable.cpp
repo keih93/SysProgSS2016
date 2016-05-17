@@ -10,14 +10,14 @@
 #include "../includes/SymtabEntry.h"
 
 Symboltable::Symboltable() {
-	this->table = new StringTab();
-	//this->sym = new SymtabEntry[512];
-	 this->sym = new SymtabEntry[512];
+	//this->table = new StringTab();
+	//this->sym = new SymtabEntry[512]();
 
 }
 
 char* Symboltable::insert(char* lexem){
-
+	char* typ;
+	this->sym[0] = new SymtabEntry(lexem,typ);
 }
 
 int Symboltable::hashFunc(char* lexem){
