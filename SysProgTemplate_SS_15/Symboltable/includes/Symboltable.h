@@ -18,9 +18,11 @@ public:
 	char* insert(char* lexem);
 	int hashFunc(char* lexem);
 private:
+	char* typ;
 	SymtabEntry* sym[];
 	StringTab* table;
 	Information* lookup(char* key);
+	bool compareLexem(char* lexem1, char* lexem2);
 };
 
 #endif /* SYMBOLTABLE_H_ */

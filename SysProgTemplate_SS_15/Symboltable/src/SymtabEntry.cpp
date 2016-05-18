@@ -9,8 +9,9 @@
 #include <limits.h>
 #include <stdio.h>
 
-SymtabEntry::SymtabEntry(char* name, char* typ){
-this->info = new Info(name,typ);
+SymtabEntry::SymtabEntry(char* name, char* typ) {
+	this->info = new Info(name, typ);
+	this->intInfo = new Information();
 }
 
 Info* SymtabEntry::getInfo() {
