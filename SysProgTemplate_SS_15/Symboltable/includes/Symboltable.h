@@ -23,6 +23,8 @@ private:
 	StringTab* table;
 	Information* lookup(char* key);
 	bool compareLexem(char* lexem1, char* lexem2);
+	int countsize(char* lexem);
+	bool isTyp(char* lexem);
 };
 
 #endif /* SYMBOLTABLE_H_ */

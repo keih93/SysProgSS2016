@@ -8,7 +8,9 @@
 #include "string.h"
 
 StringTab::StringTab(){
-
+	this->freeSpace = 0;
+	this->freeP = new char();
+	node = new StringTabNode();
 }
 
 char* StringTab::insert(char* lexem, int size) {

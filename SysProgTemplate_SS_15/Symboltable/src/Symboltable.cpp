@@ -12,32 +12,35 @@
 
 Symboltable::Symboltable() {
 	this->table = new StringTab();
-	//this->sym = new SymtabEntry[512];
 	this->typ = NULL;
-
 }
 
 char* Symboltable::insert(char* lexem) {
-	char* i = new char[3];
-	i[0] = 'i';
-	i[1] = 'n';
-	i[2] = 't';
 	char* node = NULL;
-	if (compareLexem(i, lexem)) {
-		this->typ = i;
+	if (isTyp(lexem)) {
+		this->typ = lexem;
 	} else {
-		if (!this->sym[hashFunc(lexem)]->intInfo->compareLex(lexem)) {
-			node = this->table->insert(lexem, countsize(lexem));
-			this->sym[hashFunc(lexem)] = new SymtabEntry(node, typ);
-		}
-		else{
-			node = this->sym[hashFunc(lexem)]->getInfo()->getName();
+		int count = countsize(lexem);
+		SymtabEntry* element = this->sym[hashFunc(lexem)];
+		if (element->intInfo->compareLex(lexem)) {
+			node = this->table->insert(lexem, count);
+			element = new SymtabEntry(node, typ);
+		} else {
+			node = lookup(lexem);
 		}
 	}
-return node;
+	return node;
 }
 
-int countsize(char* lexem) {
+Information* Symboltable::lookup(char* key){
+	SymtabEntry* element = SymtabEntry[hashFunc(key)];
+	if(element != NULL){
+		return NULL;
+	}
+	return element->getInfo();
+}
+
+int Symboltable::countsize(char* lexem) {
 	char* temp = lexem;
 	int count;
 	while (temp != '\0') {
@@ -45,22 +48,6 @@ int countsize(char* lexem) {
 		temp++;
 	}
 	return count;
-}
-
-bool Symboltable::compareLexem(char* lexem1, char* lexem2) {
-	char* temp1 = lexem1;
-	char* temp2 = lexem2;
-	while (temp1 != '\0' && temp2 != '\0') {
-		if (temp1 != temp2) {
-			return false;
-		}
-		temp1++;
-		temp2++;
-	}
-	if (temp1 == temp2) {
-		return true;
-	}
-	return false;
 }
 
 int Symboltable::hashFunc(char* lexem) {
