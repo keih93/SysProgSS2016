@@ -12,9 +12,20 @@
 SymtabEntry::SymtabEntry(char* name, char* typ) {
 	this->info = new Info(name, typ);
 	this->intInfo = new Information();
+	this->next = new SymtabEntry();
+}
+
+void SymtabEntry::setInfo(char* name, char* typ){
+	this->info->setName(name);
+	this->info->setTyp(typ);
 }
 
 Info* SymtabEntry::getInfo() {
 	return this->info;
+}
+
+
+SymtabEntry* SymtabEntry::getNext() {
+	return this->next;
 }
 

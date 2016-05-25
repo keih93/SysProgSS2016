@@ -11,12 +11,15 @@
 
 class SymtabEntry{
 public:
+	SymtabEntry();
 	SymtabEntry(char* name, char* typ);
+	void setInfo(char* name, char* typ);
 	Info* getInfo();
+	SymtabEntry* getNext();
 	Info* creatInfo();
-	Information* intInfo;
 private:
 	Info* info;
+	SymtabEntry* next;
 };
 
 

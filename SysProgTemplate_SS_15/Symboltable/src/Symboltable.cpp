@@ -22,21 +22,22 @@ char* Symboltable::insert(char* lexem) {
 	} else {
 		int count = countsize(lexem);
 		SymtabEntry* element = this->sym[hashFunc(lexem)];
-		if (element->intInfo->compareLex(lexem)) {
-			node = this->table->insert(lexem, count);
-			element = new SymtabEntry(node, typ);
-		} else {
-			node = lookup(lexem);
-		}
+
 	}
-	return node;
+
+}
+return node;
 }
 
-Information* Symboltable::lookup(char* key){
-	SymtabEntry* element = SymtabEntry[hashFunc(key)];
-	if(element != NULL){
-		return NULL;
+Information* Symboltable::lookup(char* key) {
+SymtabEntry* element = SymtabEntry[hashFunc(key)];
+while (element != NULL) {
+	if (!element->getInfo()->compareLex(key)) {
+		element = element->getNext();
+	} else {
+		return element->getInfo();
 	}
+	element = new SymtabEntry(key, this->typ);
 	return element->getInfo();
 }
 
@@ -57,6 +58,7 @@ int Symboltable::hashFunc(char* lexem) {
 	return (first + second + last) - (65 * 3);
 }
 
-Symboltable::~Symboltable() {
-	// TODO Auto-generated destructor stub
+Symboltable::~Symboltable()
+{
+// TODO Auto-generated destructor stub
 }
