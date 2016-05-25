@@ -8,47 +8,80 @@
 #include "../includes/Symboltable.h"
 #include "../includes/StringTab.h"
 #include "../includes/SymtabEntry.h"
-#include "stdio.h"
+#include <stdio.h>
 
 Symboltable::Symboltable() {
 	this->table = new StringTab();
-	this->typ = NULL;
+	this->typ = NOTYP;
+
+}
+
+void Symboltable::initSymbols(){
+	this->typ = TOKENWHILE;
+	insert("while");
+	insert("WHILE");
+	this->typ = TOKENIF;
+	insert("if");
+	insert("IF");
 }
 
 char* Symboltable::insert(char* lexem) {
 	char* node = NULL;
-	if (isTyp(lexem)) {
-		this->typ = lexem;
+	int count = countsize(lexem);
+	if (isTyp(lexem, count)) {
+		this->typ = INT;
 	} else {
-		int count = countsize(lexem);
-		SymtabEntry* element = this->sym[hashFunc(lexem)];
-
+		if (lookup(lexem) == NULL) {
+			node = this->table->insert(lexem, count);
+			SymtabEntry* ele = new SymtabEntry();
+			ele->setInfo(lexem, this->typ);
+			sym[hashFunc(lexem)] = ele;
+		} else {
+			node = lookup(lexem)->getName();
+		}
 	}
-
-}
-return node;
+	return node;
 }
 
-Information* Symboltable::lookup(char* key) {
-SymtabEntry* element = SymtabEntry[hashFunc(key)];
-while (element != NULL) {
-	if (!element->getInfo()->compareLex(key)) {
-		element = element->getNext();
-	} else {
-		return element->getInfo();
+Info* Symboltable::lookup(char* key) {
+	int index = hashFunc(key);
+	SymtabEntry* element = sym[index];
+	while (element != NULL) {
+		if (!element->getInfo()->compareLex(key)) {
+			element = element->getNext();
+		} else {
+			return element->getInfo();
+		}
 	}
-	element = new SymtabEntry(key, this->typ);
-	return element->getInfo();
+	return NULL;
 }
 
 int Symboltable::countsize(char* lexem) {
 	char* temp = lexem;
-	int count;
+	int count = 0;
 	while (temp != '\0') {
 		count++;
 		temp++;
 	}
 	return count;
+}
+
+
+
+bool Symboltable::isTyp(char* lexem, int count) {
+	char* typ = new char[4];
+	typ[0] = 'i';
+	typ[1] = 'n';
+	typ[2] = 't';
+	for (int i = 0; i < 3; i++) {
+		if (lexem[i] != typ[i]) {
+			return false;
+		}
+	}
+	if (lexem[3] == '\0') {
+		return true;
+	}
+	return false;
 }
 
 int Symboltable::hashFunc(char* lexem) {
@@ -58,7 +91,6 @@ int Symboltable::hashFunc(char* lexem) {
 	return (first + second + last) - (65 * 3);
 }
 
-Symboltable::~Symboltable()
-{
+Symboltable::~Symboltable() {
 // TODO Auto-generated destructor stub
 }

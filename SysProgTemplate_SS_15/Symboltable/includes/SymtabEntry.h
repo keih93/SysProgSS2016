@@ -9,11 +9,15 @@
 #define SYMBOLTABLE_INCLUDES_SYMTABENTRY_H_
 #include "Information.h"
 
-class SymtabEntry{
+
+
+
+class SymtabEntry {
 public:
 	SymtabEntry();
 	SymtabEntry(char* name, char* typ);
-	void setInfo(char* name, char* typ);
+	void setInfo(char* name,Typ typ);
+	void setNext(SymtabEntry* next);
 	Info* getInfo();
 	SymtabEntry* getNext();
 	Info* creatInfo();
@@ -21,7 +25,5 @@ private:
 	Info* info;
 	SymtabEntry* next;
 };
-
-
 
 #endif /* SYMBOLTABLE_INCLUDES_SYMTABENTRY_H_ */

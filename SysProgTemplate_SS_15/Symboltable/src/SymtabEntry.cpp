@@ -5,17 +5,17 @@
  *      Author: quang
  */
 #include "../includes/SymtabEntry.h"
+#include "../includes/Symboltable.h"
 #include <stdlib.h>
 #include <limits.h>
 #include <stdio.h>
 
-SymtabEntry::SymtabEntry(char* name, char* typ) {
-	this->info = new Info(name, typ);
-	this->intInfo = new Information();
-	this->next = new SymtabEntry();
+SymtabEntry::SymtabEntry() {
+	this->info = new Info();
+	this->next = NULL;
 }
 
-void SymtabEntry::setInfo(char* name, char* typ){
+void SymtabEntry::setInfo(char* name, Typ typ){
 	this->info->setName(name);
 	this->info->setTyp(typ);
 }
@@ -24,6 +24,9 @@ Info* SymtabEntry::getInfo() {
 	return this->info;
 }
 
+void SymtabEntry::setNext(SymtabEntry* entry){
+	this->next = entry;
+}
 
 SymtabEntry* SymtabEntry::getNext() {
 	return this->next;

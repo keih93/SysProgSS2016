@@ -10,6 +10,11 @@
 
 class StringTabNode {
 public:
+	StringTabNode();
+	bool hasNext();
+	StringTabNode* makeNext();
+	StringTabNode* getNext();
+	char* getPointer();
 private:
 	StringTabNode* next;
 	char* vector;

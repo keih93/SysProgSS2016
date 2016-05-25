@@ -6,7 +6,7 @@
 class TestScanner: public IScanner {
 public:
 	void ungetChar(int i);
-	int stop();
+	void stop();
 	 ~TestScanner();
 };
 
@@ -14,7 +14,7 @@ void TestScanner::ungetChar(int i) {
 
 }
 
-int TestScanner::stop() {
+void TestScanner::stop() {
 }
 
 int main(int argc, char* argv[]) {

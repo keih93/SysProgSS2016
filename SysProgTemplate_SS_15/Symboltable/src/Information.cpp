@@ -6,20 +6,24 @@
  */
 #include "../includes/Information.h"
 
-Info::Info(char* name, char* typ){
+Info::Info(){
+	this->name ='\0';
+	this->typ = NOTYP;
+}
+
+void Info::setName(char* name){
 	this->name = name;
-	this->typ = typ;
 }
 
 char* Info::getName(){
 	return this->name;
 }
 
-void Info::setTyp(char* typ){
+void Info::setTyp(Typ typ){
 	this->typ = typ;
 }
 
-char* Info::getTyp(){
+Typ Info::getTyp(){
 	return this->typ;
 }
 

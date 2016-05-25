@@ -11,20 +11,24 @@
 #include "StringTab.h"
 #include "SymtabEntry.h"
 
+
+
 class Symboltable {
 public:
 	Symboltable();
 	~Symboltable();
 	char* insert(char* lexem);
 	int hashFunc(char* lexem);
+	void initSymbols();
 private:
-	char* typ;
-	SymtabEntry* sym[];
+	Typ typ;
+	SymtabEntry* sym[512];
 	StringTab* table;
-	Information* lookup(char* key);
+	Info* lookup(char* key);
 	bool compareLexem(char* lexem1, char* lexem2);
 	int countsize(char* lexem);
-	bool isTyp(char* lexem);
+	bool isTyp(char* lexem, int count);
+
 };
 
 #endif /* SYMBOLTABLE_H_ */

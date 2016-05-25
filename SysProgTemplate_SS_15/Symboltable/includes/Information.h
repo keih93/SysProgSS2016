@@ -8,25 +8,29 @@
 #ifndef SYMBOLTABLE_INCLUDES_INFORMATION_H_
 #define SYMBOLTABLE_INCLUDES_INFORMATION_H_
 
+typedef enum {
+	TOKENWHILE, TOKENIF, INT, NOTYP
+}Typ;
+
 class Information {
 public:
 	bool compareLex(char* lexem);
 	void setName(char* name);
 	char* getName();
-	char* getTyp();
-	void setTyp(char* typ);
+	Typ getTyp();
+	void setTyp(Typ typ);
 };
 
 class Info: public Information {
 public:
-	Info(char* name, char* typ);
+	Info();
 	bool compareLex(char* lexem);
 	void setName(char* name);
 	char* getName();
-	char* getTyp();
-	void setTyp(char* typ);
+	Typ getTyp();
+	void setTyp(Typ typ);
 private:
-	char* typ;
+	Typ typ;
 	char* name;
 };
 
