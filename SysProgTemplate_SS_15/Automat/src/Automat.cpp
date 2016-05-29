@@ -67,6 +67,7 @@ State11::State11() {
 State12::State12() {
 }
 
+
 State::~State() {
 
 }
@@ -467,7 +468,7 @@ void State9::read(char c, Automat* automat) {
 		automat->setState(State10::makeState());
 		break;
 	default:
-		//Vorherige & als Fehler bearbeiten -> macht Zustand 0
+		//Vorherige & als Fehler markieren -> macht Zustand 0
 		automat->ungetChar(1);
 		automat->tokenfound(1);
 		automat->setState(State0::makeState());
@@ -512,6 +513,7 @@ void State12::read(char c, Automat* automat) {
 	switch (c) {
 	case ':':
 		automat->countcolumn(1);
+		automat->tokenfound(1);
 		automat->setState(State0::makeState());
 		break;
 	case '\n':
@@ -580,8 +582,10 @@ void Automat::setTokenType(char c, TokenType t) {
 			this->type = Star;
 			break;
 		case '<':
+			this->type = InequalitySignLEFT;
+			break;
 		case '>':
-			this->type = InequalitySign;
+			this->type = InequalitySignRIGHT;
 			break;
 		case '!':
 			this->type = ExclamationMark;
@@ -590,16 +594,22 @@ void Automat::setTokenType(char c, TokenType t) {
 			this->type = Semicolon;
 			break;
 		case '(':
+			this->type = ParenthesesLEFT;
+			break;
 		case ')':
-			this->type = Parentheses;
+			this->type = ParenthesesRIGHT;
 			break;
 		case '{':
+			this->type = BracesLEFT;
+			break;
 		case '}':
-			this->type = Braces;
+			this->type = BracesRIGHT;
 			break;
 		case '[':
+			this->type = SquareBracketLEFT;
+			break;
 		case ']':
-			this->type = SquareBracket;
+			this->type = SquareBracketRIGHT;
 			break;
 		}
 	} else {

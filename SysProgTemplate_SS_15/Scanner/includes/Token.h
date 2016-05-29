@@ -18,10 +18,14 @@ enum TokenType {
 	EqualColonEqual, //=:=
 	Equal, // =
 	Plus, // +
-	SquareBracket, // [ ]
-	Parentheses, // ( )
-	Braces,  //  { }
-	InequalitySign,  // < >
+	SquareBracketLEFT, // [
+	SquareBracketRIGHT, // ]
+	ParenthesesLEFT, // (
+	ParenthesesRIGHT, //  )
+	BracesLEFT,  //  {
+	BracesRIGHT,  //   }
+	InequalitySignLEFT,  // <
+	InequalitySignRIGHT,  //  >
 	Colon,  //:
 	Minus,  //-
 	Star, //*
