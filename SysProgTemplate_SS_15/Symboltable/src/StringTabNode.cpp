@@ -5,7 +5,7 @@
  *      Author: quang
  */
 
-#include "../includes/StringTabNode.h";
+#include "../includes/StringTabNode.h"
 #include <stdio.h>
 
 StringTabNode::StringTabNode() {

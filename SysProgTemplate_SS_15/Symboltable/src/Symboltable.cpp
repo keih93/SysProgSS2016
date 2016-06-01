@@ -16,13 +16,31 @@ Symboltable::Symboltable() {
 
 }
 
-void Symboltable::initSymbols(){
+void Symboltable::initSymbols() {
 	this->typ = TOKENWHILE;
-	insert("while");
-	insert("WHILE");
+	char* firsttyp = new char[5];
+	firsttyp[0] = 'w';
+	firsttyp[1] = 'h';
+	firsttyp[2] = 'i';
+	firsttyp[3] = 'l';
+	firsttyp[4] = 'e';
+	char* sectyp = new char[5];
+	sectyp[0] = 'W';
+	sectyp[1] = 'H';
+	sectyp[2] = 'I';
+	sectyp[3] = 'L';
+	sectyp[4] = 'E';
+	insert(firsttyp);
+	insert(sectyp);
 	this->typ = TOKENIF;
-	insert("if");
-	insert("IF");
+	char* thirdtyp = new char[2];
+	thirdtyp[0] = 'i';
+	thirdtyp[1] = 'f';
+	char* fourthtyp = new char[2];
+	fourthtyp[0] = 'I';
+	fourthtyp[1] = 'F';
+	insert(thirdtyp);
+	insert (fourthtyp);
 }
 
 char* Symboltable::insert(char* lexem) {
@@ -59,14 +77,12 @@ Info* Symboltable::lookup(char* key) {
 int Symboltable::countsize(char* lexem) {
 	char* temp = lexem;
 	int count = 0;
-	while (temp != '\0') {
+	while (temp[0] != '\0') {
 		count++;
 		temp++;
 	}
 	return count;
 }
-
-
 
 bool Symboltable::isTyp(char* lexem, int count) {
 	char* typ = new char[4];
@@ -88,7 +104,7 @@ int Symboltable::hashFunc(char* lexem) {
 	int first = lexem[0];
 	int second = lexem[1];
 	int last = lexem[2];
-	return (first + second + last) - (65 * 3);
+	return (first + second + last);
 }
 
 Symboltable::~Symboltable() {
