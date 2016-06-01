@@ -11,10 +11,12 @@
 #include "IScanner.h"
 #include "../../Automat/includes/Automat.h"
 #include "../../Buffer/includes/Buffer.h"
+#include "../../Symboltable/includes/Symboltable.h"
 
 
 class Scanner :public IScanner {
 private:
+	Symboltable* sym;
 	Buffer* buf;
 	Automat* automat;
 	char* buffer;
@@ -22,7 +24,7 @@ private:
 	char* mkLexem();
 	int end;
 public:
-	Scanner(Buffer* bufe);
+	Scanner(Buffer* bufe, Symboltable* sym);
 	virtual ~Scanner();
 	Token* nextToken();
 	void freeToken(Token token);

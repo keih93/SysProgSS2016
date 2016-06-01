@@ -281,6 +281,7 @@ void State0::read(char c, Automat* automat) {
 	default:			//fehlerhaftes Zeichen
 		automat->tokenfound(1);
 		automat->setTokenType(c, Error);
+		automat->countcolumn(1);
 		automat->setState(State0::makeState());
 		break;
 	}

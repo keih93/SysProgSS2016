@@ -9,21 +9,25 @@
 #include "../includes/Token.h"
 #include "../../Automat/includes/Automat.h"
 #include "../../Buffer/includes/Buffer.h"
+#include "../../Symboltable/includes/Symboltable.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "string.h"
 
 Scanner::~Scanner() {}
 
-Scanner::Scanner(Buffer* bufe) {
-	buf = bufe;
-	automat = new Automat(this);
-	buffer = new char[100];
-	pointer = 0; //steht auf dem nächsten zu verarbeitenden Zeichen
-	end = 0; //rechtes Ende der zu verarbeitenden Zeichen
+Scanner::Scanner(Buffer* bufe, Symboltable* symboltable) {
+	this->sym = symboltable;
+	this->sym->initSymbols();
+	this->buf = bufe;
+	this->automat = new Automat(this);
+	this->buffer = new char[100];
+	this->pointer = 0; //steht auf dem nächsten zu verarbeitenden Zeichen
+	this->end = 0; //rechtes Ende der zu verarbeitenden Zeichen
 }
 
 void Scanner::stop() {
@@ -56,14 +60,20 @@ Token* Scanner::nextToken() {
 	int val = automat->getValue();
 	if (type == ze_ro) {
 		// erkanntes Token überschreiben --> überlesen
+		this->mkLexem();
 		this->copyChar();
 		return this->nextToken();
 	} else if (type == Integer) { //Token für einen Integer
 		this->copyChar();
 		return this->mkToken(type, line, column, val);
 	} else {
+		char* templexem = new char[pointer];
+		templexem =	mkLexem();
+		if(type == Identifier){
+			this->sym->insert(templexem);
+		}
 		//nur im Fall von einem Identifier, Integer oder Fehler wird ein Token erzeugt
-		return this->mkToken(type, line, column, mkLexem()); //Token für einen Identifier oder Fehlertoken
+		return this->mkToken(type, line, column, templexem); //Token für einen Identifier oder Fehlertoken
 	}
 }
 
@@ -73,6 +83,7 @@ char* Scanner::mkLexem() {
 	for (int i = 0; i < pointer; i++) {
 		lex[i] = buffer[i];
 	}
+	//memcpy(lex, buffer, pointer);
 	this->copyChar();
 	return lex;
 }

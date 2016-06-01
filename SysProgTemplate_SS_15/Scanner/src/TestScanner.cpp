@@ -14,13 +14,18 @@ int main(int argc, char **argv) {
 	//std::cout<<'T';
 	Scanner* scanner;
 	Buffer* buf = new Buffer("test.txt");
-	scanner = new Scanner(buf);
+	Symboltable* sym = new Symboltable();
+	scanner = new Scanner(buf, sym);
 	int i = 0;
-	Token* token1 = scanner->nextToken();
-	while(i<38){
+	Token* token1;
+	while(i<36){
 		token1=scanner->nextToken();
+		token1->printToken();
 		i++;
 	}
+	std::cout << '\n';
+
+	token1=scanner->nextToken();
 
 
 }
