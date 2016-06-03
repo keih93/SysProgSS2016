@@ -7,3 +7,70 @@ Command-line arguments:  -os linux -ws gtk -arch x86
 
 !ENTRY org.eclipse.cdt.core 1 0 2016-04-10 21:30:11.631
 !MESSAGE Indexed 'SysProgTemplate_SS_15' (8 sources, 151 headers) in 13,3 sec: 11.428 declarations; 18.850 references; 0 unresolved inclusions; 8 syntax errors; 3 unresolved names (0,0099 %)
+!SESSION 2016-06-03 14:07:58.977 -----------------------------------------------
+eclipse.buildId=4.5.2.M20160212-1500
+java.version=1.8.0_72-internal
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -pluginCustomization /usr/local/lib/eclipse-jee-4.5/plugin_customization.ini -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -pluginCustomization /usr/local/lib/eclipse-jee-4.5/plugin_customization.ini -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.ui 1 1 2016-06-03 14:08:29.579
+!MESSAGE Workbench migration started
+
+!ENTRY org.eclipse.ui 1 1 2016-06-03 14:08:30.639
+!MESSAGE Workbench migration finished
+
+!ENTRY org.eclipse.jface 2 0 2016-06-03 14:08:30.910
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2016-06-03 14:08:30.910
+!MESSAGE A conflict occurred for ALT+CTRL+T:
+Binding(ALT+CTRL+T,
+	ParameterizedCommand(Command(org.eclipse.tm.terminal.connector.local.command.launch,Open Local Terminal on Selection,
+		,
+		Category(org.eclipse.tm.terminal.view.ui.commands.category,Terminal Commands,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@149ef64a,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+CTRL+T,
+	ParameterizedCommand(Command(org.eclipse.team.svn.ui.command.EditPropertiesCommand,Show Properties,
+		,
+		Category(org.eclipse.team.svn.ui.command.category,SVN,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@67201eeb,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2016-06-03 14:08:30.911
+!MESSAGE A conflict occurred for ALT+CTRL+U:
+Binding(ALT+CTRL+U,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.search.occurrences.in.file.quickMenu,Show Occurrences in File Quick Menu,
+		Shows the Occurrences in File quick menu,
+		Category(org.eclipse.search.ui.category.search,Search,Search command category,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2e41b65a,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,gtk,system)
+Binding(ALT+CTRL+U,
+	ParameterizedCommand(Command(org.eclipse.team.svn.ui.command.UpdateCommand,Update,
+		,
+		Category(org.eclipse.team.svn.ui.command.category,SVN,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4d25943d,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.core.net 1 0 2016-06-03 14:08:34.915
+!MESSAGE System property http.proxyHost is set to iwi-lkit-nc-02.hs-karlsruhe.de but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2016-06-03 14:08:34.917
+!MESSAGE System property http.proxyPort is set to 3128 but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2016-06-03 14:08:34.929
+!MESSAGE System property http.proxyHost is set to iwi-lkit-nc-02.hs-karlsruhe.de but should not be set.
+
+!ENTRY org.eclipse.core.net 1 0 2016-06-03 14:08:34.929
+!MESSAGE System property http.proxyPort is set to 3128 but should not be set.
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-06-03 14:08:39.095
+!MESSAGE Indexed 'SysProgTemplate_SS_15' (12 sources, 176 headers) in 4.65 sec: 12,790 declarations; 21,010 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)

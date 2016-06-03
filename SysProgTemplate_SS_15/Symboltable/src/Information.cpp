@@ -29,8 +29,8 @@ Typ Info::getTyp(){
 
 bool Info::compareLex(char* lexem){
 	char* tempname = this->name;
-	while(lexem != "\0" && tempname != "\0"){
-		if(lexem != tempname){
+	while(lexem[0] != '\0' && tempname[0] != '\0'){
+		if(lexem[0] != tempname[0]){
 			return false;
 		}
 		lexem++;

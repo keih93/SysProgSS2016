@@ -40,7 +40,7 @@ void Symboltable::initSymbols() {
 	fourthtyp[0] = 'I';
 	fourthtyp[1] = 'F';
 	insert(thirdtyp);
-	insert (fourthtyp);
+	insert(fourthtyp);
 }
 
 char* Symboltable::insert(char* lexem) {
@@ -49,14 +49,7 @@ char* Symboltable::insert(char* lexem) {
 	if (isTyp(lexem, count)) {
 		this->typ = INT;
 	} else {
-		if (lookup(lexem) == NULL) {
-			node = this->table->insert(lexem, count);
-			SymtabEntry* ele = new SymtabEntry();
-			ele->setInfo(lexem, this->typ);
-			sym[hashFunc(lexem)] = ele;
-		} else {
-			node = lookup(lexem)->getName();
-		}
+		node = lookup(lexem)->getName();
 	}
 	return node;
 }
@@ -64,6 +57,13 @@ char* Symboltable::insert(char* lexem) {
 Info* Symboltable::lookup(char* key) {
 	int index = hashFunc(key);
 	SymtabEntry* element = sym[index];
+	if(element == NULL){
+		element = new SymtabEntry();
+		element->setInfo(key, this->typ);
+		sym[index] = element;
+		return element->getInfo();
+	}
+	SymtabEntry* temp = element;
 	while (element != NULL) {
 		if (!element->getInfo()->compareLex(key)) {
 			element = element->getNext();
@@ -71,7 +71,10 @@ Info* Symboltable::lookup(char* key) {
 			return element->getInfo();
 		}
 	}
-	return NULL;
+	element = new SymtabEntry();
+	element->setInfo(key, this->typ);
+	temp->setNext(element);
+	return element->getInfo();
 }
 
 int Symboltable::countsize(char* lexem) {
