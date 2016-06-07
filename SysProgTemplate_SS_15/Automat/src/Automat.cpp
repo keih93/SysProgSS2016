@@ -264,6 +264,7 @@ void State0::read(char c, Automat* automat) {
 		break;
 	case '\0':
 		automat->stop(); //Ende des Dokuments erreicht
+		automat->tokenfound(1);
 		break;
 	case '\n':
 		automat->setTokenType(c, ze_ro);

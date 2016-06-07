@@ -74,3 +74,12 @@ Binding(ALT+CTRL+U,
 
 !ENTRY org.eclipse.cdt.core 1 0 2016-06-03 14:08:39.095
 !MESSAGE Indexed 'SysProgTemplate_SS_15' (12 sources, 176 headers) in 4.65 sec: 12,790 declarations; 21,010 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+!SESSION 2016-06-04 12:00:05.040 -----------------------------------------------
+eclipse.buildId=debbuild
+java.version=1.7.0_85
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=de_DE
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.cdt.core 1 0 2016-06-04 12:04:35.542
+!MESSAGE Indexed 'SysProgTemplate_SS_15' (9 sources, 177 headers) in 103 sec: 12.743 declarations; 21.030 references; 0 unresolved inclusions; 0 syntax errors; 2 unresolved names (0,0059 %)

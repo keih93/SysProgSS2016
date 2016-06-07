@@ -1,45 +1,7 @@
-20:04:41 **** Incremental Build of configuration Default for project SysProgTemplate_SS_15 ****
-make all 
-make -C Automat AutomatOBJTarget
-make[1]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Automat'
-make AutomatTarget
-make[2]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Automat'
-g++ -g  -c -Wall src/Automat.cpp -o objs/Automat.o  
-make[2]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Automat'
-make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Automat'
-make -C Buffer BufferOBJTarget
-make[1]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
-make BufferTarget
-make[2]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
-g++ -g  -c -Wall  src/Buffer.cpp -o objs/Buffer.o
-make[2]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
-make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Buffer'
-make -C Symboltable SymboltableOBJTarget
-make[1]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
-make SymboltableTarget
-make[2]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
-make[2]: Nothing to be done for 'SymboltableTarget'.
-make[2]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
-make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Symboltable'
-make -C Scanner makeTestScanner
-make[1]: Entering directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Scanner'
-g++ Scanner.cpp
-g++ -g  -c -Wall  -o objs/Scanner.o  src/Scanner.cpp
-src/Scanner.cpp: In member function ‘Token* Scanner::nextToken()’:
-src/Scanner.cpp:46:6: warning: unused variable ‘i’ [-Wunused-variable]
-  int i = 0;
-      ^
-g++ -g  -c -Wall src/TestScanner.cpp -o debug/TestScanner.o  
-src/TestScanner.cpp: In function ‘int main(int, char**)’:
-src/TestScanner.cpp:18:6: warning: unused variable ‘i’ [-Wunused-variable]
-  int i = 0;
-      ^
-src/TestScanner.cpp:19:9: warning: variable ‘token1’ set but not used [-Wunused-but-set-variable]
-  Token* token1 = scanner->nextToken();
-         ^
-g++ -g debug/TestScanner.o objs/*.o ../Automat/objs/*.o ../Buffer/objs/*.o ../Symboltable/objs/*.o -o debug/ScannerTest
-make[1]: Leaving directory '/home/sonja/Dokumente/SysProg/gitVersionen/6.Labortermin_2_fortgesetztVonSonja/SysProgSS2016/SysProgTemplate_SS_15/Scanner'
-target all
+08:00:43 **** Build of configuration Default for project SysProgTemplate_SS_15 ****
+make makeTestSymboltable 
+g++ -g  -c -Wall src/TestSymboltable.cpp -o debug/TestSymboltable.o  
+g++ -g objs/*.o debug/TestSymboltable.o  -o debug/SymboltableTest
 
-20:05:20 Build Finished (took 38s.540ms)
+08:00:52 Build Finished (took 8s.487ms)
 

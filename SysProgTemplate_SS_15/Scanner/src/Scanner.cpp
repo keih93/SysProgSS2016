@@ -21,17 +21,22 @@
 Scanner::~Scanner() {}
 
 Scanner::Scanner(Buffer* bufe, Symboltable* symboltable) {
+	this->stopp = 0;
 	this->sym = symboltable;
 	this->sym->initSymbols();
 	this->buf = bufe;
 	this->automat = new Automat(this);
-	this->buffer = new char[100];
+	this->buffer = new char[100000];
 	this->pointer = 0; //steht auf dem nächsten zu verarbeitenden Zeichen
 	this->end = 0; //rechtes Ende der zu verarbeitenden Zeichen
 }
 
 void Scanner::stop() {
-	//return 1;
+	this->stopp = 1;
+}
+
+int Scanner::getStop(){
+	return this->stopp;
 }
 
 Token* Scanner::mkToken(TokenType t, int l, int c, char* info) { //Token für einen Identifier oder ein fehlerhaftes Zeichen erzeugen
@@ -58,9 +63,9 @@ Token* Scanner::nextToken() {
 	int line = automat->getLine();
 	int column = automat->getColumn();
 	int val = automat->getValue();
+	//nur im Fall von einem Identifier, Integer, Zeichen oder Fehler wird ein Token erzeugt
 	if (type == ze_ro) {
 		// erkanntes Token überschreiben --> überlesen
-		this->mkLexem();
 		this->copyChar();
 		return this->nextToken();
 	} else if (type == Integer) { //Token für einen Integer
@@ -72,8 +77,7 @@ Token* Scanner::nextToken() {
 		if(type == Identifier){
 			this->sym->insert(templexem);
 		}
-		//nur im Fall von einem Identifier, Integer oder Fehler wird ein Token erzeugt
-		return this->mkToken(type, line, column, templexem); //Token für einen Identifier oder Fehlertoken
+		return this->mkToken(type, line, column, templexem); //Token für einen Identifier, Zeichen oder Fehlertoken
 	}
 }
 
@@ -83,7 +87,6 @@ char* Scanner::mkLexem() {
 	for (int i = 0; i < pointer; i++) {
 		lex[i] = buffer[i];
 	}
-	//memcpy(lex, buffer, pointer);
 	this->copyChar();
 	return lex;
 }
@@ -94,10 +97,9 @@ void Scanner::ungetChar(int i) {
 
 void Scanner::copyChar() {
 	int i = 0;
-	int temp = pointer;
-	while (temp < end) {
-		buffer[i] = buffer[temp];
-		temp++;
+	while (pointer < end) {
+		buffer[i] = buffer[pointer];
+		pointer++;
 		i++;
 	}
 	end = i;
