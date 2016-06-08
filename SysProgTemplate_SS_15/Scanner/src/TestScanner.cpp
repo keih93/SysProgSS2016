@@ -16,12 +16,10 @@ int main(int argc, char **argv) {
 	Buffer* buf = new Buffer("test.txt");
 	Symboltable* sym = new Symboltable();
 	scanner = new Scanner(buf, sym);
-	int i = 0;
 	Token* token1;
-	while(i<36){
+	while(scanner->getStop() == 0){
 		token1=scanner->nextToken();
 		token1->printToken();
-		i++;
 	}
 	std::cout << '\n';
 

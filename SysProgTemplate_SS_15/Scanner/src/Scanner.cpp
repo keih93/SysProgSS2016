@@ -26,7 +26,7 @@ Scanner::Scanner(Buffer* bufe, Symboltable* symboltable) {
 	this->sym->initSymbols();
 	this->buf = bufe;
 	this->automat = new Automat(this);
-	this->buffer = new char[100000];
+	this->buffer = new char[100];
 	this->pointer = 0; //steht auf dem nächsten zu verarbeitenden Zeichen
 	this->end = 0; //rechtes Ende der zu verarbeitenden Zeichen
 }
