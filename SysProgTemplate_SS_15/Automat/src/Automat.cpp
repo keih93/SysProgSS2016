@@ -67,7 +67,6 @@ State11::State11() {
 State12::State12() {
 }
 
-
 State::~State() {
 
 }
@@ -633,12 +632,13 @@ void Automat::setValue(char c) {
 	char* p = &c;
 	char** pp = &p;
 	int i = strtol(p, pp, 10);
-	if (errno){
+	if (errno != 0) {
 		//Fehler
+		this->value = -2;
 		errno = 0;
+	} else {
+		this->value = (this->value) * 10 + i;
 	}
-
-	this->value = (this->value) * 10 + i;
 }
 
 TokenType Automat::getTokenType() {

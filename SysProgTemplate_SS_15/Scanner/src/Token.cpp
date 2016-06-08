@@ -28,7 +28,7 @@ Token::~Token() {
 
 }
 
-void Token::printToken( std::ofstream& out) {
+void Token::printToken(std::ofstream& out) {
 	out << "Line: " << this->line << ' ';
 	out << "Column: " << this->column << ' ';
 	switch (this->type) {
@@ -101,6 +101,8 @@ void Token::printToken( std::ofstream& out) {
 	}
 	if (this->value != -1) {
 		out << "Value: " << this->value << '\n' << '\n';
+	} else if (this->value == -2) {
+		out << "Value: invalid number" << '\n' << '\n';
 	} else {
 		out << "Lexem: " << this->infokey << '\n' << '\n';
 	}
