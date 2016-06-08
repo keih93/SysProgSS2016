@@ -10,20 +10,25 @@
 #include <stdlib.h>
 #include <fstream>
 
+
 int main(int argc, char **argv) {
 	//std::cout<<'T';
+
+	std::ofstream outfile;
+	outfile.open (argv[2], std::ofstream::out);
 	Scanner* scanner;
-	Buffer* buf = new Buffer("test.txt");
+	Buffer* buf = new Buffer(argv[1]);
 	Symboltable* sym = new Symboltable();
 	scanner = new Scanner(buf, sym);
 	Token* token1;
 	while(scanner->getStop() == 0){
 		token1=scanner->nextToken();
-		token1->printToken();
+		token1->printToken(outfile);
 	}
-	std::cout << '\n';
-
-	token1=scanner->nextToken();
+	outfile << '\n';
+	outfile.flush();
+	outfile.close();
+//	token1=scanner->nextToken();
 
 
 }

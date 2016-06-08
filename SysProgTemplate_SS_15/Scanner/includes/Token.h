@@ -8,6 +8,7 @@
 #ifndef SCANNER_INCLUDES_TOKEN_H_
 #define SCANNER_INCLUDES_TOKEN_H_
 
+#include <fstream>
 
 enum TokenType {
 	ze_ro, //default bzw, Kommentar, was kein Token ist
@@ -45,7 +46,7 @@ private:
 
 public:
 	Token();
-	void printToken();
+	void printToken(std::ofstream& out);
 	char getType();
 	Token(TokenType tokent, int l, int c, char* info);
 	Token(TokenType tokent, int l, int c, int value);

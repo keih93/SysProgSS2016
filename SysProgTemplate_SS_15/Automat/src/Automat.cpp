@@ -543,9 +543,9 @@ Automat::Automat(IScanner* scanner) {
 	this->tokenFound = 0;
 	this->currentState = State0::makeState();
 	this->tokenline = 1;
-	this->tokencolumn = 1;
+	this->tokencolumn = 0;
 	this->currentline = 1;
-	this->currentcolumn = 1;
+	this->currentcolumn = 0;
 	this->value = -1;
 }
 
@@ -554,7 +554,7 @@ Automat::~Automat() {
 }
 
 void Automat::resetcolumn() {
-	this->currentcolumn = 1;
+	this->currentcolumn = 0;
 }
 
 void Automat::countline(int c) {
@@ -633,6 +633,11 @@ void Automat::setValue(char c) {
 	char* p = &c;
 	char** pp = &p;
 	int i = strtol(p, pp, 10);
+	if (errno){
+		//Fehler
+		errno = 0;
+	}
+
 	this->value = (this->value) * 10 + i;
 }
 

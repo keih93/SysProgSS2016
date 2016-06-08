@@ -15,22 +15,13 @@ int main(int argc, char **argv) {
 	buffer = new Buffer("test.txt");
 	char a;
 	int i;
-	while (i < 2710) {
+	while (i < 31869) {
 		a = buffer->getchar();
 		std::cout << a;
 		i++;
 	}
-	std::cout<<'a';
+	//std::cout<< buffer->getBuffer2();
 
-	//buffer->getchar();
-	//buffer->getchar();
 
-	//char* testbuffer = new char[512];
-	//posix_memalign((void**)&testbuffer,512,1024);
-	//int fd = open("test.txt",O_DIRECT);
-	//int stand = read(fd,testbuffer,512);
-	//std::cout<<fd;
-	//std::cout<<stand;
-	//std::cout<<testbuffer;
 
 }

@@ -76,6 +76,10 @@ Token* Scanner::nextToken() {
 		templexem =	mkLexem();
 		if(type == Identifier){
 			this->sym->insert(templexem);
+			//this->sym->insert(templexem, type);
+			//SymtabEntry* entry = this->sym->insert(templexem);
+			//type = entry->getType();
+			//return this->mkToken(type, line, column, entry);
 		}
 		return this->mkToken(type, line, column, templexem); //Token für einen Identifier, Zeichen oder Fehlertoken
 	}
