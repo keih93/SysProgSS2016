@@ -116,10 +116,10 @@ void Token::printToken(std::ofstream& out) {
 		out << "Type: " << "\"Error\"" << ' ';
 		break;
 	}
-	if (this->value != -1) {
-		out << "Value: " << this->value << '\n' << '\n';
-	} else if (this->value == -2) {
+	if (this->value == -2) {
 		out << "Value: invalid number" << '\n' << '\n';
+	}else if (this->value != -1) {
+		out << "Value: " << this->value << '\n' << '\n';
 	} else {
 		out << "Lexem: " << this->infokey << '\n' << '\n';
 	}

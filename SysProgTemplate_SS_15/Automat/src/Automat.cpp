@@ -7,9 +7,10 @@
 #include "../../Scanner/includes/Scanner.h"
 #include "../../Scanner/includes/Token.h"
 #include <stdlib.h>
-#include <limits.h>
 #include <stdio.h>
 #include <errno.h>
+#include <limits.h>
+#include <string.h>
 
 State0* State0::theState = NULL;
 State1* State1::theState = NULL;
@@ -545,7 +546,8 @@ Automat::Automat(IScanner* scanner) {
 	this->tokencolumn = 0;
 	this->currentline = 1;
 	this->currentcolumn = 0;
-	this->value = -1;
+	this->value = new char[11];
+	this->count = 0;
 }
 
 Automat::~Automat() {
@@ -626,19 +628,8 @@ void Automat::stop() {
 }
 
 void Automat::setValue(char c) {
-	if (this->value == -1) {
-		this->value = 0;
-	}
-	char* p = &c;
-	char** pp = &p;
-	int i = strtol(p, pp, 10);
-	if (errno != 0) {
-		//Fehler
-		this->value = -2;
-		errno = 0;
-	} else {
-		this->value = (this->value) * 10 + i;
-	}
+	this->value[count] = c;
+	this->count++;
 }
 
 TokenType Automat::getTokenType() {
@@ -646,9 +637,18 @@ TokenType Automat::getTokenType() {
 }
 
 int Automat::getValue() {
-	int tempval = this->value;
-	this->value = -1;
-	return tempval;
+	//char** pp = &this->value;
+	errno = 0;
+	long i = strtol(this->value, 0, 10);
+	this->count = 0;
+	this->value = new char[11];
+//	if(errno){
+//		return -2;
+//	}
+	if (i > INT_MAX) {
+		return -2;
+	}
+	return i;
 }
 
 int Automat::getLine() {

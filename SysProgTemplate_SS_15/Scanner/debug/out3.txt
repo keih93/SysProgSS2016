@@ -1,0 +1,10 @@
+Line: 1 Column: 0 Type: "Integer" Value: invalid number
+
+Line: 1 Column: 11 Type: "Minus" Lexem: -
+
+Line: 1 Column: 12 Type: "Integer" Value: 1
+
+Line: 1 Column: 14 Type: "Integer" Value: 2147483647
+
+Line: 1 Column: 25 Type: "Identifier" Lexem: adb
+

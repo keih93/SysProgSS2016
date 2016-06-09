@@ -38,7 +38,8 @@ public:
 private:
 
 	IScanner* scanner;
-	int value;
+	char* value;
+	int count;
 	TokenType type;
 	int tokenFound;
 	int tokenline;

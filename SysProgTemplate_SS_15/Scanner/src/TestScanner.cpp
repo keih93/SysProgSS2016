@@ -14,6 +14,7 @@ int main(int argc, char **argv) {
 	std::ofstream outfile;
 	outfile.open(argv[2], std::ofstream::out);
 	Buffer* buf = new Buffer(argv[1]);
+	//Buffer* buf = new Buffer("test.txt");
 	Symboltable* sym = new Symboltable();
 	Scanner* scanner = new Scanner(buf, sym);
 	Token* token1;
