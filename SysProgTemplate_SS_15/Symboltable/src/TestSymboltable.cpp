@@ -22,8 +22,8 @@ int main(int argc, char **argv) {
 	second[4] = 'q';
 	int f = symboltable->hashFunc(first);
 	int s = symboltable->hashFunc(second);
-	std::cout<<f<<' '<<s<<'\n';
-	symboltable->insert(second);
-	symboltable->insert(first);
-	symboltable->insert(second);
+	std::cout << f << ' ' << s << '\n';
+	symboltable->insert(second, Identifier);
+	symboltable->insert(first, Identifier);
+	symboltable->insert(second, Identifier);
 }

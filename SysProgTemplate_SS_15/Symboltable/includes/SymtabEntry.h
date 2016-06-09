@@ -9,14 +9,11 @@
 #define SYMBOLTABLE_INCLUDES_SYMTABENTRY_H_
 #include "Information.h"
 
-
-
-
 class SymtabEntry {
 public:
 	SymtabEntry();
-	SymtabEntry(char* name, char* typ);
-	void setInfo(char* name,Typ typ);
+	SymtabEntry(char* name, TokenType typ);
+	void setInfo(char* name, TokenType typ);
 	void setNext(SymtabEntry* next);
 	Info* getInfo();
 	SymtabEntry* getNext();

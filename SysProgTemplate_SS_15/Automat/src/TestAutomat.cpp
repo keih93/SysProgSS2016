@@ -7,7 +7,7 @@ class TestScanner: public IScanner {
 public:
 	void ungetChar(int i);
 	void stop();
-	~TestScanner();
+	virtual ~TestScanner();
 };
 
 void TestScanner::ungetChar(int i) {

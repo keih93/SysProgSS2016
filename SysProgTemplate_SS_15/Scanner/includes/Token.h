@@ -9,32 +9,7 @@
 #define SCANNER_INCLUDES_TOKEN_H_
 
 #include <fstream>
-
-enum TokenType {
-	ze_ro, //default bzw, Kommentar, was kein Token ist
-	Sign, //allgemein
-	Identifier,
-	Integer,
-	Assign, //:=
-	EqualColonEqual, //=:=
-	Equal, // =
-	Plus, // +
-	SquareBracketLEFT, // [
-	SquareBracketRIGHT, // ]
-	ParenthesesLEFT, // (
-	ParenthesesRIGHT, //  )
-	BracesLEFT,  //  {
-	BracesRIGHT,  //   }
-	InequalitySignLEFT,  // <
-	InequalitySignRIGHT,  //  >
-	Colon,  //:
-	Minus,  //-
-	Star, //*
-	ExclamationMark,  //!
-	Semicolon,  //;
-	And, //&&
-	Error //Fehlertoken
-};
+#include "../../Symboltable/includes/SymtabEntry.h"
 
 class Token {
 private:
@@ -43,6 +18,7 @@ private:
 	int column;
 	char* infokey;
 	int value;
+	SymtabEntry* entry;
 
 public:
 	Token();
@@ -50,6 +26,7 @@ public:
 	char getType();
 	Token(TokenType tokent, int l, int c, char* info);
 	Token(TokenType tokent, int l, int c, int value);
+	Token(TokenType tokent, int l, int c, SymtabEntry* entry);
 	void typeToString(TokenType typ);
 	virtual ~Token();
 };

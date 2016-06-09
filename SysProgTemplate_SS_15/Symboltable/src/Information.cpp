@@ -8,7 +8,7 @@
 
 Info::Info(){
 	this->name ='\0';
-	this->typ = NOTYP;
+	this->typ = ze_ro;
 }
 
 void Info::setName(char* name){
@@ -19,11 +19,11 @@ char* Info::getName(){
 	return this->name;
 }
 
-void Info::setTyp(Typ typ){
+void Info::setTyp(TokenType typ){
 	this->typ = typ;
 }
 
-Typ Info::getTyp(){
+TokenType Info::getTyp(){
 	return this->typ;
 }
 
@@ -36,7 +36,7 @@ bool Info::compareLex(char* lexem){
 		lexem++;
 		tempname++;
 	}
-	if(lexem == tempname){
+	if(lexem[0] == tempname[0]){
 		return true;
 	}
 	return false;

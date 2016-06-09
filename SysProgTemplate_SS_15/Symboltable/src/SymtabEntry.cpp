@@ -15,7 +15,7 @@ SymtabEntry::SymtabEntry() {
 	this->next = NULL;
 }
 
-void SymtabEntry::setInfo(char* name, Typ typ){
+void SymtabEntry::setInfo(char* name, TokenType typ){
 	this->info->setName(name);
 	this->info->setTyp(typ);
 }

@@ -12,69 +12,64 @@
 
 Symboltable::Symboltable() {
 	this->table = new StringTab();
-	this->typ = NOTYP;
-
+	initSymbols();
 }
 
 void Symboltable::initSymbols() {
-	this->typ = TOKENWHILE;
-	char* firsttyp = new char[5];
+
+	char* firsttyp = new char[6];
 	firsttyp[0] = 'w';
 	firsttyp[1] = 'h';
 	firsttyp[2] = 'i';
 	firsttyp[3] = 'l';
 	firsttyp[4] = 'e';
-	char* sectyp = new char[5];
+	firsttyp[5] = '\0';
+	char* sectyp = new char[6];
 	sectyp[0] = 'W';
 	sectyp[1] = 'H';
 	sectyp[2] = 'I';
 	sectyp[3] = 'L';
 	sectyp[4] = 'E';
-	insert(firsttyp);
-	insert(sectyp);
-	this->typ = TOKENIF;
-	char* thirdtyp = new char[2];
+	sectyp[5] = '\0';
+	insert(firsttyp, KeywordWHILE);
+	insert(sectyp, KeywordWHILE);
+
+	char* thirdtyp = new char[3];
 	thirdtyp[0] = 'i';
 	thirdtyp[1] = 'f';
-	char* fourthtyp = new char[2];
+	thirdtyp[2] = '\0';
+	char* fourthtyp = new char[3];
 	fourthtyp[0] = 'I';
 	fourthtyp[1] = 'F';
-	insert(thirdtyp);
-	insert(fourthtyp);
+	fourthtyp[2] = '\0';
+	insert(thirdtyp, KeywordIF);
+	insert(fourthtyp, KeywordIF);
 }
 
-char* Symboltable::insert(char* lexem) {
-	char* node = NULL;
+SymtabEntry* Symboltable::insert(char* lexem, TokenType typ) {
+	int index = hashFunc(lexem);
 	int count = countsize(lexem);
-	if (isTyp(lexem, count)) {
-		this->typ = INT;
-	} else {
-		node = lookup(lexem)->getName();
-	}
-	return node;
-}
-
-Info* Symboltable::lookup(char* key) {
-	int index = hashFunc(key);
 	SymtabEntry* element = sym[index];
-	if(element == NULL){
+	if (element == NULL) {
+		char* key = this->table->insert(lexem, count);
 		element = new SymtabEntry();
-		element->setInfo(key, this->typ);
+		element->setInfo(key, typ);
 		sym[index] = element;
-		return element->getInfo();
+		return element;
 	}
 	SymtabEntry* temp = element;
 	while (element != NULL) {
-		if (!element->getInfo()->compareLex(key)) {
+		if (!element->getInfo()->compareLex(lexem)) {
 			element = element->getNext();
 		} else {
-			return element->getInfo();
+			return element;
 		}
 	}
+	char* key = this->table->insert(lexem, count);
 	element = new SymtabEntry();
-	element->setInfo(key, this->typ);
+	element->setInfo(key, typ);
 	temp->setNext(element);
-	return element->getInfo();
+	return element;
 }
 
 int Symboltable::countsize(char* lexem) {
@@ -87,21 +82,6 @@ int Symboltable::countsize(char* lexem) {
 	return count;
 }
 
-bool Symboltable::isTyp(char* lexem, int count) {
-	char* typ = new char[4];
-	typ[0] = 'i';
-	typ[1] = 'n';
-	typ[2] = 't';
-	for (int i = 0; i < 3; i++) {
-		if (lexem[i] != typ[i]) {
-			return false;
-		}
-	}
-	if (lexem[3] == '\0') {
-		return true;
-	}
-	return false;
-}
 
 int Symboltable::hashFunc(char* lexem) {
 	int first = lexem[0];

@@ -18,7 +18,8 @@
 #include <stdlib.h>
 #include "string.h"
 
-Scanner::~Scanner() {}
+Scanner::~Scanner() {
+}
 
 Scanner::Scanner(Buffer* bufe, Symboltable* symboltable) {
 	this->stopp = 0;
@@ -35,7 +36,7 @@ void Scanner::stop() {
 	this->stopp = 1;
 }
 
-int Scanner::getStop(){
+int Scanner::getStop() {
 	return this->stopp;
 }
 
@@ -45,6 +46,10 @@ Token* Scanner::mkToken(TokenType t, int l, int c, char* info) { //Token für ei
 
 Token* Scanner::mkToken(TokenType t, int l, int c, int value) { //Token für einen Integer erzeugen
 	return new Token(t, l, c, value);
+}
+
+Token* Scanner::mkToken(TokenType t, int l, int c, SymtabEntry* entry) { //Token für einen Identifier oder ein fehlerhaftes Zeichen erzeugen
+	return new Token(t, l, c, entry);
 }
 
 Token* Scanner::nextToken() {
@@ -73,15 +78,13 @@ Token* Scanner::nextToken() {
 		return this->mkToken(type, line, column, val);
 	} else {
 		char* templexem = new char[pointer];
-		templexem =	mkLexem();
-		if(type == Identifier){
-			this->sym->insert(templexem);
-			//this->sym->insert(templexem, type);
-			//SymtabEntry* entry = this->sym->insert(templexem);
-			//type = entry->getType();
-			//return this->mkToken(type, line, column, entry);
+		templexem = mkLexem();
+		if (type == Identifier) {
+			SymtabEntry* entry = this->sym->insert(templexem, type);
+			type = entry->getInfo()->getTyp();
+			return this->mkToken(type, line, column, entry);//Token für einen Identifier
 		}
-		return this->mkToken(type, line, column, templexem); //Token für einen Identifier, Zeichen oder Fehlertoken
+		return this->mkToken(type, line, column, templexem); //Token für einen Zeichen oder Fehlertoken
 	}
 }
 

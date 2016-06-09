@@ -8,17 +8,41 @@
 #ifndef SYMBOLTABLE_INCLUDES_INFORMATION_H_
 #define SYMBOLTABLE_INCLUDES_INFORMATION_H_
 
-typedef enum {
-	TOKENWHILE, TOKENIF, INT, NOTYP
-}Typ;
+enum TokenType {
+	ze_ro, //default bzw, Kommentar, was kein Token ist
+	Sign, //allgemein
+	Identifier,
+	Integer,
+	Assign, //:=
+	EqualColonEqual, //=:=
+	Equal, // =
+	Plus, // +
+	SquareBracketLEFT, // [
+	SquareBracketRIGHT, // ]
+	ParenthesesLEFT, // (
+	ParenthesesRIGHT, //  )
+	BracesLEFT,  //  {
+	BracesRIGHT,  //   }
+	InequalitySignLEFT,  // <
+	InequalitySignRIGHT,  //  >
+	Colon,  //:
+	Minus,  //-
+	Star, //*
+	ExclamationMark,  //!
+	Semicolon,  //;
+	And, //&&
+	KeywordIF,
+	KeywordWHILE,
+	Error //Fehlertoken
+};
 
 class Information {
 public:
 	bool compareLex(char* lexem);
 	void setName(char* name);
 	char* getName();
-	Typ getTyp();
-	void setTyp(Typ typ);
+	TokenType getTyp();
+	void setTyp(TokenType typ);
 };
 
 class Info: public Information {
@@ -27,10 +51,10 @@ public:
 	bool compareLex(char* lexem);
 	void setName(char* name);
 	char* getName();
-	Typ getTyp();
-	void setTyp(Typ typ);
+	TokenType getTyp();
+	void setTyp(TokenType typ);
 private:
-	Typ typ;
+	TokenType typ;
 	char* name;
 };
 

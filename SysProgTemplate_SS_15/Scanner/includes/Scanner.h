@@ -31,6 +31,7 @@ public:
 	void freeToken(Token token);
 	Token* mkToken(TokenType t, int l, int c, char* info);
 	Token* mkToken(TokenType tokent, int l, int c, int value);
+	Token* mkToken(TokenType tokent, int l, int c, SymtabEntry* entry);
 	void ungetChar(int index);
 	void copyChar();
 	void stop();

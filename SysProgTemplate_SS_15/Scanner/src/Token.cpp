@@ -14,6 +14,7 @@ Token::Token(TokenType tokent, int l, int c, char* info) {
 	this->type = tokent;
 	this->infokey = info;
 	this->value = -1;
+	this->entry = NULL;
 }
 
 Token::Token(TokenType tokent, int l, int c, int value) {
@@ -22,10 +23,20 @@ Token::Token(TokenType tokent, int l, int c, int value) {
 	this->type = tokent;
 	this->infokey = new char[100];
 	this->value = value;
+	this->entry = NULL;
+}
+
+Token::Token(TokenType tokent, int l, int c, SymtabEntry* entry) {
+	this->column = c;
+	this->line = l;
+	this->type = tokent;
+	this->infokey = entry->getInfo()->getName();
+	this->value = -1;
+	this->entry = entry;
 }
 
 Token::~Token() {
-
+	delete this->entry;
 }
 
 void Token::printToken(std::ofstream& out) {
@@ -96,6 +107,12 @@ void Token::printToken(std::ofstream& out) {
 		out << "Type: " << "\"And\"" << ' ';
 		break;
 	case 22:
+		out << "Type: " << "\"KeywordIF\"" << ' ';
+		break;
+	case 23:
+		out << "Type: " << "\"KeywordWHILE\"" << ' ';
+		break;
+	case 24:
 		out << "Type: " << "\"Error\"" << ' ';
 		break;
 	}

@@ -16,7 +16,7 @@
 #include <fstream>
 
 Buffer::Buffer(const char *pathname) {
-	token = '\0';
+	//token = '\0';
 	file = pathname;
 	posix_memalign((void**) &buffer1, 512, 512);
 	posix_memalign((void**) &buffer2, 512, 512);
