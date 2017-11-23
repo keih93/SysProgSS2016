@@ -272,6 +272,13 @@ void State0::read(char c, Automat* automat) {
 		automat->resetcolumn();
 		automat->setState(State0::makeState());
 		break;
+	case '\r':
+		automat->setTokenType(c, ze_ro);
+		automat->tokenfound(1);
+		automat->countline(1);
+		automat->resetcolumn();
+		automat->setState(State0::makeState());
+		break;
 	case '\t':
 		automat->setTokenType(c, ze_ro);
 		automat->tokenfound(1);
