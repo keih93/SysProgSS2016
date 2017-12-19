@@ -23,11 +23,11 @@ private:
 public:
 	Token();
 	void printToken(std::ofstream& out);
-	char getType();
+	char* getType();
 	Token(TokenType tokent, int l, int c, char* info);
 	Token(TokenType tokent, int l, int c, int value);
 	Token(TokenType tokent, int l, int c, SymtabEntry* entry);
-	void typeToString(TokenType typ);
+	char* typeToString(TokenType typ);
 	virtual ~Token();
 };
 

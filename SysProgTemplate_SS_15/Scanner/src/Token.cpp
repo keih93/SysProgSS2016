@@ -39,6 +39,7 @@ Token::~Token() {
 	delete this->entry;
 }
 
+
 void Token::printToken(std::ofstream& out) {
 	out << "Line: " << this->line << ' ';
 	out << "Column: " << this->column << ' ';
