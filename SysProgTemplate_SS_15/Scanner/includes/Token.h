@@ -23,7 +23,8 @@ private:
 public:
 	Token();
 	void printToken(std::ofstream& out);
-	char* getType();
+	TokenType gettype();
+	char* getname();
 	Token(TokenType tokent, int l, int c, char* info);
 	Token(TokenType tokent, int l, int c, int value);
 	Token(TokenType tokent, int l, int c, SymtabEntry* entry);

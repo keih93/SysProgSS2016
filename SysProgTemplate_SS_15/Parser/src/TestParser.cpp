@@ -1,6 +1,14 @@
-#include "../includes/Scanner.h"
-#include "../includes/Token.h"
+/*
+ * TestParser.cpp
+ *
+ *  Created on: Dec 22, 2017
+ *      Author: parallels
+ */
+
+#include "../../Scanner/includes/Scanner.h"
+#include "../../Scanner/includes/Token.h"
 #include "../../Buffer/includes/Buffer.h"
+#include "../includes/Parser.h"
 #include <iostream>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -9,20 +17,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
+#include <string.h>
 using namespace std;
 
-int main(int argc, char **argv) {
+int main(int argc,char **argv) {
 	std::ofstream outfile;
 	outfile.open("out.txt", std::ofstream::out);
-	//Buffer* buf = new Buffer(argv[1]);
 	Buffer* buf = new Buffer("test.txt");
 	Symboltable* sym = new Symboltable();
 	Scanner* scanner = new Scanner(buf, sym);
-	Token* token1;
-	while (scanner->getStop() == 0) {
-		token1 = scanner->nextToken();
-		token1->printToken(outfile);
+	Parser* parser = new Parser(scanner);
+	if (parser->isPROG()) {
+		cout << "It is a Program" << "\n";
+	} else {
+		cout << "It is not a Program" << "\n";
 	}
-	cout << "It is a Program" << "\n";
+
 }
 

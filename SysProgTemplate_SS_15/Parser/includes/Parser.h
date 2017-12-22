@@ -7,12 +7,8 @@
 
 #ifndef PARSER_INCLUDES_PARSER_H_
 #define PARSER_INCLUDES
-#include "../../Scanner/includes/IScanner.h"
 #include "../../Scanner/includes/Scanner.h"
-#include "../../Scanner/includes/Token.h"
-#include "../../Automat/includes/Automat.h"
-#include "../../Buffer/includes/Buffer.h"
-#include "../../Symboltable/includes/Symboltable.h"
+
 
 class Parser {
 private:
@@ -32,6 +28,7 @@ public:
 	int isDECL();
 	int isDECLS();
 	int isPROG();
+	void switchtoken();
 };
 
 

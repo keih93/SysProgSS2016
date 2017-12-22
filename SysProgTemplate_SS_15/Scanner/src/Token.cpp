@@ -17,6 +17,8 @@ Token::Token(TokenType tokent, int l, int c, char* info) {
 	this->entry = NULL;
 }
 
+
+
 Token::Token(TokenType tokent, int l, int c, int value) {
 	this->column = c;
 	this->line = l;
@@ -128,3 +130,5 @@ void Token::printToken(std::ofstream& out) {
 
 }
 
+TokenType Token::gettype(){
+		return this->type;}
