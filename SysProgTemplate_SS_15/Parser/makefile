@@ -10,7 +10,7 @@ SRCDIR = src
 OBJDIR = objs
 
 # enthaelt das ausfuehrbare File zum Testen
-BINDIRTEST = debug
+BINDIRTEST = ../Scanner/debug
 
 
 AUTOMATDIR = ../Automat
@@ -20,6 +20,7 @@ BUFFERDIR = ../Buffer
 SYMBOLTABLEDIR = ../Symboltable
 
 SCANNERDIR = ../Scanner
+
 
 
 ## hier alle Object Files eintragen, ausser das File mit der Mainmethode
@@ -35,7 +36,7 @@ OBJS = $(OBJDIR)/Parser.o \
 # 
 ## linken der Object-files 
 makeTestParser: $(OBJDIR)/Parser.o $(OBJDIR)/TestParser.o
-	g++ -g $(OBJDIR)/Parser.o $(OBJDIR)/TestParser.o   $(PROJECTOBJDIR)/Automat/*.o $(PROJECTOBJDIR)/Buffer/*.o $(PROJECTOBJDIR)/Symboltable/*.o -o $(BINDIRTEST)/ScannerTest
+	g++ -g $(OBJDIR)/Parser.o $(OBJDIR)/TestParser.o   $(AUTOMATDIR)/$(OBJDIR)/*.o $(BUFFERDIR)/$(OBJDIR)/*.o $(SCANNERDIR)/$(OBJDIR)/*.o -o $(BINDIRTEST)/ScannerTest
 ##	
 ##	
 ##	
