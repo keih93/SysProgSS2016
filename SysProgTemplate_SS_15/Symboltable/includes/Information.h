@@ -33,6 +33,9 @@ enum TokenType {
 	And, //&&
 	KeywordIF,
 	KeywordWHILE,
+	KeywordELSE,
+	KeywordREAD,
+	KeywordWRITE,
 	Error //Fehlertoken
 };
 
