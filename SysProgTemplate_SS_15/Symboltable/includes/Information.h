@@ -36,6 +36,7 @@ enum TokenType {
 	KeywordELSE,
 	KeywordREAD,
 	KeywordWRITE,
+	KeywordINT,
 	Error //Fehlertoken
 };
 

@@ -75,6 +75,14 @@ void Symboltable::initSymbols() {
 	writeTyp[5] = '\0';
 	insert(readTyp, KeywordREAD);
 	insert(writeTyp, KeywordWRITE);
+
+	char* intTyp = new char[6];
+	intTyp[0] = 'i';
+	intTyp[1] = 'n';
+	intTyp[2] = 't';
+	intTyp[3] = '\0';
+	insert(intTyp, KeywordINT);
+
 }
 
 SymtabEntry* Symboltable::insert(char* lexem, TokenType typ) {
