@@ -33,7 +33,15 @@ enum TokenType {
 	And, //&&
 	KeywordIF,
 	KeywordWHILE,
+<<<<<<< HEAD
 	Error, //Fehlertoken
+=======
+	KeywordELSE,
+	KeywordREAD,
+	KeywordWRITE,
+	KeywordINT,
+	Error //Fehlertoken
+>>>>>>> 1ee36fb269cc03bc1dd0a57e158c8715762721b0
 };
 
 class Information {

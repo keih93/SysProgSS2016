@@ -17,8 +17,6 @@ Token::Token(TokenType tokent, int l, int c, char* info) {
 	this->entry = NULL;
 }
 
-
-
 Token::Token(TokenType tokent, int l, int c, int value) {
 	this->column = c;
 	this->line = l;
@@ -40,7 +38,6 @@ Token::Token(TokenType tokent, int l, int c, SymtabEntry* entry) {
 Token::~Token() {
 	delete this->entry;
 }
-
 
 void Token::printToken(std::ofstream& out) {
 	out << "Line: " << this->line << ' ';
@@ -110,18 +107,30 @@ void Token::printToken(std::ofstream& out) {
 		out << "Type: " << "\"And\"" << ' ';
 		break;
 	case 22:
-		out << "Type: " << "\"KeywordIF\"" << ' ';
+		out << "Type: " << "\"Keyword: If\"" << ' ';
 		break;
 	case 23:
-		out << "Type: " << "\"KeywordWHILE\"" << ' ';
+		out << "Type: " << "\"Keyword: While\"" << ' ';
 		break;
 	case 24:
+		out << "Type: " << "\"Keyword: Else\"" << ' ';
+		break;
+	case 25:
+		out << "Type: " << "\"Keyword: Read\"" << ' ';
+		break;
+	case 26:
+		out << "Type: " << "\"Keyword: Write\"" << ' ';
+		break;
+	case 27:
+		out << "Type: " << "\"Keyword: Int\"" << ' ';
+		break;
+	case 28:
 		out << "Type: " << "\"Error\"" << ' ';
 		break;
 	}
 	if (this->value == -2) {
 		out << "Value: invalid number" << '\n' << '\n';
-	}else if (this->value != -1) {
+	} else if (this->value != -1) {
 		out << "Value: " << this->value << '\n' << '\n';
 	} else {
 		out << "Lexem: " << this->infokey << '\n' << '\n';
@@ -130,5 +139,6 @@ void Token::printToken(std::ofstream& out) {
 
 }
 
-TokenType Token::gettype(){
-		return this->type;}
+TokenType Token::gettype() {
+	return this->type;
+}

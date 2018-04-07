@@ -44,6 +44,45 @@ void Symboltable::initSymbols() {
 	fourthtyp[2] = '\0';
 	insert(thirdtyp, KeywordIF);
 	insert(fourthtyp, KeywordIF);
+
+	char* elseOneTyp = new char[5];
+	elseOneTyp[0] = 'e';
+	elseOneTyp[1] = 'l';
+	elseOneTyp[2] = 's';
+	elseOneTyp[3] = 'e';
+	elseOneTyp[4] = '\0';
+	char* elseTwoTyp = new char[5];
+	elseTwoTyp[0] = 'E';
+	elseTwoTyp[1] = 'L';
+	elseTwoTyp[2] = 'S';
+	elseTwoTyp[3] = 'E';
+	elseTwoTyp[4] = '\0';
+	insert(elseOneTyp, KeywordELSE);
+	insert(elseTwoTyp, KeywordELSE);
+
+	char* readTyp = new char[5];
+	readTyp[0] = 'r';
+	readTyp[1] = 'e';
+	readTyp[2] = 'a';
+	readTyp[3] = 'd';
+	readTyp[4] = '\0';
+	char* writeTyp = new char[6];
+	writeTyp[0] = 'w';
+	writeTyp[1] = 'r';
+	writeTyp[2] = 'i';
+	writeTyp[3] = 't';
+	writeTyp[4] = 'e';
+	writeTyp[5] = '\0';
+	insert(readTyp, KeywordREAD);
+	insert(writeTyp, KeywordWRITE);
+
+	char* intTyp = new char[6];
+	intTyp[0] = 'i';
+	intTyp[1] = 'n';
+	intTyp[2] = 't';
+	intTyp[3] = '\0';
+	insert(intTyp, KeywordINT);
+
 }
 
 SymtabEntry* Symboltable::insert(char* lexem, TokenType typ) {
@@ -81,7 +120,6 @@ int Symboltable::countsize(char* lexem) {
 	}
 	return count;
 }
-
 
 int Symboltable::hashFunc(char* lexem) {
 	int first = lexem[0];
