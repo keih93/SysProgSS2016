@@ -9,6 +9,7 @@
 #define PARSER_H_
 #include "../../Scanner/includes/Scanner.h"
 #include "../../Scanner/includes/Token.h"
+#include <list>
 //#include "IParser.h"
 //namespace Scanner { class Scanner; };
 //namespace Token {class Token; };
@@ -18,24 +19,18 @@ private:
 	Scanner* scanner;
 	Token* tok;
 public:
-	 Parser(Scanner* scan);
-	 virtual ~Parser();
-	 int isOP();
-	 int isOP_EXP();
-	int isIndex();
-	int isEXP2();
+	Parser(Scanner* scan);
+	virtual ~Parser();
+	int accept(TokenType T);
+	int expect(TokenType T);
+	int isOP();
 	int isEXP();
 	int isSTATEMENT();
 	int isSTATEMENTS();
-	int isARRAY();
 	int isDECL();
 	int isDECLS();
 	int isPROG();
-	void switchtoken();
+	void nextToken();
 };
-
-
-
-
 
 #endif /* PARSER_H_ */

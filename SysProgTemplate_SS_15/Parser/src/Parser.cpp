@@ -12,17 +12,19 @@ Parser::~Parser() {
 
 Parser::Parser(Scanner* scan) {
 	this->scanner = scan;
-	this->tok = scan->nextToken();
+	this->tok = this->scanner->nextToken();
 }
 
-void Parser::switchtoken() {
+void Parser::nextToken() {
 	this->tok = this->scanner->nextToken();
 }
 
 int Parser::isPROG() {
-	if (this->tok != NULL) { //TODO write code for empty text
+	if (this->tok == NULL) {
 		return 1;
-	} else if (this->isDECLS()) {
+	}
+
+	if (this->isDECLS()) {
 		if (this->isSTATEMENTS()) {
 			return 1;
 		}
@@ -33,11 +35,11 @@ int Parser::isPROG() {
 }
 
 int Parser::isDECLS() {
-	if (this->isDECL()) {
-		return 1;
+	while (this->tok->gettype() != Semicolon) {
+		if (!this->isDECL()) {
+			return 0;
+		}
 	}
-	if (this->tok == NULL)
-		return 1;
 	return 0;
 }
 
@@ -53,28 +55,14 @@ int Parser::isSTATEMENT() {
 }
 int Parser::isDECL() {
 	if (this->tok->gettype() == 'int') { //switch later for enum number
-		this->switchtoken(); //next token
+		this->nextToken(); //next token
 		if (this->isARRAY()) {
-			this->switchtoken();
+			this->nextToken();
 			if (this->tok->gettype() == 'Identifier') {
 				return 1;
 			}
-		}
-		if (this->scanner->nextToken()->gettype() == 'Identifier') {
+		} else if (this->scanner->nextToken()->gettype() == 'Identifier') {
 			return 1;
-		}
-	}
-	return 0;
-}
-
-int Parser::isARRAY() {
-	if (this->tok->gettype() == 'sign[') {
-		this->switchtoken();
-		if (this->tok->gettype() == 'Integer') {
-			this->switchtoken();
-			if (this->tok->gettype() == 'sign]') {
-				return 1;
-			}
 		}
 	}
 	return 0;
@@ -84,19 +72,23 @@ int Parser::isEXP() {
 	return 0;
 }
 
-int Parser::isIndex() {
-	return 0;
-}
-
-int Parser::isEXP2() {
-	return 0;
-}
-
 int Parser::isOP() {
+	if(accept(type));
+			return 1;
 	return 0;
 }
 
-int Parser::isOP_EXP() {
+int Parser::accept(TokenType T) {
+	if (this->tok->gettype() == T) {
+		nextToken();
+		return 1;
+	}
+	return 0;
+}
+
+int Parser::expect(TokenType T) {
+	if (accept(T))
+		return 1;
 	return 0;
 }
 
