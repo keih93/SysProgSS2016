@@ -33,7 +33,7 @@ enum TokenType {
 	And, //&&
 	KeywordIF,
 	KeywordWHILE,
-	Error //Fehlertoken
+	Error, //Fehlertoken
 };
 
 class Information {

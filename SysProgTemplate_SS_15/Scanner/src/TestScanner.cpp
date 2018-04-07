@@ -21,8 +21,7 @@ int main(int argc, char **argv) {
 	Token* token1;
 	while (scanner->getStop() == 0) {
 		token1 = scanner->nextToken();
-		token1->printToken(outfile);
+		if(token1 != NULL) token1->printToken(outfile);
 	}
-	cout << "It is a Program" << "\n";
 }
 

@@ -6,8 +6,6 @@
  */
 
 #include "../includes/Parser.h"
-#include "../../Scanner/includes/Scanner.h"
-#include "../../Scanner/includes/Token.h"
 
 Parser::~Parser() {
 }
@@ -17,12 +15,18 @@ Parser::Parser(Scanner* scan) {
 	this->tok = scan->nextToken();
 }
 
-void Parser::switchtoken(){
+void Parser::switchtoken() {
 	this->tok = this->scanner->nextToken();
 }
 
 int Parser::isPROG() {
-	if ((this->isDECLS() && this->isSTATEMENTS()) | this->isSTATEMENTS()) {
+	if (this->tok != NULL) { //TODO write code for empty text
+		return 1;
+	} else if (this->isDECLS()) {
+		if (this->isSTATEMENTS()) {
+			return 1;
+		}
+	} else if (this->isSTATEMENTS()) {
 		return 1;
 	}
 	return 0;
@@ -44,7 +48,7 @@ int Parser::isSTATEMENTS() {
 	return 0;
 }
 
-int Parser::isSTATEMENT(){
+int Parser::isSTATEMENT() {
 	return 0;
 }
 int Parser::isDECL() {
@@ -76,27 +80,23 @@ int Parser::isARRAY() {
 	return 0;
 }
 
-int Parser::isEXP(){
+int Parser::isEXP() {
 	return 0;
 }
 
-int Parser::isIndex(){
+int Parser::isIndex() {
 	return 0;
 }
 
-int Parser::isEXP2(){
+int Parser::isEXP2() {
 	return 0;
 }
 
-int Parser::isOP(){
+int Parser::isOP() {
 	return 0;
 }
 
-int Parser::isOP_EXP(){
+int Parser::isOP_EXP() {
 	return 0;
 }
-
-
-
-
 

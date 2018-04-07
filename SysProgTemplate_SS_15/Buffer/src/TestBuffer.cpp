@@ -13,15 +13,12 @@ int main(int argc, char **argv) {
 	Buffer* buffer;
 
 	buffer = new Buffer("test.txt");
-	char a;
+	char a = 'a';
 	int i;
-	while (i < 31869) {
+	while (a != '\0') {
 		a = buffer->getchar();
 		std::cout << a;
 		i++;
 	}
 	//std::cout<< buffer->getBuffer2();
-
-
-
 }

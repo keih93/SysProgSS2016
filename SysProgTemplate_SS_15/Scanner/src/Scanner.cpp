@@ -57,18 +57,23 @@ Token* Scanner::nextToken() {
 	char c;
 	while (tokenfound == 0) {
 		if (pointer == end) { //neues Zeichen einlesen
-			buffer[end] = buf->getchar();
+			buffer[end] = buf->getchar(); //end of char behandeln
 			end++;
 		}
 		c = buffer[pointer]; //nächstes Zeichen verarbeiten
 		pointer++;
 		tokenfound = automat->handleChar(c);
+		if (this->getStop() == 1) {
+			return NULL;
+		}
 	}
+
 	TokenType type = automat->getTokenType();
 	int line = automat->getLine();
 	int column = automat->getColumn();
 	int val = automat->getValue();
 	//nur im Fall von einem Identifier, Integer, Zeichen oder Fehler wird ein Token erzeugt
+
 	if (type == ze_ro) {
 		// erkanntes Token überschreiben --> überlesen
 		this->copyChar();
@@ -82,7 +87,7 @@ Token* Scanner::nextToken() {
 		if (type == Identifier) {
 			SymtabEntry* entry = this->sym->insert(templexem, type);
 			type = entry->getInfo()->getTyp();
-			return this->mkToken(type, line, column, entry);//Token für einen Identifier
+			return this->mkToken(type, line, column, entry); //Token für einen Identifier
 		}
 		return this->mkToken(type, line, column, templexem); //Token für einen Zeichen oder Fehlertoken
 	}

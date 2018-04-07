@@ -5,10 +5,11 @@
  *      Author: parallels
  */
 
-#include "../../Scanner/includes/Scanner.h"
+//#include "../../Scanner/includes/Scanner.h"
 #include "../../Scanner/includes/Token.h"
 #include "../../Buffer/includes/Buffer.h"
 #include "../includes/Parser.h"
+#include "../../Symboltable/includes/Symboltable.h"
 #include <iostream>
 #include <sys/types.h>
 #include <sys/stat.h>
