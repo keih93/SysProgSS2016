@@ -20,17 +20,7 @@ void Parser::nextToken() {
 }
 
 int Parser::isPROG() {
-	if (this->tok == NULL) {
-		return 1;
-	}
 
-	if (this->isDECLS()) {
-		if (this->isSTATEMENTS()) {
-			return 1;
-		}
-	} else if (this->isSTATEMENTS()) {
-		return 1;
-	}
 	return 0;
 }
 
@@ -54,17 +44,7 @@ int Parser::isSTATEMENT() {
 	return 0;
 }
 int Parser::isDECL() {
-	if (this->tok->gettype() == 'int') { //switch later for enum number
-		this->nextToken(); //next token
-		if (this->isARRAY()) {
-			this->nextToken();
-			if (this->tok->gettype() == 'Identifier') {
-				return 1;
-			}
-		} else if (this->scanner->nextToken()->gettype() == 'Identifier') {
-			return 1;
-		}
-	}
+
 	return 0;
 }
 
@@ -73,8 +53,8 @@ int Parser::isEXP() {
 }
 
 int Parser::isOP() {
-	if(accept(type));
-			return 1;
+//	if(accept(type));
+//			return 1;
 	return 0;
 }
 
