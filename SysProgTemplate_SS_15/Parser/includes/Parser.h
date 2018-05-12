@@ -18,18 +18,20 @@ class Parser {
 private:
 	Scanner* scanner;
 	Token* tok;
+	int parenthesesCounter;
 public:
 	Parser(Scanner* scan);
 	virtual ~Parser();
 	int accept(TokenType T);
 	int expect(TokenType T);
-	int isOP();
-	int isEXP();
-	int isSTATEMENT();
-	int isSTATEMENTS();
-	int isDECL();
-	int isDECLS();
-	int isPROG();
+	bool isOP();
+	bool isEXP();
+	bool isEXPS();
+	bool isSTATEMENT();
+	bool isSTATEMENTS();
+	bool isDECL();
+	bool isDECLS();
+	bool isPROG();
 	void nextToken();
 };
 
