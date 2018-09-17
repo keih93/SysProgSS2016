@@ -9,6 +9,7 @@
 #define PARSER_H_
 #include "../../Scanner/includes/Scanner.h"
 #include "../../Scanner/includes/Token.h"
+#include "Node.h"
 #include <list>
 //#include "IParser.h"
 //namespace Scanner { class Scanner; };
@@ -30,6 +31,7 @@ public:
 	bool isSTATEMENT();
 	bool isSTATEMENTS();
 	bool isDECL();
+	//bool isDECLS(Node* node);
 	bool isDECLS();
 	bool isPROG();
 	void nextToken();

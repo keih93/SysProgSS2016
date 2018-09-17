@@ -63,6 +63,9 @@ Token* Scanner::nextToken() {
 		c = buffer[pointer]; //nächstes Zeichen verarbeiten
 		pointer++;
 		tokenfound = automat->handleChar(c);
+		if (this->getStop() == 1) {
+		 			return NULL;
+		 		}
 	}
 
 	TokenType type = automat->getTokenType();
