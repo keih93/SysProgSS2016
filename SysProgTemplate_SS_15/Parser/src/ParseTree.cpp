@@ -7,8 +7,8 @@
 
 #include "../includes/ParseTree.h"
 
-ParseTree::ParseTree(Node* prog) {
-	this->prog = prog;
+ParseTree::ParseTree() {
+
 }
 
 ParseTree::~ParseTree() {
@@ -17,5 +17,9 @@ ParseTree::~ParseTree() {
 
 Node* ParseTree::getProg() {
 	return this->prog;
+}
+
+void ParseTree::setProg(Node* prog) {
+	this->prog = prog;
 }
 

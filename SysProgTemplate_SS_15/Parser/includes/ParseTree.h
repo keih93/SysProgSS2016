@@ -11,9 +11,10 @@
 
 class ParseTree {
 public:
-	ParseTree(Node* prog);
+	ParseTree();
 	virtual ~ParseTree();
 	Node* getProg();
+	void setProg(Node * prog);
 
 private:
 	Node* prog;

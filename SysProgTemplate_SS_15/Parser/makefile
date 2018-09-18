@@ -28,6 +28,7 @@ SCANNERDIR = ../Scanner
 
 OBJS = $(OBJDIR)/Parser.o \
 	$(OBJDIR)/Node.o \
+	$(OBJDIR)/Leaf.o \
 	$(OBJDIR)/ParseTree.o
 	#$(OBJDIR)/xxn.o
 

@@ -10,7 +10,7 @@
 Node::Node(Token* tok) {
 	this->token = tok;
 }
-
+Node::Node() {}
 Node::~Node() {
 }
 

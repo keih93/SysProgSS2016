@@ -25,45 +25,20 @@ public:
 		Exp2,
 		Index,
 		Op_exp,
-		Op,
-		NIdentifier,
-		NInteger,
-		NAssign, //:=
-		NEqualColonEqual, //=:=
-		NEqual, // =
-		NPlus, // +
-		NSquareBracketLEFT, // [
-		NSquareBracketRIGHT, // ]
-		NParenthesesLEFT, // (
-		NParenthesesRIGHT, //  )
-		NBracesLEFT,  //  {
-		NBracesRIGHT,  //   }
-		NInequalitySignLEFT,  // <
-		NInequalitySignRIGHT,  //  >
-		NColon,  //:
-		NMinus,  //-
-		NStar, //*
-		NExclamationMark,  //!
-		NSemicolon,  //;
-		NAnd, //&&
-		NKeywordIF,
-		NKeywordWHILE,
-		NKeywordELSE,
-		NKeywordREAD,
-		NKeywordWRITE,
-		NKeywordINT
+		Op
 	};
 
 	Node(Token* tok);
+	Node();
 	virtual ~Node();
 	NodeType getType();
 	void setType(NodeType type);
 	Token* getToken();
 	void addNode(Node* node);
 	Node* getNode(uint16_t i);
+	Token* token;
 private:
 	NodeType type;
-	Token* token;
 	Node* childNodes[8];
 	uint16_t nodeCount;
 };
