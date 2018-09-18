@@ -7,6 +7,7 @@
 
 #ifndef PARSER_SRC_PARSETREE_H_
 #define PARSER_SRC_PARSETREE_H_
+#include "Node.h"
 
 class ParseTree {
 public:

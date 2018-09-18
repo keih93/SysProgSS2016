@@ -23,11 +23,10 @@ void Parser::nextToken() {
 }
 
 bool Parser::isPROG() {
-	//Node* prog = new Node(tok);
-	//prog->setType(Node::Prog);
-	//ParseTree* tree = new ParseTree(prog);
-	//if (this->isDECLS(prog)) {
-	if (this->isDECLS()) {
+	Node* prog = new Node(tok);
+	prog->setType(Node::Prog);
+	ParseTree* tree = new ParseTree(prog);
+	if (this->isDECLS(prog)) {
 		if (this->isSTATEMENTS()) {
 			return true;
 		}
@@ -40,29 +39,26 @@ bool Parser::isPROG() {
 	return false;
 }
 
-//bool Parser::isDECLS(Node* prog) {
-bool Parser::isDECLS() {
-	//Node* decls = new Node(Node::Decls, tok);
+bool Parser::isDECLS(Node* prog) {
+	Node* decls = new Node(tok);
+	decls->setType(Node::Decls);
 	if (this->isDECL()) {
-		if (accept (Semicolon)) { //switch to false when there is 1 decl and continue with a statement
-			//if (this->isDECLS(prog)) {
-			if (this->isDECLS()) {
-			//	prog->addNode(decls);
-				printf("add Decls");
-				return true;
-			} else {
-			//	prog->addNode(decls);
-				printf("add Decls");
+		if (accept(Semicolon)) { //switch to false when there is 1 decl and continue with a statement
+			if (this->isDECLS(prog)) {
+				prog->addNode(decls);
 				return true;
 			}
 		}
+	} else {
+		prog->addNode(decls);
+		return true;
 	}
 	return false;
 }
 
 bool Parser::isSTATEMENTS() {
 	if (this->isSTATEMENT()) {
-		if (accept (Semicolon)) { // where the fuck is mah ;
+		if (accept(Semicolon)) { // where the fuck is mah ;
 			if (this->isSTATEMENTS()) {
 				return true;
 			} else {
@@ -74,16 +70,16 @@ bool Parser::isSTATEMENTS() {
 }
 
 bool Parser::isDECL() {
-	if (accept (KeywordINT)) {
-		if (accept (SquareBracketLEFT)) {
-			if (accept (Integer)) {
-				if (accept (SquareBracketRIGHT)) {
-					if (accept (Identifier)) {
+	if (accept(KeywordINT)) {
+		if (accept(SquareBracketLEFT)) {
+			if (accept(Integer)) {
+				if (accept(SquareBracketRIGHT)) {
+					if (accept(Identifier)) {
 						return true;
 					}
 				}
 			}
-		} else if (accept (Identifier)) {
+		} else if (accept(Identifier)) {
 			return true;
 		}
 	}
@@ -91,16 +87,16 @@ bool Parser::isDECL() {
 }
 
 bool Parser::isSTATEMENT() {
-	if (accept (Identifier)) {
-		if (accept (Assign)) {
+	if (accept(Identifier)) {
+		if (accept(Assign)) {
 			if (isEXPS()) {
 				return true;
 			}
 		}
-		if (accept (SquareBracketLEFT)) {
+		if (accept(SquareBracketLEFT)) {
 			if (isEXP()) {
-				if (accept (SquareBracketRIGHT)) {
-					if (accept (Assign)) {
+				if (accept(SquareBracketRIGHT)) {
+					if (accept(Assign)) {
 						if (isEXP()) {
 							return true;
 						}
@@ -108,35 +104,35 @@ bool Parser::isSTATEMENT() {
 				}
 			}
 		}
-	} else if (accept (BracesLEFT)) {
+	} else if (accept(BracesLEFT)) {
 		if (isSTATEMENTS()) {
-			if (accept (BracesRIGHT)) {
+			if (accept(BracesRIGHT)) {
 				return true;
 			}
 		}
-	} else if (accept (KeywordWRITE)) {
-		if (accept (ParenthesesLEFT)) {
+	} else if (accept(KeywordWRITE)) {
+		if (accept(ParenthesesLEFT)) {
 			if (isEXP()) {
-				if (accept (ParenthesesRIGHT)) {
+				if (accept(ParenthesesRIGHT)) {
 					return true;
 				}
 			}
 		}
-	} else if (accept (KeywordREAD)) {
-		if (accept (ParenthesesLEFT)) {
+	} else if (accept(KeywordREAD)) {
+		if (accept(ParenthesesLEFT)) {
 			if (accept(Identifier)) {
-				if (accept (ParenthesesRIGHT)) {
+				if (accept(ParenthesesRIGHT)) {
 					return true;
 				}
 			}
 		}
-	} else if (accept (Minus)) {
+	} else if (accept(Minus)) {
 		return true;
-	} else if (accept (Colon)) {
+	} else if (accept(Colon)) {
 		return true;
-	} else if (accept (Star)) {
+	} else if (accept(Star)) {
 		return true;
-	} else if (accept (And)) {
+	} else if (accept(And)) {
 		return true;
 	}
 	return false;
@@ -155,24 +151,24 @@ bool Parser::isEXPS() {
 }
 
 bool Parser::isEXP() {
-	if (accept (Integer)) {
+	if (accept(Integer)) {
 		return true;
-	} else if (accept (Identifier)) {
+	} else if (accept(Identifier)) {
 		return true;
-	} else if (accept (Minus)) {
+	} else if (accept(Minus)) {
 		if (isEXP()) {
 			return true;
 		}
-	} else if (accept (Plus)) {
+	} else if (accept(Plus)) {
 		if (isEXP()) {
 			return true;
 		}
-	} else if (accept (ExclamationMark)) {
+	} else if (accept(ExclamationMark)) {
 		if (isEXP()) {
 			return true;
 		}
 	}
-	while (accept (ParenthesesLEFT)) {
+	while (accept(ParenthesesLEFT)) {
 		this->parenthesesCounter++;
 		if (this->isEXP()) {
 			while (this->parenthesesCounter > 0 && accept(ParenthesesRIGHT) == 1) {
@@ -188,29 +184,29 @@ bool Parser::isEXP() {
 }
 
 bool Parser::isOP() {
-	if (accept (InequalitySignRIGHT))
+	if (accept(InequalitySignRIGHT))
 		return true;
-	else if (accept (Equal))
+	else if (accept(Equal))
 		return true;
-	else if (accept (EqualColonEqual))
+	else if (accept(EqualColonEqual))
 		return true;
-	else if (accept (Plus))
+	else if (accept(Plus))
 		return true;
-	else if (accept (Minus))
+	else if (accept(Minus))
 		return true;
-	else if (accept (Colon))
+	else if (accept(Colon))
 		return true;
-	else if (accept (Star))
+	else if (accept(Star))
 		return true;
-	else if (accept (And))
+	else if (accept(And))
 		return true;
-	else if (accept (InequalitySignLEFT))
+	else if (accept(InequalitySignLEFT))
 		return true;
 	return false;
 }
 
 int Parser::accept(TokenType T) {
-	if (this->tok->gettype() == T) {
+	if (NULL != tok && this->tok->gettype() == T) {
 		nextToken();
 		return true;
 	}
@@ -222,4 +218,3 @@ int Parser::expect(TokenType T) {
 		return true;
 	return false;
 }
-

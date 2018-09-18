@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include "../../Scanner/includes/Token.h"
 
 class Node {
 public:

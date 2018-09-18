@@ -31,8 +31,7 @@ public:
 	bool isSTATEMENT();
 	bool isSTATEMENTS();
 	bool isDECL();
-	//bool isDECLS(Node* node);
-	bool isDECLS();
+	bool isDECLS(Node* node);
 	bool isPROG();
 	void nextToken();
 };
