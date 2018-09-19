@@ -24,6 +24,9 @@ public:
 	Token();
 	void printToken(std::ofstream& out);
 	TokenType gettype();
+	int getLine();
+	int getColumn();
+	char* getInfokey();
 	char* getname();
 	Token(TokenType tokent, int l, int c, char* info);
 	Token(TokenType tokent, int l, int c, int value);

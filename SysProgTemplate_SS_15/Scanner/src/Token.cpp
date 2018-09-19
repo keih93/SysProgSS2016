@@ -124,7 +124,7 @@ void Token::printToken(std::ofstream& out) {
 	case 27:
 		out << "Type: " << "\"Keyword: Int\"" << ' ';
 		break;
-	case 28:
+	default:
 		out << "Type: " << "\"Error\"" << ' ';
 		break;
 	}
@@ -137,6 +137,18 @@ void Token::printToken(std::ofstream& out) {
 	}
 	out.flush();
 
+}
+
+int Token::getLine() {
+	return this->line;
+}
+
+int Token::getColumn() {
+	return this->column;
+}
+
+char* Token::getInfokey() {
+	return this->infokey;
 }
 
 TokenType Token::gettype() {
