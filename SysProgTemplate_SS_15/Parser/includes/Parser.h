@@ -21,11 +21,10 @@ private:
 	Scanner* scanner;
 	Token* tok;
 	ParseTree* tree;
-	int parenthesesCounter;
 public:
 	Parser(Scanner* scan);
 	virtual ~Parser();
-	int accept(TokenType T,Node* node);
+	bool accept(TokenType T,Node* node);
 	int expect(TokenType T);
 	bool isOP(Node* node);
 	bool isEXP(Node* node);

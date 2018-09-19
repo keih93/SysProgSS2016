@@ -14,7 +14,6 @@ Parser::~Parser() {
 }
 
 Parser::Parser(Scanner* scan) {
-	this->parenthesesCounter = 0;
 	this->scanner = scan;
 	this->tok = this->scanner->nextToken();
 	this->tree = new ParseTree();
@@ -27,7 +26,8 @@ void Parser::nextToken() {
 bool Parser::isPROG() {
 	Node* prog = new Node(tok);
 	prog->setType(Node::Prog);
-	if (this->isDECLS(prog) || this->isSTATEMENTS(prog)) {
+	if ((this->isDECLS(prog) && this->tok == NULL)
+			|| this->isSTATEMENTS(prog)) {
 		tree->setProg(prog);
 		return true;
 	}
@@ -69,8 +69,11 @@ bool Parser::isSTATEMENTS(Node* node) {
 	if (this->isSTATEMENT(stats)) {
 		if (accept(Semicolon, stats)) { // where the fuck is mah ;
 			if (this->isSTATEMENTS(stats)) {
+				node->addNode(stats);
 				return true;
-			} else {
+			} else if (this->tok == NULL
+					|| this->tok->gettype() == BracesRIGHT) {
+				node->addNode(stats);
 				return true;
 			}
 		}
@@ -111,7 +114,7 @@ bool Parser::isSTATEMENT(Node* node) {
 		}
 		if (isINDEX(stat)) {
 			if (accept(Assign, stat)) {
-				if (isEXP(stat)) {
+				if (isEXPS(stat)) {
 					node->addNode(stat);
 					return true;
 				}
@@ -126,7 +129,7 @@ bool Parser::isSTATEMENT(Node* node) {
 		}
 	} else if (accept(KeywordWRITE, stat)) {
 		if (accept(ParenthesesLEFT, stat)) {
-			if (isEXP(stat)) {
+			if (isEXPS(stat)) {
 				if (accept(ParenthesesRIGHT, stat)) {
 					node->addNode(stat);
 					return true;
@@ -147,6 +150,32 @@ bool Parser::isSTATEMENT(Node* node) {
 				}
 			}
 		}
+	} else if (accept(KeywordIF, stat)) {
+		if (accept(ParenthesesLEFT, stat)) {
+			if (isEXPS(stat)) {
+				if (accept(ParenthesesRIGHT, stat)) {
+					if (isSTATEMENT(stat)) {
+						if (accept(KeywordELSE, stat)) {
+							if (isSTATEMENT(stat)) {
+								node->addNode(stat);
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+	} else if (accept(KeywordWHILE, stat)) {
+		if (accept(ParenthesesLEFT, stat)) {
+			if (isEXPS(stat)) {
+				if (accept(ParenthesesRIGHT, stat)) {
+					if (isSTATEMENT(stat)) {
+						node->addNode(stat);
+						return true;
+					}
+				}
+			}
+		}
 	}
 //	 else if (accept(Minus, stat)) { TODO: Why check this in statement?
 //		node->addNode(stat);
@@ -161,7 +190,6 @@ bool Parser::isSTATEMENT(Node* node) {
 //		node->addNode(stat);
 //		return true;
 //	}
-	//TODO: Check if ... else | while...
 	return false;
 }
 
@@ -170,7 +198,7 @@ bool Parser::isEXPS(Node* node) {
 	exps->setType(Node::Exp);
 	if (isEXP(exps)) {
 		if (isOP(exps)) {
-			if (isEXP(exps)) {
+			if (isEXPS(exps)) {
 				node->addNode(exps);
 				return true;
 			}
@@ -192,10 +220,11 @@ bool Parser::isEXP(Node* node) {
 		if (isINDEX(exp)) {
 			node->addNode(exp);
 			return true;
-		}
-	} else if (accept(Identifier, exp)) {
-		if (this->tok->gettype() == Semicolon
+		} else if (this->tok->gettype() == Semicolon
 				|| this->tok->gettype() == ParenthesesRIGHT || checkOP()) {
+			node->addNode(exp);
+			return true;
+		} else if (this->tok->gettype() == SquareBracketRIGHT) {
 			node->addNode(exp);
 			return true;
 		}
@@ -215,17 +244,11 @@ bool Parser::isEXP(Node* node) {
 			return true;
 		}
 	}
-	while (accept(ParenthesesLEFT, exp)) {
-		this->parenthesesCounter++;
-		if (this->isEXP(exp)) {
-			while (this->parenthesesCounter > 0
-					&& accept(ParenthesesRIGHT, exp) == 1) {
-				this->parenthesesCounter--;
-				if (this->parenthesesCounter == 0
-						&& accept(ParenthesesRIGHT, exp) == 0) {
-					node->addNode(exp);
-					return true;
-				}
+	if (accept(ParenthesesLEFT, exp)) {
+		if (this->isEXPS(exp)) {
+			if (accept(ParenthesesRIGHT, exp)) {
+				node->addNode(exp);
+				return true;
 			}
 		}
 	}
@@ -289,11 +312,11 @@ bool Parser::checkOP() {
 	return false;
 }
 
-bool Parser::isINDEX(Node* node) { //TODO: not working correctly
+bool Parser::isINDEX(Node* node) {
 	Node* index = new Node(tok);
 	index->setType(Node::Index);
 	if (accept(SquareBracketLEFT, index)) {
-		if (isEXP(index)) {
+		if (isEXPS(index)) {
 			if (accept(SquareBracketRIGHT, index)) {
 				node->addNode(index);
 				return true;
@@ -303,7 +326,7 @@ bool Parser::isINDEX(Node* node) { //TODO: not working correctly
 	return false;
 }
 
-int Parser::accept(TokenType T, Node* node) {
+bool Parser::accept(TokenType T, Node* node) {
 	if (NULL != tok && this->tok->gettype() == T) {
 		Leaf* leaf = new Leaf(tok);
 		leaf->setTokenType(tok->gettype());
