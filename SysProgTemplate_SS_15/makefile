@@ -15,7 +15,7 @@ PARSERDIR = Parser
 
 
 
-all:	automatOBJs bufferOBJs symboltableOBJs scanner  
+all: clean automatOBJs bufferOBJs symboltableOBJs scanner parser
 	@echo "target all"
 
 	
