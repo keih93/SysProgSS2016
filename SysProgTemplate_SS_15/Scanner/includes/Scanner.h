@@ -23,6 +23,8 @@ private:
 	char* mkLexem();
 	int end;
 	int stopp;
+	bool squareBracketRightFound;
+	bool identifierIsArray;
 public:
 	Symboltable* sym;
 	Scanner(Buffer* bufe, Symboltable* sym);

@@ -18,6 +18,7 @@ public:
 	Info* getInfo();
 	SymtabEntry* getNext();
 	Info* creatInfo();
+	bool isArray;
 private:
 	Info* info;
 	SymtabEntry* next;

@@ -21,16 +21,20 @@
 #include <string.h>
 using namespace std;
 
-int main(int argc,char **argv) {
+int main(int argc, char **argv) {
 	std::ofstream outfile;
 	outfile.open("out.txt", std::ofstream::out);
 	Buffer* buf = new Buffer("test.txt");
 	Symboltable* sym = new Symboltable();
 	Scanner* scanner = new Scanner(buf, sym);
-	Parser* parser = new Parser(scanner);
-	if (parser->isPROG()) {
-		cout << "It is a Program" << "\n";
-	} else {
+	try {
+		Parser* parser = new Parser(scanner);
+		if (parser->isPROG()) {
+			cout << "It is a Program" << "\n";
+		} else {
+			cout << "It is not a Program" << "\n";
+		}
+	} catch (...) {
 		cout << "It is not a Program" << "\n";
 	}
 

@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "string.h"
+#include <stdexcept>
 
 Scanner::~Scanner() {
 }
@@ -30,6 +31,8 @@ Scanner::Scanner(Buffer* bufe, Symboltable* symboltable) {
 	this->buffer = new char[100];
 	this->pointer = 0; //steht auf dem nächsten zu verarbeitenden Zeichen
 	this->end = 0; //rechtes Ende der zu verarbeitenden Zeichen
+	squareBracketRightFound = false;
+	identifierIsArray = false;
 }
 
 void Scanner::stop() {
@@ -84,14 +87,36 @@ Token* Scanner::nextToken(bool isDecl) {
 	} else {
 		char* templexem = new char[pointer];
 		templexem = mkLexem();
+		if (!isDecl) {
+			if (identifierIsArray) {
+				if (strcmp(templexem, "[") != 0) {
+					fprintf(stderr, "\nIncompatible Types: Identifier is an array. Line: %d Column: %d.\n", line,column);
+					throw std::logic_error("Incompatible Types");
+				}
+			} else {
+				if (strcmp(templexem, "[") == 0) {
+					fprintf(stderr, "\nIncompatible Types: Identifier is not an array. Line: %d Column: %d.\n", line,column);
+					throw std::logic_error("Incompatible Types");
+				}
+			}
+		}
+		identifierIsArray = false;
+		if (strcmp(templexem, "]") == 0) {
+			squareBracketRightFound = true;
+		}
 		if (type == Identifier) {
 			SymtabEntry* entry;
 			if (isDecl) {
-				entry = this->sym->insert(templexem, type);
+				entry = this->sym->insert(templexem, type,
+						squareBracketRightFound);
+				squareBracketRightFound = false;
 				type = entry->getInfo()->getTyp();
 			} else {
 				entry = this->sym->find(templexem, type);
 				type = entry->getInfo()->getTyp();
+				if (entry->isArray) {
+					identifierIsArray = true;
+				}
 			}
 			return this->mkToken(type, line, column, entry); //Token für einen Identifier
 		}

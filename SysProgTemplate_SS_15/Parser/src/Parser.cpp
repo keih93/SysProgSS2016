@@ -30,14 +30,13 @@ void Parser::nextDeclToken() {
 }
 
 bool Parser::isPROG() {
-	try {
-		Node* prog = new Node(tok);
-		prog->setType(Node::Prog);
-		if ((this->isDECLS(prog) && this->tok == NULL)
-				|| this->isSTATEMENTS(prog)) {
-			tree->setProg(prog);
-			return true;
-		}
+	Node* prog = new Node(tok);
+	prog->setType(Node::Prog);
+	if ((this->isDECLS(prog) && this->tok == NULL)
+			|| this->isSTATEMENTS(prog)) {
+		tree->setProg(prog);
+		return true;
+	}
 //	 else if (this->isSTATEMENTS()) {
 //		tree->setProg(prog);
 //		return true;
@@ -46,14 +45,11 @@ bool Parser::isPROG() {
 //		tree->setProg(prog);
 //		return true;
 //	}
-		if (this->tok != NULL) {
-			fprintf(stderr,
-					"\nunexpected Token Line: %d Column: %d Symbol: %s\n",
-					tok->getLine(), tok->getColumn(), tok->getInfokey());
-		} else {
-			fprintf(stderr, "\nunexpected File End.\n");
-		}
-	} catch (...) {
+	if (this->tok != NULL) {
+		fprintf(stderr, "\nunexpected Token Line: %d Column: %d Symbol: %s\n",
+				tok->getLine(), tok->getColumn(), tok->getInfokey());
+	} else {
+		fprintf(stderr, "\nunexpected File End.\n");
 	}
 	return false;
 }

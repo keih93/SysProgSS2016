@@ -15,7 +15,7 @@ class Symboltable {
 public:
 	Symboltable();
 	~Symboltable();
-	SymtabEntry* insert(char* lexem, TokenType typ);
+	SymtabEntry* insert(char* lexem, TokenType typ, bool squareBracketfound);
 	SymtabEntry* find(char* lexem, TokenType typ);
 	int hashFunc(char* lexem);
 	void initSymbols();
@@ -28,7 +28,6 @@ private:
 	int countsize(char* lexem);
 	bool isTyp(char* lexem, int count);
 	bool isNoKeyword(char* lexem);
-
 };
 
 #endif /* SYMBOLTABLE_H_ */

@@ -33,8 +33,8 @@ void Symboltable::initSymbols() {
 	sectyp[3] = 'L';
 	sectyp[4] = 'E';
 	sectyp[5] = '\0';
-	insert(firsttyp, KeywordWHILE);
-	insert(sectyp, KeywordWHILE);
+	insert(firsttyp, KeywordWHILE, false);
+	insert(sectyp, KeywordWHILE, false);
 
 	char* thirdtyp = new char[3];
 	thirdtyp[0] = 'i';
@@ -44,8 +44,8 @@ void Symboltable::initSymbols() {
 	fourthtyp[0] = 'I';
 	fourthtyp[1] = 'F';
 	fourthtyp[2] = '\0';
-	insert(thirdtyp, KeywordIF);
-	insert(fourthtyp, KeywordIF);
+	insert(thirdtyp, KeywordIF, false);
+	insert(fourthtyp, KeywordIF, false);
 
 	char* elseOneTyp = new char[5];
 	elseOneTyp[0] = 'e';
@@ -59,8 +59,8 @@ void Symboltable::initSymbols() {
 	elseTwoTyp[2] = 'S';
 	elseTwoTyp[3] = 'E';
 	elseTwoTyp[4] = '\0';
-	insert(elseOneTyp, KeywordELSE);
-	insert(elseTwoTyp, KeywordELSE);
+	insert(elseOneTyp, KeywordELSE, false);
+	insert(elseTwoTyp, KeywordELSE, false);
 
 	char* readTyp = new char[5];
 	readTyp[0] = 'r';
@@ -75,19 +75,20 @@ void Symboltable::initSymbols() {
 	writeTyp[3] = 't';
 	writeTyp[4] = 'e';
 	writeTyp[5] = '\0';
-	insert(readTyp, KeywordREAD);
-	insert(writeTyp, KeywordWRITE);
+	insert(readTyp, KeywordREAD, false);
+	insert(writeTyp, KeywordWRITE, false);
 
 	char* intTyp = new char[6];
 	intTyp[0] = 'i';
 	intTyp[1] = 'n';
 	intTyp[2] = 't';
 	intTyp[3] = '\0';
-	insert(intTyp, KeywordINT);
+	insert(intTyp, KeywordINT, false);
 
 }
 
-SymtabEntry* Symboltable::insert(char* lexem, TokenType typ) {
+SymtabEntry* Symboltable::insert(char* lexem, TokenType typ,
+		bool squareBracketfound) {
 	int index = hashFunc(lexem);
 	int count = countsize(lexem);
 	SymtabEntry* element = sym[index];
@@ -96,6 +97,10 @@ SymtabEntry* Symboltable::insert(char* lexem, TokenType typ) {
 		element = new SymtabEntry();
 		element->setInfo(key, typ);
 		sym[index] = element;
+		element->isArray = false;
+		if (squareBracketfound) {
+			element->isArray = true;
+		}
 		return element;
 	} else {
 		if (isNoKeyword(lexem)) {
