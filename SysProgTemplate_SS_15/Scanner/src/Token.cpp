@@ -124,7 +124,7 @@ void Token::printToken(std::ofstream& out) {
 	case 27:
 		out << "Type: " << "\"Keyword: Int\"" << ' ';
 		break;
-	default:
+	case 28:
 		out << "Type: " << "\"Error\"" << ' ';
 		break;
 	}

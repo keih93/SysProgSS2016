@@ -21,10 +21,12 @@ private:
 	Scanner* scanner;
 	Token* tok;
 	ParseTree* tree;
+	std::list<char*> identifierList;
 public:
 	Parser(Scanner* scan);
 	virtual ~Parser();
 	bool accept(TokenType T,Node* node);
+	bool acceptIdentifier(TokenType T,Node* node);
 	int expect(TokenType T);
 	bool isOP(Node* node);
 	bool isEXP(Node* node);

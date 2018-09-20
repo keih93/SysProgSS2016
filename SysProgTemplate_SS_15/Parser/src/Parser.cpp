@@ -9,6 +9,10 @@
 #include "../includes/ParseTree.h"
 #include "../includes/Node.h"
 #include "../includes/Leaf.h"
+#include <algorithm>
+#include <list>
+#include <stdexcept>
+using namespace std;
 
 Parser::~Parser() {
 }
@@ -24,13 +28,14 @@ void Parser::nextToken() {
 }
 
 bool Parser::isPROG() {
-	Node* prog = new Node(tok);
-	prog->setType(Node::Prog);
-	if ((this->isDECLS(prog) && this->tok == NULL)
-			|| this->isSTATEMENTS(prog)) {
-		tree->setProg(prog);
-		return true;
-	}
+	try {
+		Node* prog = new Node(tok);
+		prog->setType(Node::Prog);
+		if ((this->isDECLS(prog) && this->tok == NULL)
+				|| this->isSTATEMENTS(prog)) {
+			tree->setProg(prog);
+			return true;
+		}
 //	 else if (this->isSTATEMENTS()) {
 //		tree->setProg(prog);
 //		return true;
@@ -39,26 +44,31 @@ bool Parser::isPROG() {
 //		tree->setProg(prog);
 //		return true;
 //	}
+		if (this->tok != NULL) {
+			fprintf(stderr,
+					"\nunexpected Token Line: %d Column: %d Symbol: %s\n",
+					tok->getLine(), tok->getColumn(), tok->getInfokey());
+		} else {
+			fprintf(stderr, "\nunexpected File End.\n");
+		}
+	} catch (...) {
+	}
 	return false;
 }
 
 bool Parser::isDECLS(Node* node) {
 	Node* decls = new Node(tok);
 	decls->setType(Node::Decls);
-	if (this->isDECL(decls)) {
+	if (this->tok == NULL) {
+		node->addNode(decls);
+		return true;
+	} else if (this->isDECL(decls)) {
 		if (accept(Semicolon, decls)) { //switch to false when there is 1 decl and continue with a statement
 			if (this->isDECLS(decls)) {
 				node->addNode(decls);
 				return true;
-
-			} else {
-				node->addNode(decls);
-				return true;
 			}
 		}
-	} else if (this->tok == NULL) {
-		node->addNode(decls);
-		return true;
 	}
 	return false;
 }
@@ -68,11 +78,14 @@ bool Parser::isSTATEMENTS(Node* node) {
 	stats->setType(Node::Statments);
 	if (this->isSTATEMENT(stats)) {
 		if (accept(Semicolon, stats)) { // where the fuck is mah ;
-			if (this->isSTATEMENTS(stats)) {
+			if (this->tok == NULL) {
 				node->addNode(stats);
 				return true;
-			} else if (this->tok == NULL
-					|| this->tok->gettype() == BracesRIGHT) {
+			} else if (this->isSTATEMENTS(stats)) {
+				node->addNode(stats);
+				return true;
+			} else if (this->tok != NULL
+					&& this->tok->gettype() == BracesRIGHT) {
 				node->addNode(stats);
 				return true;
 			}
@@ -88,13 +101,13 @@ bool Parser::isDECL(Node* node) {
 		if (accept(SquareBracketLEFT, decl)) {
 			if (accept(Integer, decl)) {
 				if (accept(SquareBracketRIGHT, decl)) {
-					if (accept(Identifier, decl)) {
+					if (acceptIdentifier(Identifier, decl)) {
 						node->addNode(decl);
 						return true;
 					}
 				}
 			}
-		} else if (accept(Identifier, decl)) {
+		} else if (acceptIdentifier(Identifier, decl)) {
 			node->addNode(decl);
 			return true;
 		}
@@ -331,6 +344,27 @@ bool Parser::accept(TokenType T, Node* node) {
 		Leaf* leaf = new Leaf(tok);
 		leaf->setTokenType(tok->gettype());
 		node->addNode(leaf);
+		nextToken();
+		return true;
+	}
+	return false;
+}
+
+bool Parser::acceptIdentifier(TokenType T, Node* node) {
+	if (NULL != tok && this->tok->gettype() == T) {
+		Leaf* leaf = new Leaf(tok);
+		leaf->setTokenType(tok->gettype());
+		node->addNode(leaf);
+		if (tok->gettype() == Identifier) {
+			if (find(identifierList.begin(), identifierList.end(),
+					tok->getInfokey()) != identifierList.end()) {
+				fprintf(stderr, "\nDuplicate Variable %s.\n",
+						tok->getInfokey());
+				nextToken();
+				throw logic_error("duplicate Identifier");
+			}
+			identifierList.push_back(tok->getInfokey());
+		}
 		nextToken();
 		return true;
 	}
