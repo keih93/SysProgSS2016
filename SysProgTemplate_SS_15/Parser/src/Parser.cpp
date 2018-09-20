@@ -9,8 +9,6 @@
 #include "../includes/ParseTree.h"
 #include "../includes/Node.h"
 #include "../includes/Leaf.h"
-#include <algorithm>
-#include <list>
 #include <stdexcept>
 using namespace std;
 
@@ -19,12 +17,16 @@ Parser::~Parser() {
 
 Parser::Parser(Scanner* scan) {
 	this->scanner = scan;
-	this->tok = this->scanner->nextToken();
+	this->tok = this->scanner->nextToken(false);
 	this->tree = new ParseTree();
 }
 
 void Parser::nextToken() {
-	this->tok = this->scanner->nextToken();
+	this->tok = this->scanner->nextToken(false);
+}
+
+void Parser::nextDeclToken() {
+	this->tok = this->scanner->nextToken(true);
 }
 
 bool Parser::isPROG() {
@@ -97,17 +99,23 @@ bool Parser::isSTATEMENTS(Node* node) {
 bool Parser::isDECL(Node* node) {
 	Node* decl = new Node(tok);
 	decl->setType(Node::Decl);
-	if (accept(KeywordINT, decl)) {
+	if (acceptDecl(KeywordINT, decl)) {
 		if (accept(SquareBracketLEFT, decl)) {
 			if (accept(Integer, decl)) {
-				if (accept(SquareBracketRIGHT, decl)) {
-					if (acceptIdentifier(Identifier, decl)) {
+				if (acceptDecl(SquareBracketRIGHT, decl)) {
+					if (accept(Identifier, decl)) {
 						node->addNode(decl);
 						return true;
 					}
 				}
+			} else {
+				fprintf(stderr, "\nNo valid Dimension: %s", tok->getInfokey());
+				nextToken();
+				fprintf(stderr, "%d Line: %d Column: %d\n", tok->getValue(),
+						tok->getLine(), tok->getColumn());
+				throw logic_error("No valid Dimension");
 			}
-		} else if (acceptIdentifier(Identifier, decl)) {
+		} else if (accept(Identifier, decl)) {
 			node->addNode(decl);
 			return true;
 		}
@@ -329,11 +337,19 @@ bool Parser::isINDEX(Node* node) {
 	Node* index = new Node(tok);
 	index->setType(Node::Index);
 	if (accept(SquareBracketLEFT, index)) {
-		if (isEXPS(index)) {
-			if (accept(SquareBracketRIGHT, index)) {
-				node->addNode(index);
-				return true;
+		if (tok->gettype() != Minus && tok->gettype() != ExclamationMark) {
+			if (isEXPS(index)) {
+				if (accept(SquareBracketRIGHT, index)) {
+					node->addNode(index);
+					return true;
+				}
 			}
+		} else {
+			fprintf(stderr, "\nNo valid Dimension: %s", tok->getInfokey());
+			nextToken();
+			fprintf(stderr, "%d Line: %d Column: %d\n", tok->getValue(),
+					tok->getLine(), tok->getColumn());
+			throw logic_error("No valid Dimension");
 		}
 	}
 	return false;
@@ -350,22 +366,12 @@ bool Parser::accept(TokenType T, Node* node) {
 	return false;
 }
 
-bool Parser::acceptIdentifier(TokenType T, Node* node) {
+bool Parser::acceptDecl(TokenType T, Node* node) {
 	if (NULL != tok && this->tok->gettype() == T) {
 		Leaf* leaf = new Leaf(tok);
 		leaf->setTokenType(tok->gettype());
 		node->addNode(leaf);
-		if (tok->gettype() == Identifier) {
-			if (find(identifierList.begin(), identifierList.end(),
-					tok->getInfokey()) != identifierList.end()) {
-				fprintf(stderr, "\nDuplicate Variable %s.\n",
-						tok->getInfokey());
-				nextToken();
-				throw logic_error("duplicate Identifier");
-			}
-			identifierList.push_back(tok->getInfokey());
-		}
-		nextToken();
+		nextDeclToken();
 		return true;
 	}
 	return false;

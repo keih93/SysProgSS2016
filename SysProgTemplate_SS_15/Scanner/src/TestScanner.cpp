@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 	Token* token;
 	fprintf(stderr, "processing...");
 	while (scanner->getStop() == 0) {
-		token = scanner->nextToken();
+		token = scanner->nextToken(false);
 		if (token != NULL) {
 			if (token->gettype() == Error) {
 				fprintf(stderr,

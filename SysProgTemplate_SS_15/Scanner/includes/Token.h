@@ -27,6 +27,7 @@ public:
 	int getLine();
 	int getColumn();
 	char* getInfokey();
+	int getValue();
 	char* getname();
 	Token(TokenType tokent, int l, int c, char* info);
 	Token(TokenType tokent, int l, int c, int value);

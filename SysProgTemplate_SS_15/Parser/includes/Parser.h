@@ -11,7 +11,6 @@
 #include "../../Scanner/includes/Token.h"
 #include "Node.h"
 #include "ParseTree.h"
-#include <list>
 //#include "IParser.h"
 //namespace Scanner { class Scanner; };
 //namespace Token {class Token; };
@@ -21,12 +20,11 @@ private:
 	Scanner* scanner;
 	Token* tok;
 	ParseTree* tree;
-	std::list<char*> identifierList;
 public:
 	Parser(Scanner* scan);
 	virtual ~Parser();
 	bool accept(TokenType T,Node* node);
-	bool acceptIdentifier(TokenType T,Node* node);
+	bool acceptDecl(TokenType T,Node* node);
 	int expect(TokenType T);
 	bool isOP(Node* node);
 	bool isEXP(Node* node);
@@ -39,6 +37,7 @@ public:
 	bool isPROG();
 	bool checkOP();
 	void nextToken();
+	void nextDeclToken();
 };
 
 #endif /* PARSER_H_ */

@@ -16,8 +16,10 @@ public:
 	Symboltable();
 	~Symboltable();
 	SymtabEntry* insert(char* lexem, TokenType typ);
+	SymtabEntry* find(char* lexem, TokenType typ);
 	int hashFunc(char* lexem);
 	void initSymbols();
+	bool contains(char* key);
 private:
 	SymtabEntry* sym[512];
 	StringTab* table;
@@ -25,6 +27,7 @@ private:
 	bool compareLexem(char* lexem1, char* lexem2);
 	int countsize(char* lexem);
 	bool isTyp(char* lexem, int count);
+	bool isNoKeyword(char* lexem);
 
 };
 

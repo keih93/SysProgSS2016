@@ -9,6 +9,8 @@
 #include "../includes/StringTab.h"
 #include "../includes/SymtabEntry.h"
 #include <stdio.h>
+#include <stdexcept>
+#include <string.h>
 
 Symboltable::Symboltable() {
 	this->table = new StringTab();
@@ -95,6 +97,22 @@ SymtabEntry* Symboltable::insert(char* lexem, TokenType typ) {
 		element->setInfo(key, typ);
 		sym[index] = element;
 		return element;
+	} else {
+		if (isNoKeyword(lexem)) {
+			fprintf(stderr, "\nDuplicate Variable: %s.\n", lexem);
+			throw std::logic_error("duplicate Identifier");
+		}
+	}
+	return NULL; //this can not happen
+}
+
+SymtabEntry* Symboltable::find(char* lexem, TokenType typ) {
+	int index = hashFunc(lexem);
+	int count = countsize(lexem);
+	SymtabEntry* element = sym[index];
+	if (NULL == element) {
+		fprintf(stderr, "\nIdentifier not defined: %s.\n", lexem);
+		throw std::logic_error("Identifier not defined");
 	}
 	SymtabEntry* temp = element;
 	while (element != NULL) {
@@ -110,7 +128,6 @@ SymtabEntry* Symboltable::insert(char* lexem, TokenType typ) {
 	temp->setNext(element);
 	return element;
 }
-
 int Symboltable::countsize(char* lexem) {
 	char* temp = lexem;
 	int count = 0;
@@ -126,6 +143,26 @@ int Symboltable::hashFunc(char* lexem) {
 	int second = lexem[1];
 	int last = lexem[2];
 	return (first + second + last);
+}
+
+bool Symboltable::isNoKeyword(char* lexem) {
+	if (strcmp(lexem, "int") != 0 && strcmp(lexem, "while") != 0
+			&& strcmp(lexem, "if") != 0 && strcmp(lexem, "read") != 0
+			&& strcmp(lexem, "write") != 0 && strcmp(lexem, "WHILE") != 0
+			&& strcmp(lexem, "IF") != 0 && strcmp(lexem, "else") != 0
+			&& strcmp(lexem, "ELSE") != 0) {
+		return true;
+	}
+	return false;
+}
+
+bool Symboltable::contains(char* lexem) {
+	int index = hashFunc(lexem);
+	SymtabEntry* element = sym[index];
+	if (element == NULL) {
+		return false;
+	}
+	return true;
 }
 
 Symboltable::~Symboltable() {

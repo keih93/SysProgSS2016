@@ -52,7 +52,7 @@ Token* Scanner::mkToken(TokenType t, int l, int c, SymtabEntry* entry) { //Token
 	return new Token(t, l, c, entry);
 }
 
-Token* Scanner::nextToken() {
+Token* Scanner::nextToken(bool isDecl) {
 	int tokenfound = 0;
 	char c;
 	while (tokenfound == 0) {
@@ -64,8 +64,8 @@ Token* Scanner::nextToken() {
 		pointer++;
 		tokenfound = automat->handleChar(c);
 		if (this->getStop() == 1) {
-		 			return NULL;
-		 		}
+			return NULL;
+		}
 	}
 
 	TokenType type = automat->getTokenType();
@@ -77,7 +77,7 @@ Token* Scanner::nextToken() {
 	if (type == ze_ro) {
 		// erkanntes Token überschreiben --> überlesen
 		this->copyChar();
-		return this->nextToken();
+		return this->nextToken(isDecl);
 	} else if (type == Integer) { //Token für einen Integer
 		this->copyChar();
 		return this->mkToken(type, line, column, val);
@@ -85,8 +85,14 @@ Token* Scanner::nextToken() {
 		char* templexem = new char[pointer];
 		templexem = mkLexem();
 		if (type == Identifier) {
-			SymtabEntry* entry = this->sym->insert(templexem, type);
-			type = entry->getInfo()->getTyp();
+			SymtabEntry* entry;
+			if (isDecl) {
+				entry = this->sym->insert(templexem, type);
+				type = entry->getInfo()->getTyp();
+			} else {
+				entry = this->sym->find(templexem, type);
+				type = entry->getInfo()->getTyp();
+			}
 			return this->mkToken(type, line, column, entry); //Token für einen Identifier
 		}
 		return this->mkToken(type, line, column, templexem); //Token für einen Zeichen oder Fehlertoken
@@ -117,5 +123,4 @@ void Scanner::copyChar() {
 	end = i;
 	pointer = 0;
 }
-
 

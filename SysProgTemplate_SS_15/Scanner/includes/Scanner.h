@@ -16,7 +16,6 @@
 
 class Scanner :public IScanner {
 private:
-	Symboltable* sym;
 	Buffer* buf;
 	Automat* automat;
 	char* buffer;
@@ -25,9 +24,10 @@ private:
 	int end;
 	int stopp;
 public:
+	Symboltable* sym;
 	Scanner(Buffer* bufe, Symboltable* sym);
 	virtual ~Scanner();
-	Token* nextToken();
+	Token* nextToken(bool isDecl);
 	void freeToken(Token token);
 	Token* mkToken(TokenType t, int l, int c, char* info);
 	Token* mkToken(TokenType tokent, int l, int c, int value);

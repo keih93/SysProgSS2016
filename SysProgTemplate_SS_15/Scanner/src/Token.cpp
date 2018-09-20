@@ -147,6 +147,10 @@ int Token::getColumn() {
 	return this->column;
 }
 
+int Token::getValue() {
+	return this->value;
+}
+
 char* Token::getInfokey() {
 	return this->infokey;
 }
