@@ -107,8 +107,13 @@ bool Parser::isDECL(Node* node) {
 			} else {
 				fprintf(stderr, "\nNo valid Dimension: %s", tok->getInfokey());
 				nextToken();
-				fprintf(stderr, "%d Line: %d Column: %d\n", tok->getValue(),
-						tok->getLine(), tok->getColumn());
+				if (tok->getValue() != -1) {
+					fprintf(stderr, "%d Line: %d Column: %d\n", tok->getValue(),
+							tok->getLine(), tok->getColumn());
+				} else {
+					fprintf(stderr, " Line: %d Column: %d\n", tok->getLine(),
+							tok->getColumn());
+				}
 				throw logic_error("No valid Dimension");
 			}
 		} else if (accept(Identifier, decl)) {
@@ -343,8 +348,13 @@ bool Parser::isINDEX(Node* node) {
 		} else {
 			fprintf(stderr, "\nNo valid Dimension: %s", tok->getInfokey());
 			nextToken();
-			fprintf(stderr, "%d Line: %d Column: %d\n", tok->getValue(),
-					tok->getLine(), tok->getColumn());
+			if (tok->getValue() != -1) {
+				fprintf(stderr, "%d Line: %d Column: %d\n", tok->getValue(),
+						tok->getLine(), tok->getColumn());
+			} else {
+				fprintf(stderr, " Line: %d Column: %d\n", tok->getLine(),
+						tok->getColumn());
+			}
 			throw logic_error("No valid Dimension");
 		}
 	}
