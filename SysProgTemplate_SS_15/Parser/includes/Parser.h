@@ -20,6 +20,7 @@ private:
 	Scanner* scanner;
 	Token* tok;
 	ParseTree* tree;
+	std::string outCode;
 public:
 	Parser(Scanner* scan);
 	virtual ~Parser();
@@ -36,8 +37,10 @@ public:
 	bool isINDEX(Node* node);
 	bool isPROG();
 	bool checkOP();
+	bool writeOPCode(Token* tok,int toka,int tokb);
 	void nextToken();
 	void nextDeclToken();
+	void printOutCode();
 };
 
 #endif /* PARSER_H_ */

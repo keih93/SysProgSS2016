@@ -31,6 +31,7 @@ int main(int argc, char **argv) {
 		Parser* parser = new Parser(scanner);
 		if (parser->isPROG()) {
 			cout << "It is a Program" << "\n";
+			parser->printOutCode();
 		} else {
 			cout << "It is not a Program" << "\n";
 		}

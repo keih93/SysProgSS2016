@@ -10,6 +10,7 @@
 #include "../includes/Node.h"
 #include "../includes/Leaf.h"
 #include <stdexcept>
+#include <sstream>
 using namespace std;
 
 Parser::~Parser() {
@@ -35,6 +36,8 @@ bool Parser::isPROG() {
 	if ((this->isDECLS(prog) && this->tok == NULL)
 			|| this->isSTATEMENTS(prog)) {
 		tree->setProg(prog);
+		outCode.append("NOP\n");
+		outCode.append("STP");
 		return true;
 	}
 //	 else if (this->isSTATEMENTS()) {
@@ -75,7 +78,7 @@ bool Parser::isSTATEMENTS(Node* node) {
 	Node* stats = new Node(tok);
 	stats->setType(Node::Statments);
 	if (this->isSTATEMENT(stats)) {
-		if (accept(Semicolon, stats)) { // where the fuck is mah ;
+		if (accept(Semicolon, stats)) { // where the fuck is mah ;)
 			if (this->tok == NULL) {
 				node->addNode(stats);
 				return true;
@@ -97,9 +100,18 @@ bool Parser::isDECL(Node* node) {
 	decl->setType(Node::Decl);
 	if (acceptDecl(KeywordINT, decl)) {
 		if (accept(SquareBracketLEFT, decl)) {
+			int index = tok->getValue();
 			if (accept(Integer, decl)) {
 				if (acceptDecl(SquareBracketRIGHT, decl)) {
+					char* identifier = tok->getInfokey();
 					if (accept(Identifier, decl)) {
+						outCode.append("DS $");
+						outCode.append(identifier);
+						outCode.append(" ");
+						std::ostringstream indexString;
+						indexString << index;
+						outCode.append(indexString.str());
+						outCode.append("\n");
 						node->addNode(decl);
 						return true;
 					}
@@ -116,8 +128,13 @@ bool Parser::isDECL(Node* node) {
 				}
 				throw logic_error("No valid Dimension");
 			}
-		} else if (accept(Identifier, decl)) {
+		}
+		char* identifier = tok->getInfokey();
+		if (accept(Identifier, decl)) {
 			node->addNode(decl);
+			outCode.append("DS $");
+			outCode.append(identifier);
+			outCode.append(" 1\n");
 			return true;
 		}
 	}
@@ -153,6 +170,7 @@ bool Parser::isSTATEMENT(Node* node) {
 		if (accept(ParenthesesLEFT, stat)) {
 			if (isEXPS(stat)) {
 				if (accept(ParenthesesRIGHT, stat)) {
+					outCode.append("PRI\n");
 					node->addNode(stat);
 					return true;
 				}
@@ -218,9 +236,13 @@ bool Parser::isSTATEMENT(Node* node) {
 bool Parser::isEXPS(Node* node) {
 	Node* exps = new Node(tok);
 	exps->setType(Node::Exp);
+	int a = tok->getValue();
 	if (isEXP(exps)) {
+		Token* op = tok;
 		if (isOP(exps)) {
+			int b = tok->getValue();
 			if (isEXPS(exps)) {
+				writeOPCode(op, a, b);
 				node->addNode(exps);
 				return true;
 			}
@@ -235,8 +257,15 @@ bool Parser::isEXPS(Node* node) {
 bool Parser::isEXP(Node* node) {
 	Node* exp = new Node(tok);
 	exp->setType(Node::Exp2);
+	int index = tok->getValue();
+	char* identifier = tok->getInfokey();
 	if (accept(Integer, exp)) {
 		node->addNode(exp);
+		outCode.append("LC ");
+		std::ostringstream indexString;
+		indexString << index;
+		outCode.append(indexString.str());
+		outCode.append("\n");
 		return true;
 	} else if (accept(Identifier, exp)) {
 		if (isINDEX(exp)) {
@@ -244,14 +273,26 @@ bool Parser::isEXP(Node* node) {
 			return true;
 		} else if (this->tok->gettype() == Semicolon
 				|| this->tok->gettype() == ParenthesesRIGHT || checkOP()) {
+			outCode.append("LA $");
+			outCode.append(identifier);
+			outCode.append("\n");
+			outCode.append("LV");
+			outCode.append("\n");
 			node->addNode(exp);
 			return true;
 		} else if (this->tok->gettype() == SquareBracketRIGHT) {
+			outCode.append("LA $");
+			outCode.append(identifier);
+			outCode.append("\n");
+			outCode.append("LV");
+			outCode.append("\n");
 			node->addNode(exp);
 			return true;
 		}
 	} else if (accept(Minus, exp)) {
+		outCode.append("LC 0\n");
 		if (isEXP(exp)) {
+			outCode.append("SUB\n");
 			node->addNode(exp);
 			return true;
 		}
@@ -262,6 +303,7 @@ bool Parser::isEXP(Node* node) {
 //		}
 	} else if (accept(ExclamationMark, exp)) {
 		if (isEXP(exp)) {
+			outCode.append("NOT\n");
 			node->addNode(exp);
 			return true;
 		}
@@ -334,6 +376,38 @@ bool Parser::checkOP() {
 	return false;
 }
 
+bool Parser::writeOPCode(Token* tok, int toka, int tokb) {
+	if (this->tok->gettype() == InequalitySignRIGHT) {
+		outCode.append("LES\n");
+		if (toka != tokb) {
+			outCode.append("NOT\n");
+		}
+		return true;
+	} else if (this->tok->gettype() == Equal) {
+		outCode.append("EQU\n");
+		return true;
+	} else if (this->tok->gettype() == Colon) {
+		outCode.append("DIV\n");
+		return true;
+	} else if (this->tok->gettype() == Plus) {
+		outCode.append("ADD\n");
+		return true;
+	} else if (this->tok->gettype() == Minus) {
+		outCode.append("SUB\n");
+		return true;
+	} else if (this->tok->gettype() == Star) {
+		outCode.append("MUL\n");
+		return true;
+	} else if (this->tok->gettype() == And) {
+		outCode.append("AND\n");
+		return true;
+	} else if (this->tok->gettype() == InequalitySignLEFT) {
+		outCode.append("LES\n");
+		return true;
+	}
+	return false;
+}
+
 bool Parser::isINDEX(Node* node) {
 	Node* index = new Node(tok);
 	index->setType(Node::Index);
@@ -387,4 +461,8 @@ int Parser::expect(TokenType T) {
 	if (this->accept(T, NULL))
 		return true;
 	return false;
+}
+
+void Parser::printOutCode() {
+	printf("%s", outCode.c_str());
 }
