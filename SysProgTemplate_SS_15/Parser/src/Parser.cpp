@@ -20,6 +20,7 @@ Parser::Parser(Scanner* scan) {
 	this->scanner = scan;
 	this->tok = this->scanner->nextToken(false);
 	this->tree = new ParseTree();
+	this->labelCounter = 0;
 }
 
 void Parser::nextToken() {
@@ -30,14 +31,14 @@ void Parser::nextDeclToken() {
 	this->tok = this->scanner->nextToken(true);
 }
 
-bool Parser::isPROG() {
+bool Parser::isPROG(std::ofstream& out) {
 	Node* prog = new Node(tok);
 	prog->setType(Node::Prog);
-	if ((this->isDECLS(prog) && this->tok == NULL)
-			|| this->isSTATEMENTS(prog)) {
+	if ((this->isDECLS(prog, out) && this->tok == NULL)
+			|| this->isSTATEMENTS(prog, out)) {
 		tree->setProg(prog);
-		outCode.append("NOP\n");
-		outCode.append("STP");
+		printCode(out, "NOP\n");
+		printCode(out, "STP");
 		return true;
 	}
 //	 else if (this->isSTATEMENTS()) {
@@ -57,15 +58,15 @@ bool Parser::isPROG() {
 	return false;
 }
 
-bool Parser::isDECLS(Node* node) {
+bool Parser::isDECLS(Node* node, std::ofstream& out) {
 	Node* decls = new Node(tok);
 	decls->setType(Node::Decls);
 	if (this->tok == NULL) {
 		node->addNode(decls);
 		return true;
-	} else if (this->isDECL(decls)) {
+	} else if (this->isDECL(decls, out)) {
 		if (accept(Semicolon, decls)) { //switch to false when there is 1 decl and continue with a statement
-			if (this->isDECLS(decls)) {
+			if (this->isDECLS(decls, out)) {
 				node->addNode(decls);
 				return true;
 			}
@@ -74,15 +75,15 @@ bool Parser::isDECLS(Node* node) {
 	return false;
 }
 
-bool Parser::isSTATEMENTS(Node* node) {
+bool Parser::isSTATEMENTS(Node* node, std::ofstream& out) {
 	Node* stats = new Node(tok);
 	stats->setType(Node::Statments);
-	if (this->isSTATEMENT(stats)) {
+	if (this->isSTATEMENT(stats, out)) {
 		if (accept(Semicolon, stats)) { // where the fuck is mah ;)
 			if (this->tok == NULL) {
 				node->addNode(stats);
 				return true;
-			} else if (this->isSTATEMENTS(stats)) {
+			} else if (this->isSTATEMENTS(stats, out)) {
 				node->addNode(stats);
 				return true;
 			} else if (this->tok != NULL
@@ -95,7 +96,7 @@ bool Parser::isSTATEMENTS(Node* node) {
 	return false;
 }
 
-bool Parser::isDECL(Node* node) {
+bool Parser::isDECL(Node* node, std::ofstream& out) {
 	Node* decl = new Node(tok);
 	decl->setType(Node::Decl);
 	if (acceptDecl(KeywordINT, decl)) {
@@ -105,13 +106,11 @@ bool Parser::isDECL(Node* node) {
 				if (acceptDecl(SquareBracketRIGHT, decl)) {
 					char* identifier = tok->getInfokey();
 					if (accept(Identifier, decl)) {
-						outCode.append("DS $");
-						outCode.append(identifier);
-						outCode.append(" ");
-						std::ostringstream indexString;
-						indexString << index;
-						outCode.append(indexString.str());
-						outCode.append("\n");
+						printCode(out, "DS $");
+						printCode(out, identifier);
+						printCode(out, " ");
+						printIntCode(out, index);
+						printCode(out, "\n");
 						node->addNode(decl);
 						return true;
 					}
@@ -132,35 +131,45 @@ bool Parser::isDECL(Node* node) {
 		char* identifier = tok->getInfokey();
 		if (accept(Identifier, decl)) {
 			node->addNode(decl);
-			outCode.append("DS $");
-			outCode.append(identifier);
-			outCode.append(" 1\n");
+			printCode(out, "DS $");
+			printCode(out, identifier);
+			printCode(out, " 1\n");
 			return true;
 		}
 	}
 	return false;
 }
 
-bool Parser::isSTATEMENT(Node* node) {
+bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 	Node* stat = new Node(tok);
 	stat->setType(Node::Statement);
+	char* identifier = tok->getInfokey();
 	if (accept(Identifier, stat)) {
 		if (accept(Assign, stat)) {
-			if (isEXPS(stat)) {
+			if (isEXPS(stat, out)) {
+				printCode(out, "LA $");
+				printCode(out, identifier);
+				printCode(out, "\n");
+				printCode(out, "STR\n");
 				node->addNode(stat);
 				return true;
 			}
 		}
-		if (isINDEX(stat)) {
+		if (isINDEX(stat, out)) {
 			if (accept(Assign, stat)) {
-				if (isEXPS(stat)) {
+				if (isEXPS(stat, out)) {
+					//TODO: INDEXOR NOT donso
+					printCode(out, "LA $");
+					printCode(out, identifier);
+					printCode(out, "\n");
+					printCode(out, "STR\n");
 					node->addNode(stat);
 					return true;
 				}
 			}
 		}
 	} else if (accept(BracesLEFT, stat)) {
-		if (isSTATEMENTS(stat)) {
+		if (isSTATEMENTS(stat, out)) {
 			if (accept(BracesRIGHT, stat)) {
 				node->addNode(stat);
 				return true;
@@ -168,9 +177,9 @@ bool Parser::isSTATEMENT(Node* node) {
 		}
 	} else if (accept(KeywordWRITE, stat)) {
 		if (accept(ParenthesesLEFT, stat)) {
-			if (isEXPS(stat)) {
+			if (isEXPS(stat, out)) {
 				if (accept(ParenthesesRIGHT, stat)) {
-					outCode.append("PRI\n");
+					printCode(out, "PRI\n");
 					node->addNode(stat);
 					return true;
 				}
@@ -179,12 +188,23 @@ bool Parser::isSTATEMENT(Node* node) {
 	} else if (accept(KeywordREAD, stat)) {
 		if (accept(ParenthesesLEFT, stat)) {
 			if (accept(Identifier, stat)) {
-				if (isINDEX(stat)) {
+				if (isINDEX(stat, out)) {
 					if (accept(ParenthesesRIGHT, stat)) {
+						//TODO: do something with index
+						printCode(out, "REA\n");
+						printCode(out, "LA $");
+						printCode(out, identifier);
+						printCode(out, "\n");
+						printCode(out, "STR\n");
 						node->addNode(stat);
 						return true;
 					}
 				} else if (accept(ParenthesesRIGHT, stat)) {
+					printCode(out, "REA\n");
+					printCode(out, "LA $");
+					printCode(out, identifier);
+					printCode(out, "\n");
+					printCode(out, "STR\n");
 					node->addNode(stat);
 					return true;
 				}
@@ -192,11 +212,26 @@ bool Parser::isSTATEMENT(Node* node) {
 		}
 	} else if (accept(KeywordIF, stat)) {
 		if (accept(ParenthesesLEFT, stat)) {
-			if (isEXPS(stat)) {
+			if (isEXPS(stat, out)) {
 				if (accept(ParenthesesRIGHT, stat)) {
-					if (isSTATEMENT(stat)) {
+					printCode(out, "JIN #label");
+					printIntCode(out, this->labelCounter);
+					printCode(out, "\n");
+					int labelIfCounter = labelCounter;
+					this->labelCounter++;
+					if (isSTATEMENT(stat, out)) {
+						printCode(out, "JMP #label");
+						printIntCode(out, this->labelCounter);
+						printCode(out, "\n");
+						this->labelCounter++;
 						if (accept(KeywordELSE, stat)) {
-							if (isSTATEMENT(stat)) {
+							printCode(out, "#label");
+							printIntCode(out, labelIfCounter);
+							printCode(out, " NOP\n");
+							if (isSTATEMENT(stat, out)) {
+								printCode(out, "#label");
+								printIntCode(out, labelCounter);
+								printCode(out, " NOP\n");
 								node->addNode(stat);
 								return true;
 							}
@@ -207,9 +242,9 @@ bool Parser::isSTATEMENT(Node* node) {
 		}
 	} else if (accept(KeywordWHILE, stat)) {
 		if (accept(ParenthesesLEFT, stat)) {
-			if (isEXPS(stat)) {
+			if (isEXPS(stat, out)) {
 				if (accept(ParenthesesRIGHT, stat)) {
-					if (isSTATEMENT(stat)) {
+					if (isSTATEMENT(stat, out)) {
 						node->addNode(stat);
 						return true;
 					}
@@ -233,16 +268,16 @@ bool Parser::isSTATEMENT(Node* node) {
 	return false;
 }
 
-bool Parser::isEXPS(Node* node) {
+bool Parser::isEXPS(Node* node, std::ofstream& out) {
 	Node* exps = new Node(tok);
 	exps->setType(Node::Exp);
 	int a = tok->getValue();
-	if (isEXP(exps)) {
+	if (isEXP(exps, out)) {
 		Token* op = tok;
-		if (isOP(exps)) {
+		if (isOP(exps, out)) {
 			int b = tok->getValue();
-			if (isEXPS(exps)) {
-				writeOPCode(op, a, b);
+			if (isEXPS(exps, out)) {
+				writeOPCode(op, a, b, out);
 				node->addNode(exps);
 				return true;
 			}
@@ -254,45 +289,44 @@ bool Parser::isEXPS(Node* node) {
 	return false;
 }
 
-bool Parser::isEXP(Node* node) {
+bool Parser::isEXP(Node* node, std::ofstream& out) {
 	Node* exp = new Node(tok);
 	exp->setType(Node::Exp2);
 	int index = tok->getValue();
 	char* identifier = tok->getInfokey();
 	if (accept(Integer, exp)) {
 		node->addNode(exp);
-		outCode.append("LC ");
-		std::ostringstream indexString;
-		indexString << index;
-		outCode.append(indexString.str());
-		outCode.append("\n");
+		printCode(out, "LC ");
+		printIntCode(out, index);
+		printCode(out, "\n");
 		return true;
 	} else if (accept(Identifier, exp)) {
-		if (isINDEX(exp)) {
+		if (isINDEX(exp, out)) {
+			//TODO: do something with index
 			node->addNode(exp);
 			return true;
 		} else if (this->tok->gettype() == Semicolon
 				|| this->tok->gettype() == ParenthesesRIGHT || checkOP()) {
-			outCode.append("LA $");
-			outCode.append(identifier);
-			outCode.append("\n");
-			outCode.append("LV");
-			outCode.append("\n");
+			printCode(out, "LA $ ");
+			printCode(out, identifier);
+			printCode(out, "\n");
+			printCode(out, "LV");
+			printCode(out, "\n");
 			node->addNode(exp);
 			return true;
 		} else if (this->tok->gettype() == SquareBracketRIGHT) {
-			outCode.append("LA $");
-			outCode.append(identifier);
-			outCode.append("\n");
-			outCode.append("LV");
-			outCode.append("\n");
+			printCode(out, "LA $ ");
+			printCode(out, identifier);
+			printCode(out, "\n");
+			printCode(out, "LV");
+			printCode(out, "\n");
 			node->addNode(exp);
 			return true;
 		}
 	} else if (accept(Minus, exp)) {
-		outCode.append("LC 0\n");
-		if (isEXP(exp)) {
-			outCode.append("SUB\n");
+		printCode(out, "LC 0\n");
+		if (isEXP(exp, out)) {
+			printCode(out, "SUB\n");
 			node->addNode(exp);
 			return true;
 		}
@@ -302,14 +336,14 @@ bool Parser::isEXP(Node* node) {
 //			return true;
 //		}
 	} else if (accept(ExclamationMark, exp)) {
-		if (isEXP(exp)) {
-			outCode.append("NOT\n");
+		if (isEXP(exp, out)) {
+			printCode(out, "NOT\n");
 			node->addNode(exp);
 			return true;
 		}
 	}
 	if (accept(ParenthesesLEFT, exp)) {
-		if (this->isEXPS(exp)) {
+		if (this->isEXPS(exp, out)) {
 			if (accept(ParenthesesRIGHT, exp)) {
 				node->addNode(exp);
 				return true;
@@ -319,7 +353,7 @@ bool Parser::isEXP(Node* node) {
 	return false;
 }
 
-bool Parser::isOP(Node* node) {
+bool Parser::isOP(Node* node, std::ofstream& out) {
 	Node* op = new Node(tok);
 	op->setType(Node::Op);
 	if (accept(InequalitySignRIGHT, op)) {
@@ -376,44 +410,44 @@ bool Parser::checkOP() {
 	return false;
 }
 
-bool Parser::writeOPCode(Token* tok, int toka, int tokb) {
-	if (this->tok->gettype() == InequalitySignRIGHT) {
-		outCode.append("LES\n");
+bool Parser::writeOPCode(Token* token, int toka, int tokb, std::ofstream& out) {
+	if (token->gettype() == InequalitySignRIGHT) {
+		printCode(out, "LES\n");
 		if (toka != tokb) {
-			outCode.append("NOT\n");
+			printCode(out, "NOT\n");
 		}
 		return true;
-	} else if (this->tok->gettype() == Equal) {
-		outCode.append("EQU\n");
+	} else if (token->gettype() == Equal) {
+		printCode(out, "EQU\n");
+		//TODO: do something with EqualColonEqual?
+	} else if (token->gettype() == Colon) {
+		printCode(out, "DIV\n");
 		return true;
-	} else if (this->tok->gettype() == Colon) {
-		outCode.append("DIV\n");
+	} else if (token->gettype() == Plus) {
+		printCode(out, "ADD\n");
 		return true;
-	} else if (this->tok->gettype() == Plus) {
-		outCode.append("ADD\n");
+	} else if (token->gettype() == Minus) {
+		printCode(out, "SUB\n");
 		return true;
-	} else if (this->tok->gettype() == Minus) {
-		outCode.append("SUB\n");
+	} else if (token->gettype() == Star) {
+		printCode(out, "MUL\n");
 		return true;
-	} else if (this->tok->gettype() == Star) {
-		outCode.append("MUL\n");
+	} else if (tok->gettype() == And) {
+		printCode(out, "AND\n");
 		return true;
-	} else if (this->tok->gettype() == And) {
-		outCode.append("AND\n");
-		return true;
-	} else if (this->tok->gettype() == InequalitySignLEFT) {
-		outCode.append("LES\n");
+	} else if (token->gettype() == InequalitySignLEFT) {
+		printCode(out, "LES\n");
 		return true;
 	}
 	return false;
 }
 
-bool Parser::isINDEX(Node* node) {
+bool Parser::isINDEX(Node* node, std::ofstream& out) {
 	Node* index = new Node(tok);
 	index->setType(Node::Index);
 	if (accept(SquareBracketLEFT, index)) {
 		if (tok->gettype() != Minus && tok->gettype() != ExclamationMark) {
-			if (isEXPS(index)) {
+			if (isEXPS(index, out)) {
 				if (accept(SquareBracketRIGHT, index)) {
 					node->addNode(index);
 					return true;
@@ -463,6 +497,11 @@ int Parser::expect(TokenType T) {
 	return false;
 }
 
-void Parser::printOutCode() {
-	printf("%s", outCode.c_str());
+void Parser::printCode(std::ofstream& out, const char* code) {
+	out << code;
 }
+
+void Parser::printIntCode(std::ofstream& out, int code) {
+	out << code;
+}
+

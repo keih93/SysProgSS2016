@@ -20,27 +20,28 @@ private:
 	Scanner* scanner;
 	Token* tok;
 	ParseTree* tree;
-	std::string outCode;
+	int labelCounter;
 public:
 	Parser(Scanner* scan);
 	virtual ~Parser();
-	bool accept(TokenType T,Node* node);
-	bool acceptDecl(TokenType T,Node* node);
+	bool accept(TokenType T, Node* node);
+	bool acceptDecl(TokenType T, Node* node);
 	int expect(TokenType T);
-	bool isOP(Node* node);
-	bool isEXP(Node* node);
-	bool isEXPS(Node* node);
-	bool isSTATEMENT(Node* node);
-	bool isSTATEMENTS(Node* node);
-	bool isDECL(Node* node);
-	bool isDECLS(Node* node);
-	bool isINDEX(Node* node);
-	bool isPROG();
+	bool isOP(Node* node, std::ofstream& out);
+	bool isEXP(Node* node, std::ofstream& out);
+	bool isEXPS(Node* node, std::ofstream& out);
+	bool isSTATEMENT(Node* node, std::ofstream& out);
+	bool isSTATEMENTS(Node* node, std::ofstream& out);
+	bool isDECL(Node* node, std::ofstream& out);
+	bool isDECLS(Node* node, std::ofstream& out);
+	bool isINDEX(Node* node, std::ofstream& out);
+	bool isPROG(std::ofstream& out);
 	bool checkOP();
-	bool writeOPCode(Token* tok,int toka,int tokb);
+	bool writeOPCode(Token* tok, int toka, int tokb,std::ofstream& out);
 	void nextToken();
 	void nextDeclToken();
-	void printOutCode();
+	void printCode(std::ofstream& out, const char* code);
+	void printIntCode(std::ofstream& out, int code);
 };
 
 #endif /* PARSER_H_ */

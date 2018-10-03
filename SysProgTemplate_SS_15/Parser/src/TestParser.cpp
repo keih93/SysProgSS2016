@@ -29,10 +29,10 @@ int main(int argc, char **argv) {
 	Scanner* scanner = new Scanner(buf, sym);
 	try {
 		Parser* parser = new Parser(scanner);
-		if (parser->isPROG()) {
+		if (parser->isPROG(outfile)) {
 			cout << "It is a Program" << "\n";
-			parser->printOutCode();
 		} else {
+			//TODO: clear FILE!!!!
 			cout << "It is not a Program" << "\n";
 		}
 	} catch (...) {
