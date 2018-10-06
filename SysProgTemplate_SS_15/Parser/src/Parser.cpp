@@ -10,6 +10,7 @@
 #include "../includes/Node.h"
 #include "../includes/Leaf.h"
 #include <stdexcept>
+#include <fstream>
 #include <sstream>
 using namespace std;
 
@@ -155,14 +156,27 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 				return true;
 			}
 		}
-		if (isINDEX(stat, out)) {
+		std::ofstream indexfile;
+		indexfile.open("index.txt", std::ofstream::out);
+		if (isINDEX(stat, indexfile)) {
 			if (accept(Assign, stat)) {
 				if (isEXPS(stat, out)) {
-					//TODO: INDEXOR NOT donso
 					printCode(out, "LA $");
 					printCode(out, identifier);
 					printCode(out, "\n");
+					indexfile.close();
+					std::ifstream file("index.txt");
+					std::string line;
+					if (file.is_open()) {
+						while (getline(file, line)) {
+							printCode(out, line.c_str());
+							printCode(out, "\n");
+						}
+						file.close();
+					}
+					printCode(out, "ADD\n");
 					printCode(out, "STR\n");
+					remove("index.txt");
 					node->addNode(stat);
 					return true;
 				}
@@ -187,15 +201,29 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 		}
 	} else if (accept(KeywordREAD, stat)) {
 		if (accept(ParenthesesLEFT, stat)) {
+			char* identifier = tok->getInfokey();
 			if (accept(Identifier, stat)) {
-				if (isINDEX(stat, out)) {
+				std::ofstream indexfile;
+				indexfile.open("index.txt", std::ofstream::out);
+				if (isINDEX(stat, indexfile)) {
 					if (accept(ParenthesesRIGHT, stat)) {
-						//TODO: do something with index
 						printCode(out, "REA\n");
 						printCode(out, "LA $");
 						printCode(out, identifier);
 						printCode(out, "\n");
+						indexfile.close();
+						std::ifstream file("index.txt");
+						std::string line;
+						if (file.is_open()) {
+							while (getline(file, line)) {
+								printCode(out, line.c_str());
+								printCode(out, "\n");
+							}
+							file.close();
+						}
+						printCode(out, "ADD\n");
 						printCode(out, "STR\n");
+						remove("index.txt");
 						node->addNode(stat);
 						return true;
 					}
@@ -223,6 +251,7 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 						printCode(out, "JMP #label");
 						printIntCode(out, this->labelCounter);
 						printCode(out, "\n");
+						int labelElseCounter = labelCounter;
 						this->labelCounter++;
 						if (accept(KeywordELSE, stat)) {
 							printCode(out, "#label");
@@ -230,7 +259,7 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 							printCode(out, " NOP\n");
 							if (isSTATEMENT(stat, out)) {
 								printCode(out, "#label");
-								printIntCode(out, labelCounter);
+								printIntCode(out, labelElseCounter);
 								printCode(out, " NOP\n");
 								node->addNode(stat);
 								return true;
@@ -242,9 +271,25 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 		}
 	} else if (accept(KeywordWHILE, stat)) {
 		if (accept(ParenthesesLEFT, stat)) {
+			printCode(out, "#label");
+			printIntCode(out, labelCounter);
+			printCode(out, " NOP\n");
+			int labelWhileCounter = labelCounter;
+			this->labelCounter++;
 			if (isEXPS(stat, out)) {
 				if (accept(ParenthesesRIGHT, stat)) {
+					printCode(out, "JIN #label");
+					printIntCode(out, this->labelCounter);
+					printCode(out, "\n");
+					int labelJumpOutCounter = labelCounter;
+					this->labelCounter++;
 					if (isSTATEMENT(stat, out)) {
+						printCode(out, "JMP #label");
+						printIntCode(out, labelWhileCounter);
+						printCode(out, "\n");
+						printCode(out, "#label");
+						printIntCode(out, labelJumpOutCounter);
+						printCode(out, " NOP\n");
 						node->addNode(stat);
 						return true;
 					}
@@ -301,13 +346,29 @@ bool Parser::isEXP(Node* node, std::ofstream& out) {
 		printCode(out, "\n");
 		return true;
 	} else if (accept(Identifier, exp)) {
-		if (isINDEX(exp, out)) {
-			//TODO: do something with index
+		std::ofstream indexfile;
+		indexfile.open("index.txt", std::ofstream::out);
+		if (isINDEX(exp, indexfile)) {
+			printCode(out, "LA $");
+			printCode(out, identifier);
+			printCode(out, "\n");
+			indexfile.close();
+			std::ifstream file("index.txt");
+			std::string line;
+			if (file.is_open()) {
+				while (getline(file, line)) {
+					printCode(out, line.c_str());
+					printCode(out, "\n");
+				}
+				file.close();
+			}
+			printCode(out, "ADD\n");
+			remove("index.txt");
 			node->addNode(exp);
 			return true;
 		} else if (this->tok->gettype() == Semicolon
 				|| this->tok->gettype() == ParenthesesRIGHT || checkOP()) {
-			printCode(out, "LA $ ");
+			printCode(out, "LA $");
 			printCode(out, identifier);
 			printCode(out, "\n");
 			printCode(out, "LV");
@@ -315,7 +376,7 @@ bool Parser::isEXP(Node* node, std::ofstream& out) {
 			node->addNode(exp);
 			return true;
 		} else if (this->tok->gettype() == SquareBracketRIGHT) {
-			printCode(out, "LA $ ");
+			printCode(out, "LA $");
 			printCode(out, identifier);
 			printCode(out, "\n");
 			printCode(out, "LV");
@@ -419,7 +480,10 @@ bool Parser::writeOPCode(Token* token, int toka, int tokb, std::ofstream& out) {
 		return true;
 	} else if (token->gettype() == Equal) {
 		printCode(out, "EQU\n");
-		//TODO: do something with EqualColonEqual?
+		return true;
+	} else if (token->gettype() == EqualColonEqual) {
+		printCode(out, "EQU\n");
+		return true;
 	} else if (token->gettype() == Colon) {
 		printCode(out, "DIV\n");
 		return true;

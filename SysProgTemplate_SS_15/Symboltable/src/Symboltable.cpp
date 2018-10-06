@@ -104,7 +104,7 @@ SymtabEntry* Symboltable::insert(char* lexem, TokenType typ,
 		return element;
 	} else {
 		if (isNoKeyword(lexem)) {
-			fprintf(stderr, "\nDuplicate Variable: %s.\n", lexem);
+			fprintf(stderr, "\nDuplicate Variable: %s\n", lexem);
 			throw std::logic_error("duplicate Identifier");
 		}
 	}
@@ -116,7 +116,7 @@ SymtabEntry* Symboltable::find(char* lexem, TokenType typ) {
 	int count = countsize(lexem);
 	SymtabEntry* element = sym[index];
 	if (NULL == element) {
-		fprintf(stderr, "\nIdentifier not defined: %s.\n", lexem);
+		fprintf(stderr, "\nIdentifier not defined: %s\n", lexem);
 		throw std::logic_error("Identifier not defined");
 	}
 	SymtabEntry* temp = element;
@@ -171,5 +171,4 @@ bool Symboltable::contains(char* lexem) {
 }
 
 Symboltable::~Symboltable() {
-// TODO Auto-generated destructor stub
 }
