@@ -11,6 +11,7 @@
 #include "../../Scanner/includes/Token.h"
 #include "Node.h"
 #include "ParseTree.h"
+#include "string.h"
 //#include "IParser.h"
 //namespace Scanner { class Scanner; };
 //namespace Token {class Token; };
@@ -21,6 +22,11 @@ private:
 	Token* tok;
 	ParseTree* tree;
 	int labelCounter;
+	int index;
+	char* infokey;
+	int idx;
+	char* ikey;
+	Token* opToken;
 public:
 	Parser(Scanner* scan);
 	virtual ~Parser();
@@ -29,7 +35,7 @@ public:
 	int expect(TokenType T);
 	bool isOP(Node* node, std::ofstream& out);
 	bool isEXP(Node* node, std::ofstream& out);
-	bool isEXPS(Node* node, std::ofstream& out);
+	bool isEXPS(Node* node, std::ofstream& out, bool isIndex);
 	bool isSTATEMENT(Node* node, std::ofstream& out);
 	bool isSTATEMENTS(Node* node, std::ofstream& out);
 	bool isDECL(Node* node, std::ofstream& out);
@@ -37,7 +43,7 @@ public:
 	bool isINDEX(Node* node, std::ofstream& out);
 	bool isPROG(std::ofstream& out);
 	bool checkOP();
-	bool writeOPCode(Token* tok, int toka, int tokb,std::ofstream& out);
+	bool writeOPCode(Token* tok, int toka, int tokb, std::ofstream& out);
 	void nextToken();
 	void nextDeclToken();
 	void printCode(std::ofstream& out, const char* code);

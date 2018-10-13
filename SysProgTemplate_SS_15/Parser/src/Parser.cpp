@@ -11,7 +11,6 @@
 #include "../includes/Leaf.h"
 #include <stdexcept>
 #include <fstream>
-#include <sstream>
 using namespace std;
 
 Parser::~Parser() {
@@ -147,7 +146,7 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 	char* identifier = tok->getInfokey();
 	if (accept(Identifier, stat)) {
 		if (accept(Assign, stat)) {
-			if (isEXPS(stat, out)) {
+			if (isEXPS(stat, out, false)) {
 				printCode(out, "LA $");
 				printCode(out, identifier);
 				printCode(out, "\n");
@@ -157,32 +156,44 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 			}
 		}
 		std::ofstream indexfile;
-		indexfile.open("index.txt", std::ofstream::out);
 		if (isINDEX(stat, indexfile)) {
 			if (accept(Assign, stat)) {
-				if (isEXPS(stat, out)) {
+				if (isEXPS(stat, out, false)) {
 					printCode(out, "LA $");
 					printCode(out, identifier);
 					printCode(out, "\n");
-					indexfile.close();
-					std::ifstream file("index.txt");
-					std::string line;
-					if (file.is_open()) {
-						while (getline(file, line)) {
-							printCode(out, line.c_str());
-							printCode(out, "\n");
-						}
-						file.close();
+					if (index != -1) {
+						printCode(out, "LC ");
+						printIntCode(out, index);
+						printCode(out, "\n");
+					} else if (strcmp(infokey, "")) {
+						printCode(out, "LA $");
+						printCode(out, infokey);
+						printCode(out, "\n");
+						printCode(out, "LV\n");
+					}
+					if (idx != -1) {
+						printCode(out, "LC ");
+						printIntCode(out, idx);
+						printCode(out, "\n");
+					} else if (strcmp(ikey, "")) {
+						printCode(out, "LA $");
+						printCode(out, ikey);
+						printCode(out, "\n");
+						printCode(out, "LV\n");
+					}
+					if (opToken != NULL) {
+						writeOPCode(opToken, index, idx, out);
 					}
 					printCode(out, "ADD\n");
 					printCode(out, "STR\n");
-					remove("index.txt");
 					node->addNode(stat);
 					return true;
 				}
 			}
 		}
-	} else if (accept(BracesLEFT, stat)) {
+	}
+	if (accept(BracesLEFT, stat)) {
 		if (isSTATEMENTS(stat, out)) {
 			if (accept(BracesRIGHT, stat)) {
 				node->addNode(stat);
@@ -191,7 +202,7 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 		}
 	} else if (accept(KeywordWRITE, stat)) {
 		if (accept(ParenthesesLEFT, stat)) {
-			if (isEXPS(stat, out)) {
+			if (isEXPS(stat, out, false)) {
 				if (accept(ParenthesesRIGHT, stat)) {
 					printCode(out, "PRI\n");
 					node->addNode(stat);
@@ -203,35 +214,18 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 		if (accept(ParenthesesLEFT, stat)) {
 			char* identifier = tok->getInfokey();
 			if (accept(Identifier, stat)) {
-				std::ofstream indexfile;
-				indexfile.open("index.txt", std::ofstream::out);
-				if (isINDEX(stat, indexfile)) {
+				printCode(out, "REA\n");
+				printCode(out, "LA $");
+				printCode(out, identifier);
+				printCode(out, "\n");
+				if (isINDEX(stat, out)) {
 					if (accept(ParenthesesRIGHT, stat)) {
-						printCode(out, "REA\n");
-						printCode(out, "LA $");
-						printCode(out, identifier);
-						printCode(out, "\n");
-						indexfile.close();
-						std::ifstream file("index.txt");
-						std::string line;
-						if (file.is_open()) {
-							while (getline(file, line)) {
-								printCode(out, line.c_str());
-								printCode(out, "\n");
-							}
-							file.close();
-						}
 						printCode(out, "ADD\n");
 						printCode(out, "STR\n");
-						remove("index.txt");
 						node->addNode(stat);
 						return true;
 					}
 				} else if (accept(ParenthesesRIGHT, stat)) {
-					printCode(out, "REA\n");
-					printCode(out, "LA $");
-					printCode(out, identifier);
-					printCode(out, "\n");
 					printCode(out, "STR\n");
 					node->addNode(stat);
 					return true;
@@ -240,7 +234,7 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 		}
 	} else if (accept(KeywordIF, stat)) {
 		if (accept(ParenthesesLEFT, stat)) {
-			if (isEXPS(stat, out)) {
+			if (isEXPS(stat, out, false)) {
 				if (accept(ParenthesesRIGHT, stat)) {
 					printCode(out, "JIN #label");
 					printIntCode(out, this->labelCounter);
@@ -276,7 +270,7 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 			printCode(out, " NOP\n");
 			int labelWhileCounter = labelCounter;
 			this->labelCounter++;
-			if (isEXPS(stat, out)) {
+			if (isEXPS(stat, out, false)) {
 				if (accept(ParenthesesRIGHT, stat)) {
 					printCode(out, "JIN #label");
 					printIntCode(out, this->labelCounter);
@@ -313,15 +307,26 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 	return false;
 }
 
-bool Parser::isEXPS(Node* node, std::ofstream& out) {
+bool Parser::isEXPS(Node* node, std::ofstream& out, bool isIndex) {
 	Node* exps = new Node(tok);
 	exps->setType(Node::Exp);
 	int a = tok->getValue();
+	if (isIndex) {
+		index = tok->getValue();
+		infokey = tok->getInfokey();
+	}
 	if (isEXP(exps, out)) {
 		Token* op = tok;
+		if (isIndex) {
+			opToken = tok;
+		}
 		if (isOP(exps, out)) {
+			if (isIndex) {
+				idx = tok->getValue();
+				ikey = tok->getInfokey();
+			}
 			int b = tok->getValue();
-			if (isEXPS(exps, out)) {
+			if (isEXPS(exps, out, false)) {
 				writeOPCode(op, a, b, out);
 				node->addNode(exps);
 				return true;
@@ -346,41 +351,20 @@ bool Parser::isEXP(Node* node, std::ofstream& out) {
 		printCode(out, "\n");
 		return true;
 	} else if (accept(Identifier, exp)) {
-		std::ofstream indexfile;
-		indexfile.open("index.txt", std::ofstream::out);
-		if (isINDEX(exp, indexfile)) {
-			printCode(out, "LA $");
-			printCode(out, identifier);
-			printCode(out, "\n");
-			indexfile.close();
-			std::ifstream file("index.txt");
-			std::string line;
-			if (file.is_open()) {
-				while (getline(file, line)) {
-					printCode(out, line.c_str());
-					printCode(out, "\n");
-				}
-				file.close();
-			}
+		printCode(out, "LA $");
+		printCode(out, identifier);
+		printCode(out, "\n");
+		printCode(out, "LV");
+		printCode(out, "\n");
+		if (isINDEX(exp, out)) {
 			printCode(out, "ADD\n");
-			remove("index.txt");
 			node->addNode(exp);
 			return true;
 		} else if (this->tok->gettype() == Semicolon
 				|| this->tok->gettype() == ParenthesesRIGHT || checkOP()) {
-			printCode(out, "LA $");
-			printCode(out, identifier);
-			printCode(out, "\n");
-			printCode(out, "LV");
-			printCode(out, "\n");
 			node->addNode(exp);
 			return true;
 		} else if (this->tok->gettype() == SquareBracketRIGHT) {
-			printCode(out, "LA $");
-			printCode(out, identifier);
-			printCode(out, "\n");
-			printCode(out, "LV");
-			printCode(out, "\n");
 			node->addNode(exp);
 			return true;
 		}
@@ -404,7 +388,7 @@ bool Parser::isEXP(Node* node, std::ofstream& out) {
 		}
 	}
 	if (accept(ParenthesesLEFT, exp)) {
-		if (this->isEXPS(exp, out)) {
+		if (this->isEXPS(exp, out, false)) {
 			if (accept(ParenthesesRIGHT, exp)) {
 				node->addNode(exp);
 				return true;
@@ -511,7 +495,7 @@ bool Parser::isINDEX(Node* node, std::ofstream& out) {
 	index->setType(Node::Index);
 	if (accept(SquareBracketLEFT, index)) {
 		if (tok->gettype() != Minus && tok->gettype() != ExclamationMark) {
-			if (isEXPS(index, out)) {
+			if (isEXPS(index, out, true)) {
 				if (accept(SquareBracketRIGHT, index)) {
 					node->addNode(index);
 					return true;

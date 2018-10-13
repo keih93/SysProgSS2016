@@ -32,10 +32,11 @@ int main(int argc, char **argv) {
 		if (parser->isPROG(outfile)) {
 			cout << "It is a Program" << "\n";
 		} else {
-			//TODO: clear FILE!!!!
+			remove("out.txt");
 			cout << "It is not a Program" << "\n";
 		}
 	} catch (...) {
+		remove("out.txt");
 		cout << "It is not a Program" << "\n";
 	}
 
