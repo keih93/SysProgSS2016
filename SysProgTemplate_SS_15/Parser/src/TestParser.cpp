@@ -23,21 +23,27 @@ using namespace std;
 
 int main(int argc, char **argv) {
 	std::ofstream outfile;
-	outfile.open("out.txt", std::ofstream::out);
-	Buffer* buf = new Buffer("test.txt");
+//	outfile.open("out.txt", std::ofstream::out);
+	outfile.open(argv[2], std::ofstream::out);
+	Buffer* buf = new Buffer(argv[1]);
+//	Buffer* buf = new Buffer("test.txt");
 	Symboltable* sym = new Symboltable();
 	Scanner* scanner = new Scanner(buf, sym);
 	try {
 		Parser* parser = new Parser(scanner);
+		fprintf(stderr, "Parsing code...\n");
 		if (parser->isPROG(outfile)) {
-			cout << "It is a Program" << "\n";
+			fprintf(stderr, "Generating code...\n");
+			fprintf(stderr, "Finished successfully.\n");
 		} else {
-			remove("out.txt");
-			cout << "It is not a Program" << "\n";
+			if(strstr(argv[2],".code")){
+				remove(argv[2]);
+			}
 		}
 	} catch (...) {
-		remove("out.txt");
-		cout << "It is not a Program" << "\n";
+		if(strstr(argv[2],".code")){
+			remove(argv[2]);
+		}
 	}
 
 }
