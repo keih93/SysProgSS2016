@@ -23,27 +23,17 @@ using namespace std;
 
 int main(int argc, char **argv) {
 	std::ofstream outfile;
-//	outfile.open("out.txt", std::ofstream::out);
-	outfile.open(argv[2], std::ofstream::out);
-	Buffer* buf = new Buffer(argv[1]);
-//	Buffer* buf = new Buffer("test.txt");
+	outfile.open("out.code", std::ofstream::out);
+	//outfile.open(argv[2], std::ofstream::out);
+//	Buffer* buf = new Buffer(argv[1]);
+	Buffer* buf = new Buffer("test.txt");
 	Symboltable* sym = new Symboltable();
 	Scanner* scanner = new Scanner(buf, sym);
-	try {
-		Parser* parser = new Parser(scanner);
-		fprintf(stderr, "Parsing code...\n");
-		if (parser->isPROG(outfile)) {
-			fprintf(stderr, "Generating code...\n");
-			fprintf(stderr, "Finished successfully.\n");
-		} else {
-			if(strstr(argv[2],".code")){
-				remove(argv[2]);
-			}
-		}
-	} catch (...) {
-		if(strstr(argv[2],".code")){
-			remove(argv[2]);
-		}
+	Parser* parser = new Parser(scanner);
+	fprintf(stderr, "Parsing code...\n");
+	if (parser->isPROG(outfile)) {
+		fprintf(stderr, "Generating code...\n");
+		fprintf(stderr, "Finished successfully.\n");
 	}
 
 }

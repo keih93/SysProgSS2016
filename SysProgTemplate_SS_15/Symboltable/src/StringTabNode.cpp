@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 StringTabNode::StringTabNode() {
-	this->vector = new char[512];
+	this->vector = new char[4096];
 	this->next = NULL;
 }
 

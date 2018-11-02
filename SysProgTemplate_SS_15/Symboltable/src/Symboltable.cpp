@@ -144,10 +144,32 @@ int Symboltable::countsize(char* lexem) {
 }
 
 int Symboltable::hashFunc(char* lexem) {
-	int first = lexem[0];
-	int second = lexem[1];
-	int last = lexem[2];
-	return (first + second + last);
+	unsigned int hash = 5381;
+	int c;
+	while (c = *lexem++) {
+		hash = ((hash << 5) + hash) + c;
+	}
+	return hash%1024 ;
+//	int len = length(lexem);
+//	int i = 2;
+//	if (len <= 2) {
+//		i = 1;
+//	}
+//	int hashCode = (16 * lexem[0] + 8 * lexem[len - 1] + len
+//			+ 6 * lexem[len - i]);
+//	return hashCode % 512;
+//	int first = lexem[0];
+//	int second = lexem[1];
+//	int last = lexem[2];
+//	return (first + second + last);
+}
+
+int Symboltable::length(char *lexem) {
+	int i = 0;
+	while (lexem[i] != '\0') {
+		i++;
+	}
+	return i;
 }
 
 bool Symboltable::isNoKeyword(char* lexem) {

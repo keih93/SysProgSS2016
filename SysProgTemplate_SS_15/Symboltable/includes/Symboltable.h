@@ -21,10 +21,11 @@ public:
 	void initSymbols();
 	bool contains(char* key);
 private:
-	SymtabEntry* sym[512];
+	SymtabEntry* sym[4096];
 	StringTab* table;
 	Info* lookup(char* key, TokenType typ);
 	bool compareLexem(char* lexem1, char* lexem2);
+	int length(char *lexem);
 	int countsize(char* lexem);
 	bool isTyp(char* lexem, int count);
 	bool isNoKeyword(char* lexem);

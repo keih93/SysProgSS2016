@@ -8,7 +8,7 @@
 #include "string.h"
 
 StringTab::StringTab() {
-	this->freeSpace = 512;
+	this->freeSpace = 4096;
 	this->freeP = new char[this->freeSpace];
 	this->node = new StringTabNode();
 
@@ -22,7 +22,7 @@ char* StringTab::insert(char* lexem, int size) {
 		this->freeP += size + 1;
 		this->freeSpace -= size + 1;
 	} else {
-		this->freeSpace = 512;
+		this->freeSpace = 4096;
 		this->freeP = this->node->makeNext()->getPointer();
 		memcpy(this->freeP, lexem, size + 1);
 		this->freeP[size] = '\0';
