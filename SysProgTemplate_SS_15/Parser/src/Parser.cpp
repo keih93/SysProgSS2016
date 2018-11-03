@@ -21,8 +21,7 @@ Parser::Parser(Scanner* scan) {
 	this->tok = this->scanner->nextToken(false);
 	this->tree = new ParseTree();
 	this->labelCounter = 0;
-	this->index = -1;
-	this->idx = -1;
+	this->index = 0;
 }
 
 void Parser::nextToken() {
@@ -167,29 +166,9 @@ bool Parser::isSTATEMENT(Node* node, std::ofstream& out) {
 					printCode(out, "LA $");
 					printCode(out, identifier);
 					printCode(out, "\n");
-					if (index != -1) {
-						printCode(out, "LC ");
-						printIntCode(out, index);
-						printCode(out, "\n");
-					} else if (NULL != infokey && strcmp(infokey, "")) {
-						printCode(out, "LA $");
-						printCode(out, infokey);
-						printCode(out, "\n");
-						printCode(out, "LV\n");
-					}
-					if (idx != -1) {
-						printCode(out, "LC ");
-						printIntCode(out, idx);
-						printCode(out, "\n");
-					} else if (NULL != ikey && strcmp(ikey, "")) {
-						printCode(out, "LA $");
-						printCode(out, ikey);
-						printCode(out, "\n");
-						printCode(out, "LV\n");
-					}
-					if (opToken != NULL) {
-						writeOPCode(opToken, index, idx, out);
-					}
+					isIndexEXPS(out);
+					index = 0;
+					indexCounter = 0;
 					printCode(out, "ADD\n");
 					printCode(out, "STR\n");
 					node->addNode(stat);
@@ -316,22 +295,16 @@ bool Parser::isEXPS(Node* node, std::ofstream& out, bool isIndex) {
 	Node* exps = new Node(tok);
 	exps->setType(Node::Exp);
 	int a = tok->getValue();
-	if (isIndex) {
-		index = tok->getValue();
-		infokey = tok->getInfokey();
-	}
-	if (isEXP(exps, out)) {
+
+	if (isEXP(exps, out, isIndex)) {
 		Token* op = tok;
 		if (isIndex) {
-			opToken = tok;
+			indexToken[indexCounter] = tok;
+			indexCounter++;
 		}
 		if (isOP(exps, out)) {
-			if (isIndex) {
-				idx = tok->getValue();
-				ikey = tok->getInfokey();
-			}
 			int b = tok->getValue();
-			if (isEXPS(exps, out, false)) {
+			if (isEXPS(exps, out, isIndex)) {
 				writeOPCode(op, a, b, out);
 				node->addNode(exps);
 				return true;
@@ -344,11 +317,15 @@ bool Parser::isEXPS(Node* node, std::ofstream& out, bool isIndex) {
 	return false;
 }
 
-bool Parser::isEXP(Node* node, std::ofstream& out) {
+bool Parser::isEXP(Node* node, std::ofstream& out, bool isIndex) {
 	Node* exp = new Node(tok);
 	exp->setType(Node::Exp2);
 	int index = tok->getValue();
 	char* identifier = tok->getInfokey();
+	if (isIndex) {
+		indexToken[indexCounter] = tok;
+		indexCounter++;
+	}
 	if (accept(Integer, exp)) {
 		node->addNode(exp);
 		printCode(out, "LC ");
@@ -366,7 +343,7 @@ bool Parser::isEXP(Node* node, std::ofstream& out) {
 			node->addNode(exp);
 			return true;
 		} else if (this->tok->gettype() == Semicolon
-				|| this->tok->gettype() == ParenthesesRIGHT || checkOP()
+				|| this->tok->gettype() == ParenthesesRIGHT || checkOP(tok)
 				|| this->tok->gettype() == KeywordELSE) {
 			printCode(out, "LV");
 			printCode(out, "\n");
@@ -378,7 +355,7 @@ bool Parser::isEXP(Node* node, std::ofstream& out) {
 		}
 	} else if (accept(Minus, exp)) {
 		printCode(out, "LC 0\n");
-		if (isEXP(exp, out)) {
+		if (isEXP(exp, out, isIndex)) {
 			printCode(out, "SUB\n");
 			node->addNode(exp);
 			return true;
@@ -389,14 +366,14 @@ bool Parser::isEXP(Node* node, std::ofstream& out) {
 //			return true;
 //		}
 	} else if (accept(ExclamationMark, exp)) {
-		if (isEXP(exp, out)) {
+		if (isEXP(exp, out, isIndex)) {
 			printCode(out, "NOT\n");
 			node->addNode(exp);
 			return true;
 		}
 	}
 	if (accept(ParenthesesLEFT, exp)) {
-		if (this->isEXPS(exp, out, false)) {
+		if (this->isEXPS(exp, out, isIndex)) {
 			if (accept(ParenthesesRIGHT, exp)) {
 				node->addNode(exp);
 				return true;
@@ -440,24 +417,24 @@ bool Parser::isOP(Node* node, std::ofstream& out) {
 	return false;
 }
 
-bool Parser::checkOP() {
-	if (this->tok->gettype() == InequalitySignRIGHT) {
+bool Parser::checkOP(Token* token) {
+	if (token->gettype() == InequalitySignRIGHT) {
 		return true;
-	} else if (this->tok->gettype() == Equal) {
+	} else if (token->gettype() == Equal) {
 		return true;
-	} else if (this->tok->gettype() == EqualColonEqual) {
+	} else if (token->gettype() == EqualColonEqual) {
 		return true;
-	} else if (this->tok->gettype() == Plus) {
+	} else if (token->gettype() == Plus) {
 		return true;
-	} else if (this->tok->gettype() == Minus) {
+	} else if (token->gettype() == Minus) {
 		return true;
-	} else if (this->tok->gettype() == Colon) {
+	} else if (token->gettype() == Colon) {
 		return true;
-	} else if (this->tok->gettype() == Star) {
+	} else if (token->gettype() == Star) {
 		return true;
-	} else if (this->tok->gettype() == And) {
+	} else if (token->gettype() == And) {
 		return true;
-	} else if (this->tok->gettype() == InequalitySignLEFT) {
+	} else if (token->gettype() == InequalitySignLEFT) {
 		return true;
 	}
 	return false;
@@ -502,27 +479,12 @@ bool Parser::writeOPCode(Token* token, int toka, int tokb, std::ofstream& out) {
 bool Parser::isINDEX(Node* node, std::ofstream& out) {
 	Node* index = new Node(tok);
 	index->setType(Node::Index);
-	idx=-1;
-//	ikey=NULL;
 	if (accept(SquareBracketLEFT, index)) {
-		if (tok->gettype() != Minus && tok->gettype() != ExclamationMark) {
-			if (isEXPS(index, out, true)) {
-				if (accept(SquareBracketRIGHT, index)) {
-					node->addNode(index);
-					return true;
-				}
+		if (isEXPS(index, out, true)) {
+			if (accept(SquareBracketRIGHT, index)) {
+				node->addNode(index);
+				return true;
 			}
-		} else {
-			fprintf(stderr, "\nNo valid Dimension: %s", tok->getInfokey());
-			nextToken();
-			if (tok->getValue() != -1) {
-				fprintf(stderr, "%d Line: %d Column: %d\n", tok->getValue(),
-						tok->getLine(), tok->getColumn());
-			} else {
-				fprintf(stderr, " Line: %d Column: %d\n", tok->getLine(),
-						tok->getColumn());
-			}
-			throw logic_error("No valid Dimension");
 		}
 	}
 	return false;
@@ -564,3 +526,110 @@ void Parser::printIntCode(std::ofstream& out, int code) {
 	out << code;
 }
 
+bool Parser::isIndexEXPS(std::ofstream& out) {
+	int a = indexToken[index]->getValue();
+	if (isIndexEXP(out)) {
+		Token* op = indexToken[index];
+		if (isIndexOP(out)) {
+			int b = indexToken[index]->getValue();
+			if (isIndexEXPS(out)) {
+				writeOPCode(op, a, b, out);
+				return true;
+			}
+		} else {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Parser::isIndexEXP(std::ofstream& out) {
+	int integer = indexToken[index]->getValue();
+	char* identifier = indexToken[index]->getInfokey();
+	if (acceptIndex(Integer)) {
+		printCode(out, "LC ");
+		printIntCode(out, integer);
+		printCode(out, "\n");
+		return true;
+	} else if (acceptIndex(Identifier)) {
+		printCode(out, "LA $");
+		printCode(out, identifier);
+		printCode(out, "\n");
+		if (isIndexINDEX(out)) {
+			printCode(out, "ADD\n");
+			printCode(out, "LV");
+			printCode(out, "\n");
+			return true;
+		} else if (indexToken[index]->gettype() == Semicolon
+				|| indexToken[index]->gettype() == ParenthesesRIGHT
+				|| checkOP(indexToken[index])
+				|| indexToken[index]->gettype() == KeywordELSE) {
+			printCode(out, "LV");
+			printCode(out, "\n");
+			return true;
+		} else if (indexToken[index]->gettype() == SquareBracketRIGHT) {
+			return true;
+		}
+	} else if (acceptIndex(Minus)) {
+		printCode(out, "LC 0\n");
+		if (isIndexEXP(out)) {
+			printCode(out, "SUB\n");
+			return true;
+		}
+	} else if (acceptIndex(ExclamationMark)) {
+		if (isIndexEXP(out)) {
+			printCode(out, "NOT\n");
+			return true;
+		}
+	}
+	if (acceptIndex(ParenthesesLEFT)) {
+		if (this->isIndexEXPS(out)) {
+			if (acceptIndex(ParenthesesRIGHT)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool Parser::acceptIndex(TokenType T) {
+	if (NULL != indexToken[index] && indexToken[index]->gettype() == T) {
+		index++;
+		return true;
+	}
+	return false;
+}
+
+bool Parser::isIndexOP(std::ofstream& out) {
+	if (acceptIndex(InequalitySignRIGHT)) {
+		return true;
+	} else if (acceptIndex(Equal)) {
+		return true;
+	} else if (acceptIndex(EqualColonEqual)) {
+		return true;
+	} else if (acceptIndex(Plus)) {
+		return true;
+	} else if (acceptIndex(Minus)) {
+		return true;
+	} else if (acceptIndex(Colon)) {
+		return true;
+	} else if (acceptIndex(Star)) {
+		return true;
+	} else if (acceptIndex(And)) {
+		return true;
+	} else if (acceptIndex(InequalitySignLEFT)) {
+		return true;
+	}
+	return false;
+}
+
+bool Parser::isIndexINDEX(std::ofstream& out) {
+	if (acceptIndex(SquareBracketLEFT)) {
+		if (isIndexEXPS(out)) {
+			if (acceptIndex(SquareBracketRIGHT)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}

@@ -23,10 +23,8 @@ private:
 	ParseTree* tree;
 	int labelCounter;
 	int index;
-	char* infokey;
-	int idx;
-	char* ikey;
-	Token* opToken;
+	Token* indexToken[512];
+	int indexCounter;
 public:
 	Parser(Scanner* scan);
 	virtual ~Parser();
@@ -34,7 +32,7 @@ public:
 	bool acceptDecl(TokenType T, Node* node);
 	int expect(TokenType T);
 	bool isOP(Node* node, std::ofstream& out);
-	bool isEXP(Node* node, std::ofstream& out);
+	bool isEXP(Node* node, std::ofstream& out, bool isIndex);
 	bool isEXPS(Node* node, std::ofstream& out, bool isIndex);
 	bool isSTATEMENT(Node* node, std::ofstream& out);
 	bool isSTATEMENTS(Node* node, std::ofstream& out);
@@ -42,12 +40,17 @@ public:
 	bool isDECLS(Node* node, std::ofstream& out);
 	bool isINDEX(Node* node, std::ofstream& out);
 	bool isPROG(std::ofstream& out);
-	bool checkOP();
+	bool checkOP(Token* token);
 	bool writeOPCode(Token* tok, int toka, int tokb, std::ofstream& out);
 	void nextToken();
 	void nextDeclToken();
 	void printCode(std::ofstream& out, const char* code);
 	void printIntCode(std::ofstream& out, int code);
+	bool isIndexEXPS(std::ofstream& out);
+	bool isIndexEXP(std::ofstream& out);
+	bool acceptIndex(TokenType T);
+	bool isIndexOP(std::ofstream& out);
+	bool isIndexINDEX(std::ofstream& out);
 };
 
 #endif /* PARSER_H_ */
