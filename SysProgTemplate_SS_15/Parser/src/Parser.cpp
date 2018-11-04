@@ -104,12 +104,12 @@ bool Parser::isDECL(Node* node, std::ofstream& out) {
 	Node* decl = new Node(tok);
 	decl->setType(Node::Decl);
 	if (acceptDecl(KeywordINT, decl)) {
-		if (accept(SquareBracketLEFT, decl)) {
+		if (acceptDecl(SquareBracketLEFT, decl)) {
 			int index = tok->getValue();
-			if (accept(Integer, decl)) {
+			if (acceptDecl(Integer, decl)) {
 				if (acceptDecl(SquareBracketRIGHT, decl)) {
 					char* identifier = tok->getInfokey();
-					if (accept(Identifier, decl)) {
+					if (acceptDecl(Identifier, decl)) {
 						printCode(out, "DS $");
 						printCode(out, identifier);
 						printCode(out, " ");
@@ -133,7 +133,7 @@ bool Parser::isDECL(Node* node, std::ofstream& out) {
 			}
 		}
 		char* identifier = tok->getInfokey();
-		if (accept(Identifier, decl)) {
+		if (acceptDecl(Identifier, decl)) {
 			node->addNode(decl);
 			printCode(out, "DS $");
 			printCode(out, identifier);
